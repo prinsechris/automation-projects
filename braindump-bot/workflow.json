@@ -1,0 +1,583 @@
+{
+  "name": "Braindump Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "85bc0b52-3a22-4c38-bf12-73a2fded710e",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        280,
+        60
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REDACTED",
+          "name": "Braindump Bot Telegram"
+        }
+      },
+      "webhookId": "b50cdb31-209a-4696-bf2e-e80a026175d8"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "af439a09-aca7-4d86-8fa3-a5f6863603b5",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        480,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "id": "3ffc5621-8fdb-45de-a4b6-7167f857607f",
+      "name": "Download Voice",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        -160
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REDACTED",
+          "name": "Braindump Bot Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "d667b874-337a-4fff-98c1-4ad45803bbac",
+      "name": "Whisper Transcribe",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        540,
+        -160
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REDACTED",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-field-1",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b0b407da-0a7d-4f45-b28a-43d235d05541",
+      "name": "Extract Text",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "Tu es **BrainDump**, un assistant intelligent de capture et d'evaluation d'idees pour Chris, fondateur d'Adaptive Logic (agence d'automatisation IA a Avignon).\n\nTu as acces a Google Search et Wikipedia pour verifier tes analyses.\n\nTON ROLE:\n1. Ecouter les idees d'automatisation, business et workflow de Chris\n2. Poser des questions pour clarifier (UNE question a la fois)\n3. RECHERCHER SUR INTERNET pour valider l'idee :\n   - Existe-t-il deja des solutions similaires ? (concurrence)\n   - Y a-t-il de la demande pour ce type de produit/service ?\n   - Quelles sont les tendances du marche ?\n4. Evaluer la qualite de l'idee avec un SCORING\n5. Proposer un resume structure quand l'idee est claire\n\nSCORING QUALITE (a inclure dans le resume) :\nEvalue chaque critere sur 10 et justifie en 1 phrase :\n\n- UTILITE /10 : L'idee resout-elle un vrai probleme concret ?\n- VIABILITE /10 : Est-ce realisable avec les ressources actuelles de Chris (n8n, APIs, solo) ?\n- POTENTIEL COMMERCIAL /10 : Peut-on vendre ca ? Quel modele de revenus ?\n- DEMANDE MARCHE /10 : Est-ce recherche/demande ? Y a-t-il un marche existant ?\n- DIFFICULTE /10 : Complexite technique (1=trivial, 10=expert)\n- SCORE GLOBAL /50 : Somme des 5 criteres\n\nUTILISE GOOGLE SEARCH pour :\n- Verifier si des concurrents existent deja\n- Estimer la demande (volume de recherche, tendances)\n- Trouver des prix/tarifs de solutions similaires\n- Valider la faisabilite technique\n\nSTYLE:\n- Francais, ton direct et pro\n- Reponses courtes, adaptees a Telegram\n- Encourage si l'idee est bonne, sois honnete si elle est faible\n- Donne des chiffres concrets quand possible\n\nQUAND L'IDEE EST CLAIRE, propose ce resume :\n\nTITRE: [titre]\nTYPE: [type]\nDESCRIPTION: [2-3 phrases]\n\nSCORING:\n- Utilite: X/10 — [justification]\n- Viabilite: X/10 — [justification]\n- Commercial: X/10 — [justification]\n- Demande: X/10 — [justification]\n- Difficulte: X/10 — [justification]\n- TOTAL: XX/50\n\nSTACK TECH: [outils]\nPROCHAINES ETAPES: [actions]\n\nPuis demande : \"Tu veux que j'enregistre cette idee dans Notion ?\"\n\nQUAND CHRIS CONFIRME (oui, enregistre, save, go, ok), inclus a la FIN de ta reponse :\n\nSAVE_START\n{\"title\": \"Titre court\", \"type\": \"Automatisation\", \"description\": \"Description 2-3 phrases + score global X/50\", \"stack\": [\"n8n\", \"Claude API\"], \"complexity\": \"Moyen\", \"priority\": \"Important\", \"revenue\": \"Medium (500-2K)\", \"steps\": \"1. Etape 1\\n2. Etape 2\\n3. Etape 3\"}\nSAVE_END\n\nRegles JSON :\n- type: [Automatisation, Business Idea, Systeme, Workflow, Client Service]\n- complexity: [Facile, Moyen, Complexe, Expert]\n- priority: [Urgent, Important, Normal, Someday]\n- revenue: [Low (0-500), Medium (500-2K), High (2K-10K), Game Changer (10K+)]\n- stack: parmi [n8n, Claude API, TikTok API, YouTube API, Instagram API, ElevenLabs, Shotstack, Creatomate, Notion API, Reddit API, FFmpeg, Python, JavaScript]\n\nSi Chris dit quelque chose de vague, pose une question. Ne suppose jamais."
+        }
+      },
+      "id": "15ac41b9-9647-42d0-9d90-eb7c4c0b1883",
+      "name": "BrainDump Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        920,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "e759690a-e4f9-4ba4-9b6f-3ea58b19f8a3",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        200
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REDACTED",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=braindump_{{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "id": "f4053a53-f22d-48af-a273-b21228bc03da",
+      "name": "Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1020,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI output for save command\nconst output = $input.first().json.output || '';\nconst saveMatch = output.match(/SAVE_START\\s*([\\s\\S]*?)\\s*SAVE_END/);\n\nif (saveMatch) {\n  try {\n    const saveData = JSON.parse(saveMatch[1].trim());\n    const cleanOutput = output.replace(/SAVE_START[\\s\\S]*?SAVE_END/, '').trim();\n\n    // Map values to Notion select options with emojis\n    const typeMap = {\n      'Automatisation': '\\u{1F916} Automatisation',\n      'Business Idea': '\\u{1F4BC} Business Idea',\n      'Systeme': '\\u{2699}\\u{FE0F} Syst\\u00e8me',\n      'Workflow': '\\u{1F504} Workflow',\n      'Client Service': '\\u{1F465} Client Service'\n    };\n    const priorityMap = {\n      'Urgent': '\\u{1F525} Urgent',\n      'Important': '\\u{26A1} Important',\n      'Normal': '\\u{1F4CB} Normal',\n      'Someday': '\\u{1F4AD} Someday'\n    };\n    const complexityMap = {\n      'Facile': '\\u{1F7E2} Facile',\n      'Moyen': '\\u{1F7E1} Moyen',\n      'Complexe': '\\u{1F7E0} Complexe',\n      'Expert': '\\u{1F534} Expert'\n    };\n    const revenueMap = {\n      'Low (0-500)': '\\u{1F4B0} Low (0-500\\u20AC/mois)',\n      'Medium (500-2K)': '\\u{1F4B0}\\u{1F4B0} Medium (500-2K\\u20AC/mois)',\n      'High (2K-10K)': '\\u{1F4B0}\\u{1F4B0}\\u{1F4B0} High (2K-10K\\u20AC/mois)',\n      'Game Changer (10K+)': '\\u{1F4B0}\\u{1F4B0}\\u{1F4B0}\\u{1F4B0} Game Changer (10K+/mois)'\n    };\n\n    return [{\n      json: {\n        output: cleanOutput,\n        shouldSave: true,\n        title: saveData.title || 'Sans titre',\n        description: saveData.description || '',\n        steps: saveData.steps || '',\n        notionType: typeMap[saveData.type] || typeMap['Automatisation'],\n        notionPriority: priorityMap[saveData.priority] || priorityMap['Normal'],\n        notionComplexity: complexityMap[saveData.complexity] || complexityMap['Moyen'],\n        notionRevenue: revenueMap[saveData.revenue] || revenueMap['Low (0-500)'],\n        notionStack: saveData.stack || []\n      }\n    }];\n  } catch(e) {\n    return [{ json: { output: output, shouldSave: false } }];\n  }\n} else {\n  return [{ json: { output: output, shouldSave: false } }];\n}"
+      },
+      "id": "12364670-1673-4657-b3e4-0cad4e32b4c2",
+      "name": "Parse Save",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "20c95596-cf32-4752-879d-67db70e1b193",
+      "name": "Telegram Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        80
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REDACTED",
+          "name": "Braindump Bot Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.shouldSave }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "save"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.shouldSave }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "noSave"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f8d3a76d-a1c1-4981-bb07-5710d4a85c84",
+      "name": "Save Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1420,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": {
+          "__rl": true,
+          "value": "e14aa153-d924-49b8-a51a-5ab885f36b01",
+          "mode": "id"
+        },
+        "title": "={{ $json.title }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Description|rich_text",
+              "textContent": "={{ $json.description }}"
+            },
+            {
+              "key": "Notes|rich_text",
+              "textContent": "={{ $json.steps }}"
+            },
+            {
+              "key": "Status|select",
+              "selectValue": "💭 Idée"
+            },
+            {
+              "key": "Type|select",
+              "selectValue": "={{ $json.notionType }}"
+            },
+            {
+              "key": "Priority|select",
+              "selectValue": "={{ $json.notionPriority }}"
+            },
+            {
+              "key": "Complexity|select",
+              "selectValue": "={{ $json.notionComplexity }}"
+            }
+          ]
+        }
+      },
+      "id": "ac4e574a-2676-443b-b038-be7b962a81ef",
+      "name": "Save to Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1700,
+        -200
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "REDACTED",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('Parse Save').item.json.output }}\n\n--- Idee enregistree dans Notion ! ---",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8730cef8-9039-4b69-ba62-33ef7a8bae49",
+      "name": "Telegram Confirm Save",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1960,
+        -200
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REDACTED",
+          "name": "Braindump Bot Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "14b7e854-faff-49c5-87f7-6cf4946900d2",
+      "name": "Google Search",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        200
+      ],
+      "credentials": {
+        "serpApi": {
+          "id": "REDACTED",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "daba64e3-c3e3-47eb-a372-ee1e2be5f95d",
+      "name": "Wikipedia",
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Download Voice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Voice": {
+      "main": [
+        [
+          {
+            "node": "Whisper Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Whisper Transcribe": {
+      "main": [
+        [
+          {
+            "node": "BrainDump Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Text": {
+      "main": [
+        [
+          {
+            "node": "BrainDump Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "BrainDump Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BrainDump Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Save",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "BrainDump Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Save": {
+      "main": [
+        [
+          {
+            "node": "Save Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Switch": {
+      "main": [
+        [
+          {
+            "node": "Save to Notion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Notion": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirm Save",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "BrainDump Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "BrainDump Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  }
+}
