@@ -57,7 +57,7 @@ Branche : `main`
 |---------|------|--------|
 | - | 2026-02-21 | Creation du repo, Braindump Bot initial |
 | - | 2026-02-22 | Couche 3b Manager Agent v2 (Classifier + Switch, 7 agents, voice) |
-| - | 2026-02-23 | Manager Agent v3 (LangChain orchestrator, multi-agent chaining, Jina scraper, memory) |
+| - | 2026-02-23 | Manager Agent v3 (LangChain orchestrator, 8 outils, chaining multi-agent, scraper hybride, knowledge base, memory, 5 bugs fixes) |
 
 ---
 
@@ -66,4 +66,4 @@ Branche : `main`
 - **20+ sessions** de travail documentees
 - **3 repos** actifs
 - Periode : fevrier 2025 — fevrier 2026
-- Progression : de zero a un systeme multi-agent complet avec 7 sous-agents
+- Progression : de zero a un systeme multi-agent complet avec 8 outils + chaining autonome
