@@ -19,7 +19,7 @@ Branche active : `claude/fix-previous-bug-FdlYT`
 | 08 | 2026-02-18 | Client Portal + Video Content Generator |
 | 09 | 2026-02-20 | Deblocage SSH (20-30h perdues), passage Claude Code CLI + Terminus, Notion MCP + n8n API connectes |
 | 10 | 2026-02-21 | Braindump Bot Telegram (15 nodes n8n, Whisper, SerpAPI, Notion, scoring /50) |
-| 11 | 2026-02-24 | Stats & Analytics Dashboard, Notion API interne v3, Command Center gamifie |
+| 11 | 2026-02-24 | Bilan 23-24 fev : CC audit + population (12 DBs, 3 relations), Stats Dashboard (12 vues), callouts gamifies, API interne v3 |
 
 Chemin : `docs/sessions/2026-02-{date}_session-{num}.md`
 Vue globale : `SESSION_LOG.md` (sessions 5-7 detaillees)
@@ -59,7 +59,7 @@ Branche : `main`
 | - | 2026-02-21 | Creation du repo, Braindump Bot initial |
 | - | 2026-02-22 | Couche 3b Manager Agent v2 (Classifier + Switch, 7 agents, voice) |
 | - | 2026-02-23 | Manager Agent v3 (LangChain orchestrator, 8 outils, chaining multi-agent, scraper hybride, knowledge base, memory, 5 bugs fixes) |
-| - | 2026-02-24 | Notion scripts (Stats Dashboard, gamify callouts), token_v2 API interne |
+| - | 2026-02-24 | Notion scripts (Stats Dashboard 12 vues, gamify callouts, upgrade callouts, cleanup CC), token_v2 API interne |
 
 ---
 
