@@ -1,6 +1,6 @@
 # Index des Sessions de Travail — Adaptive Logic
 
-> Derniere mise a jour : 2026-02-24
+> Derniere mise a jour : 2026-02-25
 
 ## AI-Business-Automation-Suite
 
@@ -20,6 +20,7 @@ Branche active : `claude/fix-previous-bug-FdlYT`
 | 09 | 2026-02-20 | Deblocage SSH (20-30h perdues), passage Claude Code CLI + Terminus, Notion MCP + n8n API connectes |
 | 10 | 2026-02-21 | Braindump Bot Telegram (15 nodes n8n, Whisper, SerpAPI, Notion, scoring /50) |
 | 11 | 2026-02-24 | Bilan 23-24 fev : CC audit + population (12 DBs, 3 relations), Stats Dashboard (12 vues), callouts gamifies, API interne v3 |
+| 12 | 2026-02-25 | Review Autopilot prod (Claude API, multilangue, approval workflow), 16 frameworks marketing, landing page site, strategie pricing 4 paliers |
 
 Chemin : `docs/sessions/2026-02-{date}_session-{num}.md`
 Vue globale : `SESSION_LOG.md` (sessions 5-7 detaillees)
@@ -60,12 +61,13 @@ Branche : `main`
 | - | 2026-02-22 | Couche 3b Manager Agent v2 (Classifier + Switch, 7 agents, voice) |
 | - | 2026-02-23 | Manager Agent v3 (LangChain orchestrator, 8 outils, chaining multi-agent, scraper hybride, knowledge base, memory, 5 bugs fixes) |
 | - | 2026-02-24 | Notion scripts (Stats Dashboard 12 vues, gamify callouts, upgrade callouts, cleanup CC), token_v2 API interne |
+| - | 2026-02-25 | 3 pages Notion creees (16 frameworks marketing, plans marketing 10 produits, strategie Fiverr + Content Machine) |
 
 ---
 
 ## Stats globales
 
-- **20+ sessions** de travail documentees
+- **22+ sessions** de travail documentees
 - **3 repos** actifs
 - Periode : fevrier 2025 — fevrier 2026
 - Progression : de zero a un systeme multi-agent complet avec 8 outils + chaining autonome
