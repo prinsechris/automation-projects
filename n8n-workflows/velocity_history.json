@@ -1,0 +1,1478 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-02-24T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 5,
+      "tasks_completed": 1,
+      "tasks_started": 1,
+      "tasks_created": 0,
+      "total_active_tasks": 17,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-23T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 8,
+      "tasks_completed": 1,
+      "tasks_started": 3,
+      "tasks_created": 0,
+      "total_active_tasks": 17,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-22T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 10,
+      "tasks_completed": 2,
+      "tasks_started": 1,
+      "tasks_created": 0,
+      "total_active_tasks": 18,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-21T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 15,
+      "tasks_completed": 3,
+      "tasks_started": 2,
+      "tasks_created": 0,
+      "total_active_tasks": 19,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 6,
+      "tasks_completed": 1,
+      "tasks_started": 1,
+      "tasks_created": 0,
+      "total_active_tasks": 17,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-19T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 12,
+      "tasks_completed": 1,
+      "tasks_started": 2,
+      "tasks_created": 0,
+      "total_active_tasks": 17,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-18T23:30:58.707971+00:00",
+      "source": "seed",
+      "commits": 8,
+      "tasks_completed": 2,
+      "tasks_started": 1,
+      "tasks_created": 0,
+      "total_active_tasks": 18,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:30:39.016922+00:00",
+      "source": "test",
+      "commits": 6,
+      "tasks_completed": 0,
+      "tasks_started": 1,
+      "tasks_created": 1,
+      "total_active_tasks": 16,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:31:08.611363+00:00",
+      "source": "test",
+      "commits": 1,
+      "tasks_completed": 0,
+      "tasks_started": 0,
+      "tasks_created": 0,
+      "total_active_tasks": 17,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:38:53.093859+00:00",
+      "source": "test",
+      "commits": 1,
+      "tasks_completed": 0,
+      "tasks_started": 0,
+      "tasks_created": 0,
+      "total_active_tasks": 16,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:42:31.218450+00:00",
+      "source": "test",
+      "commits": 6,
+      "tasks_completed": 0,
+      "tasks_started": 0,
+      "tasks_created": 2,
+      "total_active_tasks": 16,
+      "project_snapshots": {
+        "30fda200-b2d6-8105-9e8c-db2dabf163c5": {
+          "name": "Creer le site vitrine Adaptive Logic (v1)",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "30fda200-b2d6-81b2-a1d9-e3642d2ba6c7": {
+          "name": "Tester et deployer le Client Portal",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8106-a290-cd4acfece2ad": {
+          "name": "[Template] Nouveau Projet",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-815c-8f12-ed01ba746e84": {
+          "name": "Templates Notion",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-8197-8015-ef7bddba5475": {
+          "name": "Adaptive Logic",
+          "status": "In Progress",
+          "tasks_done": 0,
+          "tasks_total": 11,
+          "progress": 0.0
+        },
+        "312da200-b2d6-819f-827d-eef3fd5d96c2": {
+          "name": "Marque Vetements",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        },
+        "312da200-b2d6-81c9-9e1e-e02675b7157d": {
+          "name": "Contenu Automatise (TikTok/YT/IG)",
+          "status": "Backlog",
+          "tasks_done": 0,
+          "tasks_total": 0,
+          "progress": 0
+        }
+      },
+      "goal_snapshots": {
+        "30fda200-b2d6-8109-9de5-eac1bd6410ea": {
+          "name": "Scaler Adaptive Logic a 10+ clients",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8118-8f97-dab37d9942e8": {
+          "name": "Activer et configurer le Solo Leveling System",
+          "progress": 0.7,
+          "target_date": "2026-02-25",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8123-b519-d451e285069c": {
+          "name": "Deployer le Client Portal",
+          "progress": 0.15,
+          "target_date": "2026-03-15",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-8132-a68b-f9dddc2884df": {
+          "name": "Decrocher le 1er client Adaptive Logic",
+          "progress": 0,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-815e-85ac-e096148e50f9": {
+          "name": "Creer le site vitrine Adaptive Logic",
+          "progress": 0.05,
+          "target_date": "2026-03-03",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d0-8e2d-e02beb8316d9": {
+          "name": "Avoir 3-5 clients actifs",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udcad Not Started"
+        },
+        "30fda200-b2d6-81d6-9898-ced829262e26": {
+          "name": "Atteindre 2000 EUR de CA",
+          "progress": 0,
+          "target_date": "2026-03-31",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "30fda200-b2d6-81ef-8272-c4134f1119c2": {
+          "name": "Tester et deployer Review Autopilot",
+          "progress": 0.2,
+          "target_date": "2026-03-01",
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-812f-9974-eeb0409d5235": {
+          "name": "Devenir libre financierement",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-8131-8bbe-f18ed85fae51": {
+          "name": "[Template] Nouvel Objectif",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udcad Not Started"
+        },
+        "312da200-b2d6-81cd-99e4-fe21ba2a550a": {
+          "name": "Etre en bonne sante physique",
+          "progress": 0,
+          "target_date": null,
+          "status": "\ud83d\udd25 In Progress"
+        },
+        "312da200-b2d6-81ff-9922-e5381e57189d": {
+          "name": "Perdre du poids / retrouver la forme",
+          "progress": 0,
+          "target_date": "2026-06-30",
+          "status": "\ud83d\udd25 In Progress"
+        }
+      }
+    }
+  ]
+}
