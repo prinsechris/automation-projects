@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Voice Training</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif;
+  height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+}
+
+/* ── Screens ── */
+.screen {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 10; background: #0a0a0a; display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 30px; text-align: center; overflow-y: auto;
+}
+.screen.active { display: flex; }
+.screen h1 { font-size: 28px; margin-bottom: 8px; }
+.screen p.subtitle { opacity: 0.6; margin-bottom: 30px; font-size: 14px; }
+
+/* ── Buttons ── */
+button {
+  padding: 14px 28px; border: none; border-radius: 8px;
+  font-size: 18px; font-weight: 600; cursor: pointer;
+  min-height: 50px; transition: opacity 0.2s;
+}
+button:active { opacity: 0.7; }
+.btn-primary { background: #0066ff; color: #fff; }
+.btn-primary:disabled { background: #333; color: #666; cursor: default; }
+.btn-secondary { background: #333; color: #fff; }
+.btn-success { background: #00c853; color: #fff; }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+
+/* ── Setup screen ── */
+#setup .mode-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+.mode-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 24px 20px; width: 160px; cursor: pointer; transition: border-color 0.2s, transform 0.2s;
+}
+.mode-card:hover { border-color: #0066ff; transform: translateY(-2px); }
+.mode-card h3 { font-size: 16px; margin-bottom: 6px; }
+.mode-card p { font-size: 12px; opacity: 0.6; }
+
+/* ── Module select ── */
+.module-option {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; width: 280px; cursor: pointer; transition: border-color 0.2s;
+  margin: 8px 0; text-align: left;
+}
+.module-option:hover { border-color: #0066ff; }
+.module-option.disabled { opacity: 0.4; cursor: not-allowed; }
+.module-option h3 { font-size: 16px; margin-bottom: 4px; }
+.module-option p { font-size: 12px; opacity: 0.6; }
+.module-option .tag {
+  display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 4px; background: #222; margin-top: 6px;
+}
+.module-option .tag.mic { background: rgba(0,102,255,0.2); color: #4d94ff; }
+.module-option .tag.no-mic { background: rgba(0,200,83,0.2); color: #00c853; }
+
+/* ── Exercise area ── */
+#exercise-area {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 5; background: #0a0a0a; display: none;
+  flex-direction: column;
+}
+#exercise-area.active { display: flex; }
+
+#exercise-header {
+  padding: 16px 20px; background: #111; display: flex;
+  align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #222;
+}
+#exercise-header .module-title { font-size: 16px; font-weight: 600; }
+#exercise-header .progress-text { font-size: 13px; opacity: 0.6; }
+
+#exercise-content {
+  flex: 1; overflow-y: auto; padding: 20px;
+  padding-bottom: 180px; /* space for voice panel */
+}
+
+#exercise-controls {
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 20px));
+  background: #111; display: flex; gap: 10px; justify-content: center;
+  border-top: 1px solid #222;
+}
+
+/* ── Reading module ── */
+.reading-text {
+  font-size: 20px; line-height: 1.8; letter-spacing: 0.3px;
+}
+.reading-text .word {
+  display: inline; transition: color 0.15s;
+}
+.reading-text .word.correct { color: #00c853; }
+.reading-text .word.wrong { color: #ff5252; }
+.reading-text .word.pending { color: #666; }
+.reading-text .word.current { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+
+.precision-bar-container {
+  margin: 16px 0; background: #222; border-radius: 8px; height: 8px; overflow: hidden;
+}
+.precision-bar {
+  height: 100%; background: #0066ff; border-radius: 8px;
+  transition: width 0.3s ease, background-color 0.3s;
+}
+.precision-label { font-size: 13px; opacity: 0.7; margin-bottom: 4px; }
+
+.text-selector { margin-bottom: 20px; }
+.text-selector select {
+  background: #222; color: #fff; border: 1px solid #333;
+  padding: 10px 14px; border-radius: 8px; font-size: 14px; width: 100%;
+}
+
+/* ── Tongue twisters ── */
+.twister-display {
+  font-size: 24px; line-height: 1.6; text-align: center;
+  margin: 20px 0; padding: 24px; background: #111;
+  border-radius: 12px; border: 2px solid #333;
+}
+.twister-progress { font-size: 14px; opacity: 0.6; margin-bottom: 12px; }
+.twister-transcript {
+  margin-top: 16px; padding: 16px; background: #111;
+  border-radius: 8px; font-size: 14px; min-height: 60px;
+}
+.twister-transcript .label { font-size: 12px; opacity: 0.5; margin-bottom: 6px; }
+.twister-result {
+  text-align: center; padding: 12px; border-radius: 8px;
+  font-size: 16px; font-weight: 600; margin-top: 12px;
+}
+.twister-result.success { background: rgba(0,200,83,0.2); color: #00c853; }
+.twister-result.fail { background: rgba(255,82,82,0.2); color: #ff5252; }
+.difficulty-dots { display: flex; gap: 4px; justify-content: center; margin-bottom: 12px; }
+.difficulty-dots .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #333;
+}
+.difficulty-dots .dot.filled { background: #0066ff; }
+
+/* ── Breathing module ── */
+.breathing-container {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; flex: 1; padding: 20px;
+}
+.breathing-circle-wrap {
+  position: relative; width: 220px; height: 220px;
+  display: flex; align-items: center; justify-content: center;
+}
+.breathing-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: radial-gradient(circle, #0066ff 0%, #003399 100%);
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 40px rgba(0,102,255,0.4);
+}
+.breathing-phase {
+  font-size: 24px; font-weight: 600; margin-top: 30px;
+  min-height: 36px;
+}
+.breathing-timer {
+  font-size: 64px; font-weight: 900; margin-top: 10px;
+  text-shadow: 0 0 30px rgba(0,102,255,0.6);
+}
+.breathing-cycles {
+  font-size: 14px; opacity: 0.6; margin-top: 16px;
+}
+.technique-selector { margin-bottom: 24px; text-align: center; }
+.technique-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 16px; margin: 8px; cursor: pointer; display: inline-block;
+  transition: border-color 0.2s;
+}
+.technique-card:hover, .technique-card.selected { border-color: #0066ff; }
+.technique-card h4 { font-size: 14px; margin-bottom: 4px; }
+.technique-card p { font-size: 11px; opacity: 0.6; }
+
+/* Wim Hof specific */
+.wimhof-counter {
+  font-size: 72px; font-weight: 900;
+  text-shadow: 0 0 30px rgba(0,102,255,0.6);
+}
+.wimhof-instruction { font-size: 20px; margin-top: 16px; }
+.wimhof-round { font-size: 14px; opacity: 0.6; margin-bottom: 16px; }
+
+/* ── Voice analysis panel ── */
+#voice-panel {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: #111; border-top: 1px solid #333;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 8; display: none;
+}
+#voice-panel.active { display: block; }
+.voice-metrics { display: flex; gap: 12px; justify-content: space-between; }
+.voice-metric {
+  flex: 1; text-align: center;
+}
+.voice-metric .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+.voice-metric .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+.voice-metric .bar-track {
+  height: 4px; background: #222; border-radius: 2px; margin-top: 4px; overflow: hidden;
+}
+.voice-metric .bar-fill {
+  height: 100%; border-radius: 2px; transition: width 0.2s;
+}
+.volume-fill { background: linear-gradient(90deg, #00c853, #ffab00, #ff5252); }
+.pitch-fill { background: #0066ff; }
+.pace-fill { background: #aa00ff; }
+
+/* ── Done screen ── */
+#done-screen {
+  z-index: 20; background: rgba(0,200,83,0.95);
+}
+#done-screen h1 { font-size: 48px; margin-bottom: 10px; }
+#done-screen p { font-size: 18px; opacity: 0.9; }
+#done-screen .stats { margin: 20px 0; }
+#done-screen .stats div { font-size: 14px; margin: 4px 0; opacity: 0.85; }
+#beeminder-status { margin-top: 20px; font-size: 16px; }
+
+/* ── Warning banner ── */
+.warning-banner {
+  background: rgba(255,171,0,0.15); border: 1px solid rgba(255,171,0,0.3);
+  border-radius: 8px; padding: 12px 16px; margin: 16px 0;
+  font-size: 13px; color: #ffab00;
+}
+
+/* ── Animations ── */
+@keyframes bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+.bump { animation: bump 0.2s ease; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SETUP SCREEN ═══════════════════ -->
+<div id="setup" class="screen active">
+  <h1>Voice Training</h1>
+  <p class="subtitle">Eloquence. Diction. Souffle.</p>
+  <div id="browser-warning" class="warning-banner" style="display:none;">
+    Speech Recognition non supporte sur ce navigateur. Seul le module Respiration est disponible.
+  </div>
+  <div class="mode-cards">
+    <div class="mode-card" onclick="startFullSession()">
+      <h3>Mode complet</h3>
+      <p>Respiration + Lecture + Virelangues</p>
+    </div>
+    <div class="mode-card" onclick="showModuleSelect()">
+      <h3>Choisir module</h3>
+      <p>Selectionner un exercice</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ MODULE SELECT ═══════════════════ -->
+<div id="module-select" class="screen">
+  <h1>Choisir un module</h1>
+  <p class="subtitle">Selectionne l'exercice a travailler</p>
+  <div class="module-option" onclick="startModule('breathing')">
+    <h3>Respiration</h3>
+    <p>Techniques de souffle : carree, Wim Hof, diaphragmatique</p>
+    <span class="tag no-mic">Pas de micro</span>
+  </div>
+  <div id="opt-reading" class="module-option" onclick="startModule('reading')">
+    <h3>Lecture a voix haute</h3>
+    <p>Textes classiques avec suivi karaoke mot par mot</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-twisters" class="module-option" onclick="startModule('twisters')">
+    <h3>Virelangues</h3>
+    <p>10 exercices de diction par difficulte croissante</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn-secondary" onclick="showScreen('setup')">Retour</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXERCISE AREA ═══════════════════ -->
+<div id="exercise-area">
+  <div id="exercise-header">
+    <span class="module-title" id="ex-title">Module</span>
+    <span class="progress-text" id="ex-progress"></span>
+  </div>
+  <div id="exercise-content"></div>
+  <div id="exercise-controls"></div>
+</div>
+
+<!-- ═══════════════════ VOICE ANALYSIS PANEL ═══════════════════ -->
+<div id="voice-panel">
+  <div class="voice-metrics">
+    <div class="voice-metric">
+      <div class="label">Volume</div>
+      <div class="value" id="vm-volume">--</div>
+      <div class="bar-track"><div class="bar-fill volume-fill" id="vb-volume" style="width:0%"></div></div>
+    </div>
+    <div class="voice-metric">
+      <div class="label">Pitch</div>
+      <div class="value" id="vm-pitch">--</div>
+      <div class="bar-track"><div class="bar-fill pitch-fill" id="vb-pitch" style="width:0%"></div></div>
+    </div>
+    <div class="voice-metric">
+      <div class="label">Debit</div>
+      <div class="value" id="vm-pace">--</div>
+      <div class="bar-track"><div class="bar-fill pace-fill" id="vb-pace" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ DONE SCREEN ═══════════════════ -->
+<div id="done-screen" class="screen">
+  <h1>TERMINE</h1>
+  <p id="done-text">Session completee</p>
+  <div class="stats" id="done-stats"></div>
+  <div id="beeminder-status">Envoi a Beeminder...</div>
+  <div class="btn-group" style="margin-top:24px;">
+    <button class="btn-primary" onclick="location.reload()">Nouvelle session</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════
+const BEEMINDER_USER = "prinsechris";
+const BEEMINDER_TOKEN = "28f1_C1a-W6ZPtA1joXN";
+const BEEMINDER_GOAL = "habitudes";
+
+const SPEECH_SUPPORTED = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+// ════════════════════════════════════════════════════════════
+// TEXTS
+// ════════════════════════════════════════════════════════════
+const READING_TEXTS = [
+  {
+    title: "Le Petit Prince — Saint-Exupery",
+    text: "Les grandes personnes aiment les chiffres. Quand vous leur parlez d'un nouvel ami, elles ne vous questionnent jamais sur l'essentiel. Elles ne vous disent jamais : Quel est le son de sa voix ? Quels sont les jeux qu'il prefere ? Est-ce qu'il collectionne les papillons ? Elles vous demandent : Quel age a-t-il ? Combien a-t-il de freres ? Combien pese-t-il ? Combien gagne son pere ? Alors seulement elles croient le connaitre."
+  },
+  {
+    title: "Liberation de Paris — De Gaulle",
+    text: "Paris outrage, Paris brise, Paris martyrise, mais Paris libere ! Libere par lui-meme, libere par son peuple, avec le concours des armees de la France, avec l'appui et le concours de la France tout entiere, de la France qui se bat, de la seule France, de la vraie France, de la France eternelle."
+  },
+  {
+    title: "L'Etranger — Camus",
+    text: "Aujourd'hui maman est morte. Ou peut-etre hier, je ne sais pas. J'ai recu un telegramme de l'asile : Mere decedee. Enterrement demain. Sentiments distingues. Cela ne veut rien dire. C'etait peut-etre hier."
+  }
+];
+
+const TWISTERS = [
+  "Un chasseur sachant chasser sait chasser sans son chien",
+  "Les chaussettes de l'archiduchesse sont-elles seches ou archi-seches",
+  "Je suis ce que je suis et si je suis ce que je suis qu'est-ce que je suis",
+  "Cinq chiens chassent six chats dans six cent six sachets",
+  "Pauvre petit pecheur prend patience pour pouvoir prendre plusieurs petits poissons",
+  "Tonton ton the t'a-t-il ote ta toux",
+  "Si six scies scient six cypres six cent six scies scient six cent six cypres",
+  "Trois gros rats gris dans trois gros trous ronds rongent trois gros croutes rondes",
+  "Seize jacinthes sechent dans seize sachets secs",
+  "Le mur murant Paris rend Paris murmurant"
+];
+
+const BREATHING_TECHNIQUES = {
+  square: { name: "Carree", desc: "4-4-4-4", cycles: 6, phases: [
+    { label: "Inspirez", duration: 4, scale: 2.0 },
+    { label: "Retenez", duration: 4, scale: 2.0 },
+    { label: "Expirez", duration: 4, scale: 1.0 },
+    { label: "Retenez", duration: 4, scale: 1.0 }
+  ]},
+  wimhof: { name: "Wim Hof", desc: "30 resp. + retention", rounds: 3 },
+  diaphragm: { name: "Diaphragmatique", desc: "4s nez, 6s bouche", cycles: 8, phases: [
+    { label: "Inspirez par le nez", duration: 4, scale: 2.0 },
+    { label: "Expirez par la bouche", duration: 6, scale: 1.0 }
+  ]}
+};
+
+// ════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════
+let sessionStartTime = null;
+let modulesCompleted = [];
+let sessionMode = "single"; // "full" or "single"
+let fullSessionQueue = [];
+
+// Speech recognition
+let recognition = null;
+let recognizing = false;
+
+// Audio analysis
+let audioCtx = null;
+let analyser = null;
+let audioStream = null;
+let audioDataArray = null;
+let audioFloatArray = null;
+let voiceAnalysisRAF = null;
+
+// Module state
+let currentModule = null;
+
+// Reading state
+let readingWords = [];
+let readingIndex = 0;
+let readingCorrect = 0;
+let readingTotal = 0;
+let readingTranscriptWords = [];
+
+// Twister state
+let twisterIndex = 0;
+let twistersCompleted = 0;
+
+// Breathing state
+let breathingTechnique = null;
+let breathingInterval = null;
+let breathingTimeout = null;
+let breathingActive = false;
+
+// Pace tracking
+let paceWordTimestamps = [];
+let currentPaceWPM = 0;
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+(function init() {
+  if (!SPEECH_SUPPORTED) {
+    document.getElementById("browser-warning").style.display = "block";
+    document.getElementById("opt-reading").classList.add("disabled");
+    document.getElementById("opt-twisters").classList.add("disabled");
+    document.getElementById("opt-reading").onclick = null;
+    document.getElementById("opt-twisters").onclick = null;
+  }
+})();
+
+// ════════════════════════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ════════════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("exercise-area").classList.remove("active");
+  document.getElementById("voice-panel").classList.remove("active");
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
+}
+
+function showExercise() {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("exercise-area").classList.add("active");
+}
+
+// ════════════════════════════════════════════════════════════
+// SESSION FLOW
+// ════════════════════════════════════════════════════════════
+function startFullSession() {
+  if (!SPEECH_SUPPORTED) {
+    alert("Speech Recognition non supporte. Utilisez Chrome ou Edge.");
+    return;
+  }
+  sessionMode = "full";
+  sessionStartTime = Date.now();
+  modulesCompleted = [];
+  fullSessionQueue = ["breathing", "reading", "twisters"];
+  startModule(fullSessionQueue.shift());
+}
+
+function showModuleSelect() {
+  showScreen("module-select");
+}
+
+function startModule(mod) {
+  if ((mod === "reading" || mod === "twisters") && !SPEECH_SUPPORTED) return;
+  if (!sessionStartTime) sessionStartTime = Date.now();
+  currentModule = mod;
+  showExercise();
+
+  if (mod === "breathing") startBreathing();
+  else if (mod === "reading") startReading();
+  else if (mod === "twisters") startTwisters();
+}
+
+function completeModule(mod) {
+  modulesCompleted.push(mod);
+  stopRecognition();
+  stopVoiceAnalysis();
+  document.getElementById("voice-panel").classList.remove("active");
+
+  if (sessionMode === "full" && fullSessionQueue.length > 0) {
+    startModule(fullSessionQueue.shift());
+  } else {
+    showDone();
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// SPEECH RECOGNITION
+// ════════════════════════════════════════════════════════════
+function initRecognition(onResult, onEnd) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  recognition = new SR();
+  recognition.lang = "fr-FR";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 3;
+
+  recognition.onresult = onResult;
+  recognition.onerror = function(e) {
+    if (e.error === "no-speech" || e.error === "aborted") return;
+    console.warn("SpeechRecognition error:", e.error);
+  };
+  recognition.onend = function() {
+    // Auto-restart (Chrome cuts after ~15s of silence)
+    if (recognizing) {
+      try { recognition.start(); } catch(e) {}
+    }
+    if (onEnd) onEnd();
+  };
+  return recognition;
+}
+
+function startRecognition() {
+  if (!recognition) return;
+  recognizing = true;
+  try { recognition.start(); } catch(e) {}
+}
+
+function stopRecognition() {
+  recognizing = false;
+  if (recognition) {
+    try { recognition.stop(); } catch(e) {}
+  }
+  recognition = null;
+}
+
+// ════════════════════════════════════════════════════════════
+// AUDIO ANALYSIS (Web Audio API)
+// ════════════════════════════════════════════════════════════
+async function initAudioAnalysis() {
+  try {
+    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioCtx.createMediaStreamSource(audioStream);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    source.connect(analyser);
+    audioDataArray = new Uint8Array(analyser.frequencyBinCount);
+    audioFloatArray = new Float32Array(analyser.fftSize);
+    document.getElementById("voice-panel").classList.add("active");
+    runVoiceAnalysis();
+  } catch(e) {
+    console.warn("Audio analysis unavailable:", e);
+  }
+}
+
+function stopVoiceAnalysis() {
+  if (voiceAnalysisRAF) cancelAnimationFrame(voiceAnalysisRAF);
+  voiceAnalysisRAF = null;
+  if (audioStream) {
+    audioStream.getTracks().forEach(t => t.stop());
+    audioStream = null;
+  }
+  if (audioCtx) {
+    audioCtx.close().catch(() => {});
+    audioCtx = null;
+  }
+  analyser = null;
+}
+
+function runVoiceAnalysis() {
+  if (!analyser) return;
+
+  // Volume (RMS)
+  analyser.getByteTimeDomainData(audioDataArray);
+  let sum = 0;
+  for (let i = 0; i < audioDataArray.length; i++) {
+    const v = (audioDataArray[i] - 128) / 128;
+    sum += v * v;
+  }
+  const rms = Math.sqrt(sum / audioDataArray.length);
+  const volumeNorm = Math.min(100, Math.round(rms * 300));
+
+  document.getElementById("vm-volume").textContent = volumeNorm;
+  document.getElementById("vb-volume").style.width = volumeNorm + "%";
+
+  // Pitch (autocorrelation)
+  analyser.getFloatTimeDomainData(audioFloatArray);
+  const pitch = detectPitch(audioFloatArray, audioCtx.sampleRate);
+  const pitchEl = document.getElementById("vm-pitch");
+  const pitchBar = document.getElementById("vb-pitch");
+  if (pitch > 0) {
+    let pitchLabel;
+    if (pitch < 130) pitchLabel = "Grave";
+    else if (pitch > 220) pitchLabel = "Aigu";
+    else pitchLabel = "Medium";
+    pitchEl.textContent = Math.round(pitch) + " Hz";
+    pitchBar.style.width = Math.min(100, (pitch / 400) * 100) + "%";
+  } else {
+    pitchEl.textContent = "--";
+    pitchBar.style.width = "0%";
+  }
+
+  // Pace (WPM) - updated from speech timestamps
+  const paceEl = document.getElementById("vm-pace");
+  const paceBar = document.getElementById("vb-pace");
+  if (currentPaceWPM > 0) {
+    paceEl.textContent = currentPaceWPM + " m/m";
+    // Ideal: 130-160 wpm, bar green zone
+    const paceNorm = Math.min(100, (currentPaceWPM / 200) * 100);
+    paceBar.style.width = paceNorm + "%";
+  } else {
+    paceEl.textContent = "--";
+    paceBar.style.width = "0%";
+  }
+
+  voiceAnalysisRAF = requestAnimationFrame(runVoiceAnalysis);
+}
+
+function detectPitch(buffer, sampleRate) {
+  // Autocorrelation pitch detection
+  const SIZE = buffer.length;
+  let maxVal = 0;
+  for (let i = 0; i < SIZE; i++) {
+    if (Math.abs(buffer[i]) > maxVal) maxVal = Math.abs(buffer[i]);
+  }
+  if (maxVal < 0.01) return -1; // too quiet
+
+  // Trim silence from ends
+  let start = 0, end = SIZE - 1;
+  const threshold = 0.2;
+  while (start < SIZE && Math.abs(buffer[start]) < threshold * maxVal) start++;
+  while (end > 0 && Math.abs(buffer[end]) < threshold * maxVal) end--;
+  if (end <= start) return -1;
+
+  const trimmed = buffer.slice(start, end + 1);
+  const len = trimmed.length;
+
+  // Autocorrelation
+  const correlations = new Float32Array(len);
+  for (let lag = 0; lag < len; lag++) {
+    let sum = 0;
+    for (let i = 0; i < len - lag; i++) {
+      sum += trimmed[i] * trimmed[i + lag];
+    }
+    correlations[lag] = sum;
+  }
+
+  // Find first dip then first peak
+  let dip = 1;
+  while (dip < len && correlations[dip] > correlations[dip - 1]) dip++;
+  if (dip >= len) return -1;
+
+  let peak = dip;
+  let peakVal = correlations[dip];
+  for (let i = dip; i < len; i++) {
+    if (correlations[i] > peakVal) {
+      peakVal = correlations[i];
+      peak = i;
+    }
+  }
+
+  if (peakVal < 0.3 * correlations[0]) return -1;
+
+  const freq = sampleRate / peak;
+  if (freq < 60 || freq > 500) return -1;
+  return freq;
+}
+
+function trackPace(wordCount) {
+  const now = Date.now();
+  paceWordTimestamps.push({ time: now, count: wordCount });
+  // Keep last 10 seconds
+  const cutoff = now - 10000;
+  paceWordTimestamps = paceWordTimestamps.filter(e => e.time > cutoff);
+
+  if (paceWordTimestamps.length >= 2) {
+    const first = paceWordTimestamps[0];
+    const last = paceWordTimestamps[paceWordTimestamps.length - 1];
+    const elapsed = (last.time - first.time) / 60000; // minutes
+    const words = last.count - first.count;
+    if (elapsed > 0) {
+      currentPaceWPM = Math.round(words / elapsed);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// MODULE 1: READING
+// ════════════════════════════════════════════════════════════
+let selectedTextIndex = 0;
+
+function startReading() {
+  document.getElementById("ex-title").textContent = "Lecture a voix haute";
+  paceWordTimestamps = [];
+  currentPaceWPM = 0;
+  readingTranscriptWords = [];
+  readingIndex = 0;
+  readingCorrect = 0;
+  readingTotal = 0;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="text-selector">
+      <select id="text-select" onchange="changeReadingText(this.value)">
+        ${READING_TEXTS.map((t, i) => `<option value="${i}">${t.title}</option>`).join("")}
+      </select>
+    </div>
+    <div class="precision-label">Precision : <span id="precision-pct">0</span>%</div>
+    <div class="precision-bar-container">
+      <div class="precision-bar" id="precision-bar" style="width:0%"></div>
+    </div>
+    <div class="reading-text" id="reading-display"></div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-read-start" onclick="toggleReading()">Commencer la lecture</button>
+    <button class="btn-secondary" onclick="skipModule('reading')">Passer</button>
+  `;
+
+  renderReadingText(0);
+}
+
+function changeReadingText(idx) {
+  selectedTextIndex = parseInt(idx);
+  readingIndex = 0;
+  readingCorrect = 0;
+  readingTotal = 0;
+  readingTranscriptWords = [];
+  renderReadingText(selectedTextIndex);
+  updatePrecision();
+}
+
+function renderReadingText(idx) {
+  const text = READING_TEXTS[idx].text;
+  readingWords = text.split(/\s+/);
+  const display = document.getElementById("reading-display");
+  display.innerHTML = readingWords.map((w, i) => {
+    const cls = i === 0 ? "current" : "pending";
+    return `<span class="word ${cls}" id="rw-${i}">${w} </span>`;
+  }).join("");
+  document.getElementById("ex-progress").textContent = `0 / ${readingWords.length} mots`;
+}
+
+function toggleReading() {
+  const btn = document.getElementById("btn-read-start");
+  if (!recognizing) {
+    initRecognition(onReadingResult);
+    startRecognition();
+    initAudioAnalysis();
+    btn.textContent = "Arreter";
+  } else {
+    stopRecognition();
+    stopVoiceAnalysis();
+    document.getElementById("voice-panel").classList.remove("active");
+    btn.textContent = "Reprendre";
+  }
+}
+
+function normalizeWord(w) {
+  return w.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
+function onReadingResult(event) {
+  let fullTranscript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    fullTranscript += event.results[i][0].transcript + " ";
+  }
+
+  const spokenWords = fullTranscript.trim().split(/\s+/).filter(w => w.length > 0);
+  const newWords = spokenWords.slice(readingTranscriptWords.length);
+  readingTranscriptWords = spokenWords;
+
+  if (newWords.length > 0) {
+    trackPace(spokenWords.length);
+  }
+
+  for (const spoken of newWords) {
+    if (readingIndex >= readingWords.length) break;
+
+    const expected = normalizeWord(readingWords[readingIndex]);
+    const spokenNorm = normalizeWord(spoken);
+    readingTotal++;
+
+    const el = document.getElementById("rw-" + readingIndex);
+    if (el) el.classList.remove("current");
+
+    if (spokenNorm === expected || fuzzyMatch(spokenNorm, expected) >= 0.8) {
+      readingCorrect++;
+      if (el) { el.classList.remove("pending"); el.classList.add("correct"); }
+    } else {
+      if (el) { el.classList.remove("pending"); el.classList.add("wrong"); }
+    }
+
+    readingIndex++;
+
+    // Mark next word as current
+    const nextEl = document.getElementById("rw-" + readingIndex);
+    if (nextEl) { nextEl.classList.remove("pending"); nextEl.classList.add("current"); }
+  }
+
+  updatePrecision();
+  document.getElementById("ex-progress").textContent = `${readingIndex} / ${readingWords.length} mots`;
+
+  // Check completion
+  if (readingIndex >= readingWords.length) {
+    const pct = readingTotal > 0 ? Math.round((readingCorrect / readingTotal) * 100) : 0;
+    if (pct >= 90) {
+      completeModule("reading");
+    }
+  }
+}
+
+function updatePrecision() {
+  const pct = readingTotal > 0 ? Math.round((readingCorrect / readingTotal) * 100) : 0;
+  document.getElementById("precision-pct").textContent = pct;
+  const bar = document.getElementById("precision-bar");
+  bar.style.width = pct + "%";
+  bar.style.backgroundColor = pct >= 90 ? "#00c853" : pct >= 70 ? "#ffab00" : "#0066ff";
+}
+
+// ════════════════════════════════════════════════════════════
+// MODULE 2: TONGUE TWISTERS
+// ════════════════════════════════════════════════════════════
+let twisterListening = false;
+
+function startTwisters() {
+  document.getElementById("ex-title").textContent = "Virelangues";
+  twisterIndex = 0;
+  twistersCompleted = 0;
+  paceWordTimestamps = [];
+  currentPaceWPM = 0;
+  renderTwister();
+}
+
+function renderTwister() {
+  document.getElementById("ex-progress").textContent = `${twisterIndex + 1} / ${TWISTERS.length}`;
+
+  const difficulty = Math.ceil(((twisterIndex + 1) / TWISTERS.length) * 5);
+  const dots = Array.from({ length: 5 }, (_, i) =>
+    `<span class="dot ${i < difficulty ? "filled" : ""}"></span>`
+  ).join("");
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="twister-progress">Exercice ${twisterIndex + 1} sur ${TWISTERS.length}</div>
+    <div class="difficulty-dots">${dots}</div>
+    <div class="twister-display" id="twister-text">${TWISTERS[twisterIndex]}</div>
+    <div class="twister-transcript">
+      <div class="label">Votre prononciation :</div>
+      <div id="twister-heard">--</div>
+    </div>
+    <div id="twister-result-area"></div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-twister-listen" onclick="toggleTwisterListen()">Ecouter</button>
+    <button class="btn-secondary" onclick="skipModule('twisters')">Passer le module</button>
+  `;
+
+  twisterListening = false;
+}
+
+function toggleTwisterListen() {
+  const btn = document.getElementById("btn-twister-listen");
+  if (!twisterListening) {
+    initRecognition(onTwisterResult);
+    startRecognition();
+    initAudioAnalysis();
+    btn.textContent = "Arreter";
+    twisterListening = true;
+    document.getElementById("twister-heard").textContent = "...";
+    document.getElementById("twister-result-area").innerHTML = "";
+  } else {
+    stopRecognition();
+    stopVoiceAnalysis();
+    document.getElementById("voice-panel").classList.remove("active");
+    btn.textContent = "Ecouter";
+    twisterListening = false;
+  }
+}
+
+function onTwisterResult(event) {
+  const target = TWISTERS[twisterIndex];
+  let bestScore = 0;
+  let bestTranscript = "";
+
+  for (let i = 0; i < event.results.length; i++) {
+    const result = event.results[i];
+    for (let a = 0; a < result.length; a++) {
+      const transcript = result[a].transcript.trim();
+      const score = fuzzyMatch(normalizeWord(transcript), normalizeWord(target));
+      if (score > bestScore) {
+        bestScore = score;
+        bestTranscript = transcript;
+      }
+    }
+  }
+
+  if (bestTranscript) {
+    document.getElementById("twister-heard").textContent = bestTranscript;
+    trackPace(bestTranscript.split(/\s+/).length);
+  }
+
+  const resultArea = document.getElementById("twister-result-area");
+  const pct = Math.round(bestScore * 100);
+
+  if (bestScore >= 0.85) {
+    resultArea.innerHTML = `<div class="twister-result success">Valide ! (${pct}% de correspondance)</div>`;
+    twistersCompleted++;
+
+    // Auto-advance after a short delay
+    setTimeout(() => {
+      stopRecognition();
+      stopVoiceAnalysis();
+      document.getElementById("voice-panel").classList.remove("active");
+      twisterListening = false;
+
+      if (twisterIndex < TWISTERS.length - 1) {
+        twisterIndex++;
+        renderTwister();
+      } else {
+        completeModule("twisters");
+      }
+    }, 1200);
+  } else if (bestScore > 0.3) {
+    resultArea.innerHTML = `<div class="twister-result fail">Pas tout a fait... (${pct}%) — Reessayez</div>`;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// FUZZY MATCHING
+// ════════════════════════════════════════════════════════════
+function fuzzyMatch(a, b) {
+  if (a === b) return 1;
+  if (!a || !b) return 0;
+
+  const na = normalizeWord(a);
+  const nb = normalizeWord(b);
+  if (na === nb) return 1;
+
+  // Levenshtein distance
+  const len1 = na.length;
+  const len2 = nb.length;
+  if (len1 === 0 || len2 === 0) return 0;
+
+  const matrix = [];
+  for (let i = 0; i <= len1; i++) {
+    matrix[i] = [i];
+    for (let j = 1; j <= len2; j++) {
+      if (i === 0) {
+        matrix[i][j] = j;
+      } else {
+        const cost = na[i - 1] === nb[j - 1] ? 0 : 1;
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j - 1] + cost
+        );
+      }
+    }
+  }
+
+  const maxLen = Math.max(len1, len2);
+  return 1 - (matrix[len1][len2] / maxLen);
+}
+
+// ════════════════════════════════════════════════════════════
+// MODULE 3: BREATHING
+// ════════════════════════════════════════════════════════════
+function startBreathing() {
+  document.getElementById("ex-title").textContent = "Respiration";
+  document.getElementById("ex-progress").textContent = "";
+  document.getElementById("voice-panel").classList.remove("active");
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="technique-selector" id="technique-selector">
+      <p style="margin-bottom:12px;opacity:0.6;font-size:14px;">Choisissez une technique :</p>
+      <div class="technique-card" onclick="selectTechnique('square')">
+        <h4>Carree</h4>
+        <p>4-4-4-4 — 6 cycles</p>
+      </div>
+      <div class="technique-card" onclick="selectTechnique('wimhof')">
+        <h4>Wim Hof</h4>
+        <p>30 resp. rapides + retention — 3 rounds</p>
+      </div>
+      <div class="technique-card" onclick="selectTechnique('diaphragm')">
+        <h4>Diaphragmatique</h4>
+        <p>4s inspire nez, 6s expire bouche — 8 cycles</p>
+      </div>
+    </div>
+    <div class="breathing-container" id="breathing-stage" style="display:none;">
+      <div class="breathing-circle-wrap">
+        <div class="breathing-circle" id="breathing-circle"></div>
+      </div>
+      <div class="breathing-phase" id="breathing-phase"></div>
+      <div class="breathing-timer" id="breathing-timer"></div>
+      <div class="breathing-cycles" id="breathing-cycles"></div>
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="skipModule('breathing')">Passer</button>
+  `;
+}
+
+function selectTechnique(tech) {
+  breathingTechnique = tech;
+  document.getElementById("technique-selector").style.display = "none";
+  document.getElementById("breathing-stage").style.display = "flex";
+
+  document.getElementById("exercise-controls").innerHTML = `
+    <button class="btn-secondary" id="btn-breath-stop" onclick="stopBreathingExercise()">Arreter</button>
+  `;
+
+  if (tech === "wimhof") {
+    startWimHof();
+  } else {
+    startPhasedBreathing(tech);
+  }
+}
+
+function startPhasedBreathing(tech) {
+  const config = BREATHING_TECHNIQUES[tech];
+  const phases = config.phases;
+  let currentCycle = 0;
+  let currentPhase = 0;
+  let countdown = phases[0].duration;
+
+  const circle = document.getElementById("breathing-circle");
+  const phaseEl = document.getElementById("breathing-phase");
+  const timerEl = document.getElementById("breathing-timer");
+  const cyclesEl = document.getElementById("breathing-cycles");
+
+  function updateDisplay() {
+    const phase = phases[currentPhase];
+    phaseEl.textContent = phase.label;
+    timerEl.textContent = countdown;
+    cyclesEl.textContent = `Cycle ${currentCycle + 1} / ${config.cycles}`;
+    circle.style.transform = `scale(${phase.scale})`;
+  }
+
+  updateDisplay();
+  breathingActive = true;
+
+  breathingInterval = setInterval(() => {
+    if (!breathingActive) return;
+
+    countdown--;
+    if (countdown <= 0) {
+      currentPhase++;
+      if (currentPhase >= phases.length) {
+        currentPhase = 0;
+        currentCycle++;
+        if (currentCycle >= config.cycles) {
+          clearInterval(breathingInterval);
+          breathingActive = false;
+          completeModule("breathing");
+          return;
+        }
+      }
+      countdown = phases[currentPhase].duration;
+    }
+    updateDisplay();
+  }, 1000);
+}
+
+// Wim Hof
+function startWimHof() {
+  let round = 0;
+  const totalRounds = 3;
+
+  function doRound() {
+    if (round >= totalRounds) {
+      completeModule("breathing");
+      return;
+    }
+
+    document.getElementById("breathing-cycles").textContent = `Round ${round + 1} / ${totalRounds}`;
+    doRapidBreathing(() => {
+      doRetention(() => {
+        doRecovery(() => {
+          round++;
+          doRound();
+        });
+      });
+    });
+  }
+
+  function doRapidBreathing(callback) {
+    let breathCount = 0;
+    const total = 30;
+    const circle = document.getElementById("breathing-circle");
+    const phaseEl = document.getElementById("breathing-phase");
+    const timerEl = document.getElementById("breathing-timer");
+    let inhale = true;
+
+    phaseEl.textContent = "Respirations rapides";
+    breathingActive = true;
+
+    breathingInterval = setInterval(() => {
+      if (!breathingActive) return;
+
+      if (inhale) {
+        circle.style.transform = "scale(2.0)";
+        circle.style.transition = "transform 0.8s ease";
+      } else {
+        circle.style.transform = "scale(1.0)";
+        circle.style.transition = "transform 0.6s ease";
+        breathCount++;
+      }
+      timerEl.textContent = breathCount + " / " + total;
+      inhale = !inhale;
+
+      if (breathCount >= total && !inhale) {
+        clearInterval(breathingInterval);
+        callback();
+      }
+    }, 700);
+  }
+
+  function doRetention(callback) {
+    let seconds = 0;
+    const circle = document.getElementById("breathing-circle");
+    const phaseEl = document.getElementById("breathing-phase");
+    const timerEl = document.getElementById("breathing-timer");
+
+    circle.style.transform = "scale(0.8)";
+    circle.style.transition = "transform 1s ease";
+    phaseEl.textContent = "Retention — Retenez votre souffle";
+
+    // 30 seconds retention (beginners); tap to release is skipped for simplicity
+    let retentionTime = 30;
+
+    breathingInterval = setInterval(() => {
+      if (!breathingActive) return;
+      seconds++;
+      timerEl.textContent = seconds + "s";
+      if (seconds >= retentionTime) {
+        clearInterval(breathingInterval);
+        callback();
+      }
+    }, 1000);
+  }
+
+  function doRecovery(callback) {
+    let seconds = 15;
+    const circle = document.getElementById("breathing-circle");
+    const phaseEl = document.getElementById("breathing-phase");
+    const timerEl = document.getElementById("breathing-timer");
+
+    circle.style.transform = "scale(2.2)";
+    circle.style.transition = "transform 1s ease";
+    phaseEl.textContent = "Recovery — Grande inspiration, retenez";
+
+    breathingInterval = setInterval(() => {
+      if (!breathingActive) return;
+      seconds--;
+      timerEl.textContent = seconds + "s";
+      if (seconds <= 0) {
+        clearInterval(breathingInterval);
+        callback();
+      }
+    }, 1000);
+  }
+
+  doRound();
+}
+
+function stopBreathingExercise() {
+  breathingActive = false;
+  if (breathingInterval) clearInterval(breathingInterval);
+  if (breathingTimeout) clearTimeout(breathingTimeout);
+  completeModule("breathing");
+}
+
+// ════════════════════════════════════════════════════════════
+// SKIP MODULE
+// ════════════════════════════════════════════════════════════
+function skipModule(mod) {
+  breathingActive = false;
+  if (breathingInterval) clearInterval(breathingInterval);
+  if (breathingTimeout) clearTimeout(breathingTimeout);
+  stopRecognition();
+  stopVoiceAnalysis();
+  document.getElementById("voice-panel").classList.remove("active");
+  completeModule(mod);
+}
+
+// ════════════════════════════════════════════════════════════
+// DONE SCREEN + BEEMINDER
+// ════════════════════════════════════════════════════════════
+function showDone() {
+  const elapsed = Math.round((Date.now() - sessionStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+
+  const moduleNames = { breathing: "Respiration", reading: "Lecture", twisters: "Virelangues" };
+  const modList = modulesCompleted.map(m => moduleNames[m] || m).join(", ");
+
+  showScreen("done-screen");
+  document.getElementById("done-text").textContent = "Session completee";
+  document.getElementById("done-stats").innerHTML = `
+    <div>Modules : ${modList}</div>
+    <div>Temps : ${mins}m ${secs}s</div>
+    ${currentModule === "reading" || modulesCompleted.includes("reading")
+      ? `<div>Precision lecture : ${readingTotal > 0 ? Math.round((readingCorrect / readingTotal) * 100) : 0}%</div>`
+      : ""
+    }
+    ${modulesCompleted.includes("twisters")
+      ? `<div>Virelangues valides : ${twistersCompleted} / ${TWISTERS.length}</div>`
+      : ""
+    }
+  `;
+
+  sendToBeeminder(modList, elapsed);
+}
+
+async function sendToBeeminder(modules, seconds) {
+  const statusEl = document.getElementById("beeminder-status");
+  try {
+    const today = new Date();
+    const timestamp = Math.floor(new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime() / 1000);
+
+    const resp = await fetch(
+      `https://www.beeminder.com/api/v1/users/${BEEMINDER_USER}/goals/${BEEMINDER_GOAL}/datapoints.json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          auth_token: BEEMINDER_TOKEN,
+          value: 1,
+          timestamp: timestamp,
+          comment: `Entrainement vocal: ${modules} en ${seconds}s`
+        })
+      }
+    );
+
+    if (resp.ok) {
+      statusEl.textContent = "Beeminder : ENVOYE";
+      statusEl.style.color = "#fff";
+    } else {
+      const err = await resp.json();
+      statusEl.textContent = `Beeminder : erreur — ${JSON.stringify(err.errors || err)}`;
+      statusEl.style.color = "#ffcc00";
+    }
+  } catch(e) {
+    statusEl.textContent = `Beeminder : erreur reseau — ${e.message}`;
+    statusEl.style.color = "#ff5555";
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPOSE FUNCTIONS TO GLOBAL SCOPE
+// ════════════════════════════════════════════════════════════
+window.startFullSession = startFullSession;
+window.showModuleSelect = showModuleSelect;
+window.startModule = startModule;
+window.showScreen = showScreen;
+window.changeReadingText = changeReadingText;
+window.toggleReading = toggleReading;
+window.toggleTwisterListen = toggleTwisterListen;
+window.selectTechnique = selectTechnique;
+window.stopBreathingExercise = stopBreathingExercise;
+window.skipModule = skipModule;
+</script>
+</body>
+</html>

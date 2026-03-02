@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Push-Up Verifier</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif;
+  height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+}
+#video-container {
+  position: relative; flex: 1; overflow: hidden;
+}
+video, canvas {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover;
+}
+canvas { z-index: 2; }
+#overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 3; pointer-events: none;
+}
+#count-display {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 120px; font-weight: 900; z-index: 4;
+  text-shadow: 0 0 40px rgba(0,150,255,0.8); pointer-events: none;
+  transition: transform 0.15s ease;
+}
+#count-display.bump { transform: translate(-50%, -50%) scale(1.3); }
+#target-display {
+  position: absolute; top: 20px; right: 20px; z-index: 4;
+  font-size: 18px; opacity: 0.7;
+}
+#status {
+  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 4; font-size: 16px; text-align: center; width: 90%;
+  padding: 10px; border-radius: 8px;
+}
+#status.detecting { background: rgba(0,150,255,0.3); }
+#status.error { background: rgba(255,50,50,0.3); }
+#status.success { background: rgba(0,200,50,0.3); }
+#controls {
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 20px));
+  z-index: 5; display: flex; gap: 10px;
+  justify-content: center; background: #111;
+  position: relative;
+}
+button {
+  padding: 14px 28px; border: none; border-radius: 8px;
+  font-size: 18px; font-weight: 600; cursor: pointer;
+  min-height: 50px;
+}
+#btn-start { background: #0066ff; color: #fff; }
+#btn-start:disabled { background: #333; color: #666; }
+#btn-reset { background: #333; color: #fff; }
+#setup {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 10; background: #0a0a0a; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 30px; text-align: center;
+}
+#setup h1 { font-size: 28px; margin-bottom: 8px; }
+#setup p { opacity: 0.6; margin-bottom: 30px; }
+#setup label { font-size: 14px; opacity: 0.7; margin-bottom: 6px; }
+#setup input {
+  width: 120px; padding: 12px; font-size: 32px; text-align: center;
+  background: #222; border: 2px solid #333; border-radius: 8px;
+  color: #fff; margin-bottom: 20px;
+}
+#btn-go {
+  background: #0066ff; color: #fff; padding: 16px 48px;
+  font-size: 20px; border-radius: 12px;
+}
+.done-screen {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 10; background: rgba(0,200,50,0.95);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 30px; text-align: center; display: none;
+}
+.done-screen h1 { font-size: 48px; margin-bottom: 10px; }
+.done-screen p { font-size: 18px; opacity: 0.9; }
+#beeminder-status { margin-top: 20px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div id="setup">
+  <h1>Push-Up Verifier</h1>
+  <p>Inviolable. Camera + IA + Beeminder.</p>
+  <label>Nombre de pompes</label>
+  <input type="number" id="target-input" value="15" min="1" max="100">
+  <br>
+  <button id="btn-go" onclick="startSession()">GO</button>
+</div>
+
+<div id="video-container">
+  <video id="video" playsinline></video>
+  <canvas id="canvas"></canvas>
+  <div id="count-display">0</div>
+  <div id="target-display">Objectif: <span id="target-text">15</span></div>
+  <div id="status" class="detecting">Positionnez-vous face a la camera</div>
+</div>
+
+<div id="controls">
+  <button id="btn-start" onclick="toggleDetection()" disabled>Demarrer</button>
+  <button id="btn-reset" onclick="resetCount()">Reset</button>
+</div>
+
+<div id="done-screen" class="done-screen">
+  <h1>VALIDE</h1>
+  <p id="done-text">15 pompes completees</p>
+  <p id="done-time"></p>
+  <div id="beeminder-status">Envoi a Beeminder...</div>
+</div>
+
+<script type="module">
+import { PoseLandmarker, FilesetResolver, DrawingUtils } from
+  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/vision_bundle.mjs";
+
+let poseLandmarker;
+let video, canvas, ctx;
+let detecting = false;
+let count = 0;
+let target = 15;
+let position = "unknown"; // "up" or "down"
+let startTime = null;
+let lastCountTime = 0;
+let sessionActive = false;
+
+// Beeminder config
+const BEEMINDER_USER = "prinsechris";
+const BEEMINDER_TOKEN = "28f1_C1a-W6ZPtA1joXN";
+const BEEMINDER_GOAL = "habitudes";
+
+window.startSession = async function() {
+  target = parseInt(document.getElementById("target-input").value) || 15;
+  document.getElementById("target-text").textContent = target;
+  document.getElementById("setup").style.display = "none";
+
+  video = document.getElementById("video");
+  canvas = document.getElementById("canvas");
+  ctx = canvas.getContext("2d");
+
+  await initCamera();
+  await initPose();
+
+  // Auto-start detection — no extra button needed
+  detecting = true;
+  sessionActive = true;
+  startTime = Date.now();
+  document.getElementById("btn-start").textContent = "Pause";
+  document.getElementById("btn-start").disabled = false;
+  document.getElementById("status").textContent = "Detection active — faites vos pompes !";
+  renderLoop();
+};
+
+async function initCamera() {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }
+  });
+  video.srcObject = stream;
+  await video.play();
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+}
+
+async function initPose() {
+  const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm"
+  );
+  poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+    baseOptions: {
+      modelAssetPath: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+      delegate: "GPU"
+    },
+    runningMode: "VIDEO",
+    numPoses: 1
+  });
+}
+
+function calcAngle(a, b, c) {
+  const radians = Math.atan2(c.y - b.y, c.x - b.x) - Math.atan2(a.y - b.y, a.x - b.x);
+  let angle = Math.abs(radians * 180 / Math.PI);
+  if (angle > 180) angle = 360 - angle;
+  return angle;
+}
+
+function detectPushUp(landmarks) {
+  // Use both arms for robustness
+  const lShoulder = landmarks[11];
+  const lElbow = landmarks[13];
+  const lWrist = landmarks[15];
+  const rShoulder = landmarks[12];
+  const rElbow = landmarks[14];
+  const rWrist = landmarks[16];
+
+  const leftAngle = calcAngle(lShoulder, lElbow, lWrist);
+  const rightAngle = calcAngle(rShoulder, rElbow, rWrist);
+  const avgAngle = (leftAngle + rightAngle) / 2;
+
+  const now = Date.now();
+
+  // Debounce: at least 500ms between counts
+  if (now - lastCountTime < 500) return avgAngle;
+
+  if (avgAngle < 90 && position !== "down") {
+    position = "down";
+  } else if (avgAngle > 150 && position === "down") {
+    position = "up";
+    count++;
+    lastCountTime = now;
+    updateCount();
+
+    if (count >= target) {
+      onComplete();
+    }
+  }
+
+  return avgAngle;
+}
+
+function updateCount() {
+  const el = document.getElementById("count-display");
+  el.textContent = count;
+  el.classList.add("bump");
+  setTimeout(() => el.classList.remove("bump"), 150);
+}
+
+function onComplete() {
+  detecting = false;
+  sessionActive = false;
+  const elapsed = Math.round((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+
+  const doneScreen = document.getElementById("done-screen");
+  doneScreen.style.display = "flex";
+  document.getElementById("done-text").textContent = `${count} pompes completees`;
+  document.getElementById("done-time").textContent = `Temps: ${mins}m ${secs}s`;
+
+  sendToBeeminder(count, elapsed);
+}
+
+async function sendToBeeminder(reps, seconds) {
+  const statusEl = document.getElementById("beeminder-status");
+  try {
+    const today = new Date();
+    const timestamp = Math.floor(new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime() / 1000);
+
+    const resp = await fetch(
+      `https://www.beeminder.com/api/v1/users/${BEEMINDER_USER}/goals/${BEEMINDER_GOAL}/datapoints.json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          auth_token: BEEMINDER_TOKEN,
+          value: 1,
+          timestamp: timestamp,
+          comment: `Reveil Musculaire: ${reps} pompes en ${seconds}s (verifie par camera IA)`
+        })
+      }
+    );
+
+    if (resp.ok) {
+      statusEl.textContent = "Beeminder: ENVOYE";
+      statusEl.style.color = "#fff";
+    } else {
+      const err = await resp.json();
+      statusEl.textContent = `Beeminder: erreur — ${JSON.stringify(err.errors || err)}`;
+      statusEl.style.color = "#ffcc00";
+    }
+  } catch(e) {
+    statusEl.textContent = `Beeminder: erreur reseau — ${e.message}`;
+    statusEl.style.color = "#ff5555";
+  }
+}
+
+function renderLoop() {
+  if (!detecting || !poseLandmarker) return;
+
+  const now = performance.now();
+  const results = poseLandmarker.detectForVideo(video, now);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (results.landmarks && results.landmarks.length > 0) {
+    const lm = results.landmarks[0];
+    const drawingUtils = new DrawingUtils(ctx);
+
+    // Draw skeleton
+    drawingUtils.drawConnectors(lm, PoseLandmarker.POSE_CONNECTIONS, {
+      color: "#00aaff", lineWidth: 2
+    });
+    drawingUtils.drawLandmarks(lm, {
+      color: "#00ff88", lineWidth: 1, radius: 3
+    });
+
+    const angle = detectPushUp(lm);
+
+    const statusEl = document.getElementById("status");
+    if (position === "down") {
+      statusEl.textContent = `BAS (angle: ${Math.round(angle)}) — Remontez !`;
+      statusEl.className = "detecting";
+    } else {
+      statusEl.textContent = `HAUT (angle: ${Math.round(angle)}) — Descendez !`;
+      statusEl.className = "detecting";
+    }
+  } else {
+    document.getElementById("status").textContent = "Corps non detecte — positionnez-vous";
+    document.getElementById("status").className = "error";
+  }
+
+  if (detecting) requestAnimationFrame(renderLoop);
+}
+
+window.toggleDetection = function() {
+  if (!detecting) {
+    detecting = true;
+    sessionActive = true;
+    if (!startTime) startTime = Date.now();
+    document.getElementById("btn-start").textContent = "Pause";
+    renderLoop();
+  } else {
+    detecting = false;
+    document.getElementById("btn-start").textContent = "Reprendre";
+  }
+};
+
+window.resetCount = function() {
+  count = 0;
+  position = "unknown";
+  startTime = null;
+  lastCountTime = 0;
+  document.getElementById("count-display").textContent = "0";
+  document.getElementById("done-screen").style.display = "none";
+  document.getElementById("status").textContent = "Reset. Appuyez sur Demarrer.";
+};
+</script>
+</body>
+</html>
