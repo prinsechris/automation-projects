@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Pitch Recorder</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif;
+  height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+}
+
+/* -- Screens -- */
+.screen {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 10; background: #0a0a0a; display: none;
+  flex-direction: column; align-items: center; justify-content: flex-start;
+  padding: 30px 20px; text-align: center; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.screen.active { display: flex; }
+.screen h1 { font-size: 28px; margin-bottom: 8px; margin-top: 20px; }
+.screen p.subtitle { opacity: 0.6; margin-bottom: 24px; font-size: 14px; }
+
+/* -- Buttons -- */
+button {
+  padding: 14px 28px; border: none; border-radius: 8px;
+  font-size: 18px; font-weight: 600; cursor: pointer;
+  min-height: 50px; transition: opacity 0.2s;
+}
+button:active { opacity: 0.7; }
+.btn-primary { background: #ff3333; color: #fff; }
+.btn-primary:disabled { background: #333; color: #666; cursor: default; }
+.btn-secondary { background: #333; color: #fff; }
+.btn-success { background: #00c853; color: #fff; }
+.btn-blue { background: #0066ff; color: #fff; }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+
+/* -- Pitch cards -- */
+.pitch-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; width: 100%; max-width: 360px; cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  text-align: left; margin: 6px 0;
+}
+.pitch-card:hover { border-color: #ff3333; transform: translateY(-2px); }
+.pitch-card h3 { font-size: 16px; margin-bottom: 4px; }
+.pitch-card p { font-size: 12px; opacity: 0.6; }
+.pitch-card .tag {
+  display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 4px; margin-top: 6px;
+}
+.pitch-card .tag-steps { background: rgba(255,51,51,0.2); color: #ff6666; }
+.pitch-card .tag-time { background: rgba(255,255,255,0.1); color: #aaa; }
+
+/* -- Exercise screen -- */
+#exercise-screen {
+  justify-content: flex-start; padding: 0;
+}
+#ex-header {
+  width: 100%; padding: 14px 20px; background: #111;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #222; flex-shrink: 0;
+}
+#ex-header .title { font-size: 15px; font-weight: 600; }
+#ex-header .step-info { font-size: 13px; opacity: 0.6; }
+
+/* Script area */
+#script-area {
+  flex: 1; overflow-y: auto; padding: 16px 20px;
+  padding-bottom: 220px; width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+.script-step {
+  background: #111; border: 2px solid #222; border-radius: 12px;
+  padding: 16px; margin-bottom: 12px; text-align: left;
+  transition: border-color 0.3s, opacity 0.3s;
+}
+.script-step.active { border-color: #ff3333; }
+.script-step.done { opacity: 0.4; }
+.step-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1px; color: #ff3333; margin-bottom: 6px;
+}
+.step-text { font-size: 15px; line-height: 1.6; }
+.step-text .key { font-weight: 700; color: #ff6666; }
+.step-text .pause {
+  display: inline-block; background: #222; color: #888;
+  font-size: 10px; padding: 1px 6px; border-radius: 3px;
+  font-style: italic; margin: 0 2px;
+}
+.step-text .tone {
+  display: inline-block; color: #aa88ff; font-size: 10px;
+  font-weight: 600; text-transform: uppercase; margin: 0 2px;
+}
+.step-text .direction {
+  display: block; color: #888; font-size: 12px;
+  font-style: italic; margin: 4px 0;
+}
+.step-hint {
+  font-size: 12px; opacity: 0.5; margin-top: 8px;
+  font-style: italic; padding-top: 8px; border-top: 1px solid #222;
+}
+
+/* Recording panel */
+#rec-panel {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: #111; border-top: 1px solid #333;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 20px));
+  z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+#rec-timer {
+  font-size: 36px; font-weight: 900; color: #ff3333;
+  text-shadow: 0 0 20px rgba(255,51,51,0.4);
+  font-variant-numeric: tabular-nums;
+}
+#rec-timer.idle { color: #666; text-shadow: none; }
+.rec-btn {
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 4px solid #ff3333; background: transparent;
+  cursor: pointer; position: relative; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  min-height: auto;
+}
+.rec-btn .inner {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #ff3333; transition: all 0.2s;
+}
+.rec-btn.recording .inner {
+  width: 24px; height: 24px; border-radius: 4px;
+}
+.rec-btn.recording { background: rgba(255,51,51,0.15); }
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(255,51,51,0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(255,51,51,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,51,51,0); }
+}
+.rec-btn.recording { animation: pulse-ring 1.5s infinite; }
+
+.rec-meta {
+  display: flex; align-items: center; gap: 16px;
+  font-size: 13px; opacity: 0.6;
+}
+.rec-controls {
+  display: flex; gap: 10px; align-items: center;
+}
+
+/* Takes list */
+.take-item {
+  background: #111; border: 1px solid #222; border-radius: 8px;
+  padding: 12px 16px; margin: 6px 0; display: flex;
+  align-items: center; justify-content: space-between;
+  text-align: left; width: 100%; max-width: 400px;
+}
+.take-item .take-info { flex: 1; }
+.take-item .take-num { font-size: 14px; font-weight: 600; }
+.take-item .take-dur { font-size: 12px; opacity: 0.5; }
+.take-item .take-actions { display: flex; gap: 8px; }
+.take-item button { padding: 8px 12px; font-size: 13px; min-height: auto; border-radius: 6px; }
+
+/* Done screen */
+#done-screen { z-index: 25; background: #0a0a0a; justify-content: center; }
+#done-screen h1 { font-size: 42px; color: #ff3333; }
+.done-stats { margin: 20px 0; }
+.done-stats .stat { font-size: 14px; margin: 6px 0; opacity: 0.8; }
+.done-stats .stat-big { font-size: 24px; font-weight: 900; color: #ff3333; }
+#beeminder-status { margin-top: 16px; font-size: 14px; opacity: 0.7; }
+
+/* Step dots */
+.step-dots { display: flex; gap: 6px; justify-content: center; margin: 8px 0; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; }
+.step-dot.active { background: #ff3333; }
+.step-dot.done { background: #00c853; }
+</style>
+</head>
+<body>
+
+<!-- ======= HOME ======= -->
+<div id="home" class="screen active">
+  <h1>Pitch Recorder</h1>
+  <p class="subtitle">Entraine-toi. Enregistre. Progresse.</p>
+
+  <div class="pitch-card" onclick="selectPitch('coldcall')">
+    <h3>Cold Call — Standard</h3>
+    <p>Accroche, decouverte, objections, prise de RDV</p>
+    <span class="tag tag-steps">7 etapes</span>
+    <span class="tag tag-time">~3 min</span>
+  </div>
+
+  <div class="pitch-card" onclick="selectPitch('bonne-mauvaise')">
+    <h3>Cold Call — Bonne/mauvaise nouvelle</h3>
+    <p>Variante transparence. Desarmant et honnete.</p>
+    <span class="tag tag-steps">4 etapes</span>
+    <span class="tag tag-time">~2 min</span>
+  </div>
+
+  <div class="pitch-card" onclick="selectPitch('porte-a-porte')">
+    <h3>Pitch Porte-a-porte</h3>
+    <p>6 phases du script terrain : accroche au close</p>
+    <span class="tag tag-steps">6 etapes</span>
+    <span class="tag tag-time">~4 min</span>
+  </div>
+
+  <div class="pitch-card" onclick="selectPitch('objections')">
+    <h3>Objections</h3>
+    <p>Les 5 objections classiques et comment y repondre</p>
+    <span class="tag tag-steps">5 etapes</span>
+    <span class="tag tag-time">~3 min</span>
+  </div>
+
+  <div class="pitch-card" onclick="selectPitch('libre')">
+    <h3>Mode libre</h3>
+    <p>Pas de script. Juste l'enregistrement.</p>
+    <span class="tag tag-time">Illimite</span>
+  </div>
+</div>
+
+<!-- ======= EXERCISE ======= -->
+<div id="exercise-screen" class="screen">
+  <div id="ex-header">
+    <span class="title" id="ex-title">Pitch</span>
+    <span class="step-info" id="ex-step-info"></span>
+  </div>
+  <div id="script-area"></div>
+  <div id="rec-panel">
+    <div class="rec-meta">
+      <span id="take-label">Prise 1</span>
+      <span id="step-nav-label"></span>
+    </div>
+    <div class="rec-controls">
+      <button class="btn-secondary" id="btn-prev-step" onclick="prevStep()" style="padding:10px 16px;font-size:14px;min-height:auto;">Prec.</button>
+      <div class="rec-btn" id="btn-rec" onclick="toggleRecording()">
+        <div class="inner"></div>
+      </div>
+      <button class="btn-secondary" id="btn-next-step" onclick="nextStep()" style="padding:10px 16px;font-size:14px;min-height:auto;">Suiv.</button>
+    </div>
+    <div id="rec-timer" class="idle">0:00</div>
+  </div>
+</div>
+
+<!-- ======= REVIEW ======= -->
+<div id="review-screen" class="screen">
+  <h1>Prise terminee</h1>
+  <p class="subtitle" id="review-subtitle"></p>
+
+  <div style="margin:16px 0;">
+    <audio id="review-audio" controls style="width:100%;max-width:360px;"></audio>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn-primary" onclick="shareTake()">Partager</button>
+    <button class="btn-blue" onclick="downloadTake()">Telecharger</button>
+  </div>
+  <div class="btn-group">
+    <button class="btn-secondary" onclick="redoTake()">Refaire</button>
+    <button class="btn-success" onclick="finishOrContinue()">Continuer</button>
+  </div>
+
+  <div id="takes-history" style="margin-top:24px;width:100%;max-width:400px;"></div>
+</div>
+
+<!-- ======= DONE ======= -->
+<div id="done-screen" class="screen">
+  <h1>SESSION FINIE</h1>
+  <div class="done-stats" id="done-stats"></div>
+  <div id="beeminder-status"></div>
+  <div class="btn-group" style="margin-top:20px;">
+    <button class="btn-primary" onclick="shareAll()">Partager tout</button>
+    <button class="btn-secondary" onclick="location.reload()">Nouvelle session</button>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// CONFIG
+// ================================================================
+const BEEMINDER_USER = "prinsechris";
+const BEEMINDER_TOKEN = "28f1_C1a-W6ZPtA1joXN";
+const BEEMINDER_GOAL = "habitudes";
+
+// ================================================================
+// PITCH SCRIPTS
+// ================================================================
+const PITCHES = {
+  "coldcall": {
+    title: "Cold Call — Standard",
+    steps: [
+      {
+        label: "ACCROCHE",
+        text: `<span class="tone">TON : CALME, SOURIANT</span><br><br>
+Bonjour, c'est Chris. <span class="pause">pause 1s</span> J'appelle parce que <span class="key">j'ai regarde vos avis Google et j'ai remarque quelque chose d'interessant.</span> Vous avez 2 minutes ?`,
+        hint: "Ton calme, pas de rush. Tu offres une opportunite, pas une vente."
+      },
+      {
+        label: "TRANSITION",
+        text: `<span class="tone">TON : EXPERT CURIEUX</span><br><br>
+En fait, j'ai fait une petite analyse de votre reputation en ligne et <span class="key">j'ai repere 2-3 choses que vos concurrents font et pas vous.</span> <span class="pause">pause</span> Est-ce que vous repondez a vos avis Google ?`,
+        hint: "Pose la question. Laisse-les parler."
+      },
+      {
+        label: "DECOUVERTE",
+        text: `<span class="tone">TON : EMPATHIQUE</span><br><br>
+Je comprends, c'est exactement ce que me disent la plupart des commercants. <span class="key">Vous recevez combien de nouveaux avis par mois a peu pres ?</span> <span class="pause">attendre</span><br><br>
+D'accord. Et est-ce que vous avez remarque si votre note a baisse ces derniers mois ? <span class="key">Les avis sans reponse pesent 2 fois plus sur votre note</span> que les avis avec reponse.`,
+        hint: "Valide leur probleme. Apporte de la valeur. Eduque."
+      },
+      {
+        label: "IMPACT",
+        text: `<span class="tone">TON : FACTUEL PUIS GRAVE</span><br><br>
+<span class="key">90% des gens lisent les avis avant de choisir un commerce.</span> <span class="pause">pause</span> Et un avis negatif sans reponse fait 3 fois plus de degats qu'avec une bonne reponse. <span class="pause">pause 2s</span><br><br>
+Concretement, ca represente des dizaines de clients par mois qui choisissent d'aller chez le concurrent.`,
+        hint: "Chiffres concrets. Laisser peser le silence."
+      },
+      {
+        label: "SOLUTION",
+        text: `<span class="tone">TON : ENTHOUSIASTE MAITRISE</span><br><br>
+C'est justement pour ca que j'ai cree un outil. <span class="key">En 10 secondes par avis, l'IA genere une reponse pro, et vous validez avant publication.</span> <span class="pause">pause</span><br><br>
+Ca prend <span class="key">30 secondes par jour au lieu de 30 minutes.</span> Et un demi-point de plus sur Google, c'est entre 500 et 2000 euros de CA en plus par mois.`,
+        hint: "Montre, ne dis pas. Si tu as un exemple reel, c'est le moment."
+      },
+      {
+        label: "OFFRE",
+        text: `<span class="tone">TON : DECONTRACTE, FACTUEL</span><br><br>
+Pour comparaison, un community manager c'est entre 400 et 800 euros par mois. <span class="pause">pause</span><br><br>
+Nous c'est <span class="key">100 euros pour la mise en place, puis 100 euros par mois</span> pour le pilotage complet. Ou 200 euros en une fois si vous preferez gerer en autonomie. <span class="pause">pause</span><br><br>
+Et les 30 premiers jours, <span class="key">c'est satisfait ou rembourse.</span> Et si je ne vous ai pas rembourse sous 30 jours apres votre demande, <span class="key">je vous rends le double.</span> Zero risque.`,
+        hint: "Le prix est dit comme on donne l'heure. Pas d'hesitation."
+      },
+      {
+        label: "CLOSE",
+        text: `<span class="tone">TON : PRESOMPTIF, CHALEUREUX</span><br><br>
+<span class="key">Le plus simple, c'est qu'on demarre la semaine prochaine.</span> <span class="pause">pause</span> Je configure tout de mon cote.<br><br>
+<span class="key">Vous preferez qu'on commence lundi ou plutot mercredi ?</span> <span class="pause">attendre</span><br><br>
+Parfait. Je vous envoie le recapitulatif par email. <span class="key">Vous allez voir, vos clients vont sentir la difference.</span>`,
+        hint: "Pas de question oui/non. Propose 2 creneaux."
+      }
+    ]
+  },
+
+  "bonne-mauvaise": {
+    title: "Cold Call — Bonne/mauvaise nouvelle",
+    steps: [
+      {
+        label: "ACCROCHE TRANSPARENTE",
+        text: `<span class="tone">TON : DIRECT, SOURIANT</span><br><br>
+Bonjour, c'est Chris. <span class="key">Je vais etre honnete avec vous, c'est un appel de prospection.</span> <span class="pause">pause 1s</span><br><br>
+Mais la bonne nouvelle c'est que <span class="key">j'ai regarde votre fiche Google avant d'appeler</span> et j'ai repere quelque chose de concret qui pourrait vous aider. Vous avez 30 secondes ?`,
+        hint: "La transparence desarme. Sois direct et souriant."
+      },
+      {
+        label: "EMPATHIE + FAIT",
+        text: `<span class="tone">TON : EMPATHIQUE, COMPLICE</span><br><br>
+Je comprends, moi aussi je recois des appels tout le temps et c'est chiant. <span class="pause">pause</span><br><br>
+La difference c'est que moi j'ai vraiment regarde votre fiche. <span class="key">Vous avez des centaines d'avis et personne y repond.</span> <span class="pause">pause</span><br><br>
+Est-ce que vous saviez que <span class="key">89% des clients lisent les reponses du patron avant de reserver ?</span>`,
+        hint: "Tu es comme eux, tu comprends. Empathie + fait concret."
+      },
+      {
+        label: "SOLUTION RAPIDE",
+        text: `<span class="tone">TON : ENTHOUSIASTE CONTENU</span><br><br>
+C'est justement ca le truc. Personne a le temps de repondre a des centaines d'avis manuellement. <span class="pause">pause</span><br><br>
+C'est pour ca que <span class="key">j'ai cree un outil qui le fait en 10 secondes par avis</span>, avec votre validation avant publication. <span class="pause">pause</span><br><br>
+<span class="key">Je vous envoie un rapport gratuit de votre reputation et on en reparle ?</span>`,
+        hint: "Valide le probleme, presente la solution, offre le rapport."
+      },
+      {
+        label: "PRISE DE RDV",
+        text: `<span class="tone">TON : PRATIQUE, CONFIANT</span><br><br>
+Super ! Plutot que par email, <span class="key">est-ce qu'on peut se caler 10 minutes cette semaine ?</span> C'est beaucoup plus parlant quand je vous montre en direct sur vos propres avis. <span class="pause">pause</span><br><br>
+<span class="key">Mercredi apres-midi ou jeudi matin, qu'est-ce qui vous arrange ?</span>`,
+        hint: "Propose 2 creneaux precis. Confirme tout."
+      }
+    ]
+  },
+
+  "porte-a-porte": {
+    title: "Pitch Porte-a-porte",
+    steps: [
+      {
+        label: "PHASE 1 — ACCROCHE",
+        text: `<span class="direction">(Sourire sincere, contact visuel, voix chaude)</span>
+<span class="tone">TON : DECLARATIF AMICAL — 30 secondes</span><br><br>
+Bonjour ! <span class="pause">pause 1s</span> Vous etes le gerant ? <span class="pause">attendre</span><br><br>
+Enchante. Moi c'est Chris, je suis specialiste en reputation en ligne a Avignon. <span class="pause">pause</span><br><br>
+<span class="key">Je ne viens rien vous vendre.</span> <span class="pause">pause 2s</span><br><br>
+En fait, je fais le tour des commerces du quartier et <span class="key">j'offre un mini-audit gratuit de votre reputation Google.</span> C'est 2 minutes, et apres vous en faites ce que vous voulez.<br><br>
+<span class="direction">(Montrer le telephone avec leur fiche Google ouverte)</span>
+<span class="key">Est-ce que ca vous derange si je vous montre ce que j'ai trouve ?</span>`,
+        hint: "Reciprocite + Frame Control. Tu es l'expert, pas le demarcheur."
+      },
+      {
+        label: "PHASE 2 — DIAGNOSTIC",
+        text: `<span class="direction">(Montrer le telephone, pointer les elements)</span>
+<span class="tone">TON : EXPERT NEUTRE — comme un medecin — 1 minute</span><br><br>
+Voila votre fiche Google. Vous avez [NB] avis, avec une note de [NOTE] sur 5. <span class="pause">pause</span><br><br>
+<span class="key">Sur les avis recents, aucun n'a recu de reponse.</span> <span class="pause">pause 2s</span><br><br>
+C'est probablement pas par manque de volonte... <span class="key">c'est juste qu'on n'a jamais le temps, non ?</span> <span class="pause">laisser parler</span><br><br>
+<span class="key">C'est qui chez vous qui gere les avis en general ?</span> <span class="pause">attendre</span><br><br>
+Et quand un client laisse un avis negatif... <span class="key">comment vous gerez ca d'habitude ?</span>`,
+        hint: "Questions SPIN. Mirroring sur ses derniers mots. Silence apres."
+      },
+      {
+        label: "PHASE 3 — IMPLICATION",
+        text: `<span class="tone">TON : GRAVE, EMPATHIQUE — baisser le volume — 30 secondes</span><br><br>
+Ce que les etudes montrent, c'est que <span class="key">90% des gens lisent les avis avant de choisir.</span> <span class="pause">pause</span><br><br>
+Et un avis negatif sans reponse fait <span class="key">3 fois plus de degats</span> qu'avec une bonne reponse. <span class="pause">pause 2s</span><br><br>
+Concretement... ca represente des dizaines de clients par mois qui voient ces avis et <span class="key">qui choisissent d'aller chez le concurrent.</span> <span class="pause">pause 3s</span><br><br>
+<span class="key">A votre avis, sur un mois, combien de clients ca peut representer ?</span>`,
+        hint: "Le silence fait le travail. Chuchoter cree la gravite."
+      },
+      {
+        label: "PHASE 4 — SOLUTION + DEMO",
+        text: `<span class="tone">TON : ENTHOUSIASTE MAITRISE — 1 minute</span><br><br>
+Et c'est justement la qu'on intervient. <span class="pause">pause</span><br><br>
+<span class="key">Tenez, regardez.</span> <span class="direction">(Montrer la reponse IA preparee)</span><br><br>
+Voila ce que notre IA a genere comme reponse en 10 secondes. <span class="pause">pause</span><br><br>
+<span class="direction">(Lire la reponse a voix haute)</span> <span class="pause">pause 3s</span><br><br>
+<span class="key">Qu'est-ce que vous en pensez ?</span> <span class="pause">attendre</span><br><br>
+Et si chaque avis recevait ce genre de reponse pro dans l'heure, <span class="key">ca changerait quoi pour votre etablissement ?</span> <span class="pause">laisser repondre</span><br><br>
+Vous n'avez rien a faire. L'IA detecte chaque nouvel avis, genere la reponse, vous validez. <span class="key">30 secondes par jour au lieu de 30 minutes.</span>`,
+        hint: "La demo doit etre REELLE, pas theorique. Question Need-Payoff SPIN."
+      },
+      {
+        label: "PHASE 5 — OFFRE",
+        text: `<span class="tone">TON : DECONTRACTE, COMME UNE FORMALITE — 30 secondes</span><br><br>
+On a deux formules. <span class="pause">pause</span><br><br>
+<span class="key">Formule simple : 200 euros, en une fois.</span> Je configure tout et c'est a vous.<br><br>
+Ou alors, <span class="key">formule accompagnee : 100 euros pour la mise en place, puis 100 euros par mois.</span> Pilotage complet, rapport mensuel.<br><br>
+<span class="tone">TON : ANCRAGE</span><br>
+Pour comparaison, un community manager c'est entre <span class="key">400 et 800 euros par mois.</span> <span class="pause">pause 2s</span><br><br>
+<span class="tone">TON : RASSURANCE</span><br>
+Aucun engagement. Et les 30 premiers jours, <span class="key">c'est satisfait ou rembourse.</span> Si je ne vous ai pas rembourse sous 30 jours apres votre demande, <span class="key">je vous rends le double.</span> Zero risque.`,
+        hint: "Prix dit comme on donne l'heure. Garantie dite avec chaleur."
+      },
+      {
+        label: "PHASE 6 — CLOSE",
+        text: `<span class="tone">TON : PRESOMPTIF — la decision est deja prise — 30 secondes</span><br><br>
+<span class="key">Le plus simple, c'est qu'on demarre la semaine prochaine.</span> <span class="pause">pause 1s</span><br><br>
+Je configure tout de mon cote, et des que c'est pret je vous envoie un message.<br><br>
+<span class="key">Vous preferez qu'on commence lundi ou plutot mercredi ?</span> <span class="pause">attendre</span><br><br>
+Parfait. Je vous laisse ma carte. Je vous envoie le recapitulatif par email ce soir.<br><br>
+<span class="direction">(Poignee de main, sourire, contact visuel)</span>
+<span class="key">Vous allez voir, vos clients vont sentir la difference.</span>`,
+        hint: "Close presomptif. Pas de oui/non. 2 options positives."
+      }
+    ]
+  },
+
+  "objections": {
+    title: "Objections — Top 5",
+    steps: [
+      {
+        label: "\"JE VAIS REFLECHIR\"",
+        text: `<span class="tone">ACCUSATION AUDIT + LOOPING</span><br><br>
+"Bien sur, et c'est tout a fait normal de prendre le temps." <span class="pause">pause</span><br><br>
+<span class="key">"Est-ce que c'est le prix qui vous fait hesiter, ou c'est plutot que vous n'etes pas sur que ca va marcher pour votre activite ?"</span><br><br>
+<strong>Si prix :</strong> "Un client perdu a cause d'un avis sans reponse — un repas a 25-30 euros, 2 fois par mois, ca fait <span class="key">600 euros par an. Le service en couvre a peine 2.</span>"<br><br>
+<strong>Si efficacite :</strong> "C'est pour ca qu'il y a la <span class="key">garantie 30 jours. Et si je ne vous ai pas rembourse dans les 30 jours, je vous rends le double.</span> Vous ne risquez rien."<br><br>
+<strong>Si associe :</strong> "Je peux laisser ce document et <span class="key">repasser quand votre associe est dispo.</span>"`,
+        hint: "Identifier la VRAIE objection. Ne jamais insister plus d'une fois."
+      },
+      {
+        label: "\"ON A DEJA QUELQU'UN\"",
+        text: `<span class="tone">LABELING + FRAME CONTROL</span><br><br>
+<span class="key">"C'est super, ca montre que vous prenez votre reputation au serieux."</span> <span class="pause">pause</span><br><br>
+"Par curiosite, est-ce que cette personne repond a chaque avis dans les 24h, y compris les negatifs ?" <span class="pause">pause</span><br><br>
+"Ce qu'on fait c'est different : <span class="key">on ne remplace pas votre CM, on le complete.</span> L'IA gere les reponses aux avis 24h/24. Votre CM se concentre sur le contenu et la strategie. Chacun son job."`,
+        hint: "Feliciter d'abord. Complementaire, pas concurrent."
+      },
+      {
+        label: "\"L'IA C'EST PAS NATUREL\"",
+        text: `<span class="tone">INTRIGUE PING + DEMO REELLE</span><br><br>
+"Franchement, c'est la premiere chose que je me suis dite aussi." <span class="pause">pause</span><br><br>
+<span class="key">"Relisez la reponse que je vous ai montree. Si je ne vous avais pas dit que c'etait une IA, vous l'auriez su ?"</span> <span class="pause">pause</span><br><br>
+"Et en plus, <span class="key">vous validez chaque reponse avant publication.</span> Si un mot ne vous plait pas, vous le changez. Vous gardez le dernier mot, toujours."`,
+        hint: "La preuve est dans la demo. Montrer, pas argumenter."
+      },
+      {
+        label: "\"C'EST TROP CHER\"",
+        text: `<span class="tone">VALUE REFRAME + ANCRAGE</span><br><br>
+"Je comprends, c'est important de bien peser." <span class="pause">pause</span><br><br>
+"Faisons un calcul. Un client regulier chez vous, il depense combien par visite ?" <span class="pause">attendre</span><br><br>
+"Si le service vous ramene <span class="key">ne serait-ce que 2 clients de plus par mois</span>, ca rembourse le service et il vous reste du benefice."<br><br>
+<span class="key">"Ca revient a 3 euros par jour. Moins qu'un cafe."</span>`,
+        hint: "Ne jamais parler de prix. Parler de ROI. Faire calculer le prospect."
+      },
+      {
+        label: "\"PAS BEAUCOUP D'AVIS\"",
+        text: `<span class="tone">REFRAME POSITIF</span><br><br>
+<span class="key">"Justement ! C'est le meilleur moment pour commencer."</span> <span class="pause">pause</span><br><br>
+"Quand vous avez peu d'avis, <span class="key">chaque avis pese enormement sur votre note.</span> Un seul avis negatif sans reponse peut faire chuter de 0,5 point."<br><br>
+"Et le service vous aide aussi a obtenir plus d'avis positifs. <span class="key">Un client qui voit que le commerce repond est 20% plus enclin a en laisser un.</span>"`,
+        hint: "Transformer la faiblesse en opportunite."
+      }
+    ]
+  },
+
+  "libre": {
+    title: "Mode libre",
+    steps: [
+      {
+        label: "MODE LIBRE",
+        text: `<span class="tone">Pas de script</span><br><br>
+Enregistre-toi librement. Pratique ton pitch, teste des variantes, improvise.<br><br>
+Utilise le bouton d'enregistrement quand tu es pret.`,
+        hint: "C'est ton moment. Sois naturel."
+      }
+    ]
+  }
+};
+
+// ================================================================
+// STATE
+// ================================================================
+let currentPitch = null;
+let currentStepIndex = 0;
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let recStartTime = null;
+let recTimerInterval = null;
+let takes = []; // { blob, duration, stepLabel, timestamp }
+let takeNumber = 0;
+let sessionStartTime = null;
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  const el = document.getElementById(id);
+  if (el) el.classList.add("active");
+}
+
+function selectPitch(id) {
+  currentPitch = PITCHES[id];
+  currentStepIndex = 0;
+  takeNumber = 0;
+  takes = [];
+  sessionStartTime = Date.now();
+  showScreen("exercise-screen");
+  renderExercise();
+}
+
+// ================================================================
+// EXERCISE RENDERING
+// ================================================================
+function renderExercise() {
+  const pitch = currentPitch;
+  document.getElementById("ex-title").textContent = pitch.title;
+  document.getElementById("ex-step-info").textContent =
+    pitch.steps.length > 1 ? `Etape ${currentStepIndex + 1} / ${pitch.steps.length}` : "";
+
+  const area = document.getElementById("script-area");
+  area.innerHTML = pitch.steps.map((step, i) => `
+    <div class="script-step ${i === currentStepIndex ? 'active' : ''} ${i < currentStepIndex ? 'done' : ''}" id="step-${i}">
+      <div class="step-label">${step.label}</div>
+      <div class="step-text">${step.text}</div>
+      ${step.hint ? `<div class="step-hint">${step.hint}</div>` : ""}
+    </div>
+  `).join("");
+
+  // Scroll active step into view
+  setTimeout(() => {
+    const activeEl = document.getElementById(`step-${currentStepIndex}`);
+    if (activeEl) activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 100);
+
+  document.getElementById("take-label").textContent = `Prise ${takeNumber + 1}`;
+  document.getElementById("step-nav-label").textContent =
+    pitch.steps.length > 1 ? `${currentStepIndex + 1}/${pitch.steps.length}` : "";
+
+  // Nav buttons visibility
+  document.getElementById("btn-prev-step").style.visibility =
+    currentStepIndex > 0 ? "visible" : "hidden";
+  document.getElementById("btn-next-step").style.visibility =
+    currentStepIndex < pitch.steps.length - 1 ? "visible" : "hidden";
+}
+
+function nextStep() {
+  if (currentStepIndex < currentPitch.steps.length - 1) {
+    currentStepIndex++;
+    renderExercise();
+  }
+}
+
+function prevStep() {
+  if (currentStepIndex > 0) {
+    currentStepIndex--;
+    renderExercise();
+  }
+}
+
+// ================================================================
+// RECORDING
+// ================================================================
+async function toggleRecording() {
+  if (isRecording) {
+    stopRecordingAudio();
+  } else {
+    await startRecordingAudio();
+  }
+}
+
+async function startRecordingAudio() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    // Determine best mime type
+    const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+      ? "audio/webm;codecs=opus"
+      : MediaRecorder.isTypeSupported("audio/mp4")
+        ? "audio/mp4"
+        : "";
+
+    mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+      const duration = Math.round((Date.now() - recStartTime) / 1000);
+      takeNumber++;
+      takes.push({
+        blob,
+        duration,
+        stepLabel: currentPitch.steps[currentStepIndex]?.label || "Libre",
+        timestamp: new Date(),
+        number: takeNumber
+      });
+      showReview();
+    };
+
+    mediaRecorder.start(1000); // 1s chunks
+    isRecording = true;
+    recStartTime = Date.now();
+
+    const btn = document.getElementById("btn-rec");
+    btn.classList.add("recording");
+
+    const timer = document.getElementById("rec-timer");
+    timer.classList.remove("idle");
+    recTimerInterval = setInterval(updateRecTimer, 100);
+
+  } catch (e) {
+    alert("Impossible d'acceder au micro. Verifie les permissions.");
+    console.error("Mic error:", e);
+  }
+}
+
+function stopRecordingAudio() {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+  }
+  isRecording = false;
+  clearInterval(recTimerInterval);
+
+  const btn = document.getElementById("btn-rec");
+  btn.classList.remove("recording");
+
+  const timer = document.getElementById("rec-timer");
+  timer.classList.add("idle");
+  timer.textContent = "0:00";
+}
+
+function updateRecTimer() {
+  if (!recStartTime) return;
+  const elapsed = Math.floor((Date.now() - recStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  document.getElementById("rec-timer").textContent =
+    `${mins}:${String(secs).padStart(2, "0")}`;
+}
+
+// ================================================================
+// REVIEW SCREEN
+// ================================================================
+function showReview() {
+  const take = takes[takes.length - 1];
+  showScreen("review-screen");
+
+  document.getElementById("review-subtitle").textContent =
+    `Prise ${take.number} — ${take.stepLabel} — ${formatDuration(take.duration)}`;
+
+  const audio = document.getElementById("review-audio");
+  audio.src = URL.createObjectURL(take.blob);
+
+  renderTakesHistory();
+}
+
+function renderTakesHistory() {
+  const container = document.getElementById("takes-history");
+  if (takes.length <= 1) { container.innerHTML = ""; return; }
+
+  container.innerHTML = `
+    <h3 style="font-size:14px;opacity:0.6;margin-bottom:8px;">Historique (${takes.length} prises)</h3>
+    ${takes.slice().reverse().map((t, idx) => `
+      <div class="take-item">
+        <div class="take-info">
+          <div class="take-num">Prise ${t.number}</div>
+          <div class="take-dur">${t.stepLabel} — ${formatDuration(t.duration)}</div>
+        </div>
+        <div class="take-actions">
+          <button class="btn-secondary" onclick="playTake(${takes.length - 1 - idx})">Ecouter</button>
+          <button class="btn-secondary" onclick="shareSingleTake(${takes.length - 1 - idx})">Partager</button>
+        </div>
+      </div>
+    `).join("")}
+  `;
+}
+
+function playTake(idx) {
+  const audio = document.getElementById("review-audio");
+  audio.src = URL.createObjectURL(takes[idx].blob);
+  audio.play();
+}
+
+// ================================================================
+// SHARE / DOWNLOAD
+// ================================================================
+async function shareTake() {
+  const take = takes[takes.length - 1];
+  await shareBlob(take.blob, `prise-${take.number}.webm`, `Pitch — Prise ${take.number}`);
+}
+
+async function shareSingleTake(idx) {
+  const take = takes[idx];
+  await shareBlob(take.blob, `prise-${take.number}.webm`, `Pitch — Prise ${take.number}`);
+}
+
+async function shareBlob(blob, filename, title) {
+  const ext = blob.type.includes("mp4") ? "mp4" : "webm";
+  const file = new File([blob], filename.replace(/\.\w+$/, `.${ext}`), { type: blob.type });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ title, files: [file] });
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return;
+    }
+  }
+  // Fallback download
+  downloadBlob(blob, filename.replace(/\.\w+$/, `.${ext}`));
+}
+
+function downloadTake() {
+  const take = takes[takes.length - 1];
+  const ext = take.blob.type.includes("mp4") ? "mp4" : "webm";
+  downloadBlob(take.blob, `pitch-prise-${take.number}.${ext}`);
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function shareAll() {
+  if (takes.length === 0) return;
+
+  const ext = takes[0].blob.type.includes("mp4") ? "mp4" : "webm";
+  const files = takes.map(t =>
+    new File([t.blob], `prise-${t.number}.${ext}`, { type: t.blob.type })
+  );
+
+  if (navigator.canShare && navigator.canShare({ files })) {
+    try {
+      await navigator.share({
+        title: `Session Pitch — ${takes.length} prises`,
+        files
+      });
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return;
+    }
+  }
+  // Fallback: download each
+  takes.forEach(t => {
+    downloadBlob(t.blob, `pitch-prise-${t.number}.${ext}`);
+  });
+}
+
+// ================================================================
+// FLOW CONTROL
+// ================================================================
+function redoTake() {
+  showScreen("exercise-screen");
+  renderExercise();
+}
+
+function finishOrContinue() {
+  // If there are more steps, go to next step
+  if (currentStepIndex < currentPitch.steps.length - 1) {
+    currentStepIndex++;
+    showScreen("exercise-screen");
+    renderExercise();
+  } else {
+    showDone();
+  }
+}
+
+// ================================================================
+// DONE SCREEN
+// ================================================================
+function showDone() {
+  showScreen("done-screen");
+
+  const totalDuration = takes.reduce((sum, t) => sum + t.duration, 0);
+  const sessionDuration = Math.round((Date.now() - sessionStartTime) / 1000);
+
+  document.getElementById("done-stats").innerHTML = `
+    <div class="stat"><span class="stat-big">${takes.length}</span> prises</div>
+    <div class="stat">Enregistrement total : ${formatDuration(totalDuration)}</div>
+    <div class="stat">Session : ${formatDuration(sessionDuration)}</div>
+    <div class="stat" style="margin-top:12px;">${currentPitch.title}</div>
+  `;
+
+  sendToBeeminder();
+}
+
+// ================================================================
+// BEEMINDER
+// ================================================================
+async function sendToBeeminder() {
+  const statusEl = document.getElementById("beeminder-status");
+  statusEl.textContent = "Envoi a Beeminder...";
+
+  try {
+    const totalDuration = takes.reduce((sum, t) => sum + t.duration, 0);
+    const resp = await fetch(
+      `https://www.beeminder.com/api/v1/users/${BEEMINDER_USER}/goals/${BEEMINDER_GOAL}/datapoints.json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          auth_token: BEEMINDER_TOKEN,
+          value: 1,
+          timestamp: Math.floor(Date.now() / 1000),
+          comment: `Pitch Recorder: ${takes.length} prises, ${formatDuration(totalDuration)} — ${currentPitch.title}`
+        })
+      }
+    );
+    if (resp.ok) {
+      statusEl.textContent = "Beeminder : +1 enregistre";
+      statusEl.style.color = "#00c853";
+    } else {
+      statusEl.textContent = "Beeminder : erreur " + resp.status;
+      statusEl.style.color = "#ff5252";
+    }
+  } catch (e) {
+    statusEl.textContent = "Beeminder : hors ligne";
+    statusEl.style.color = "#ffab00";
+  }
+}
+
+// ================================================================
+// UTILS
+// ================================================================
+function formatDuration(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+</script>
+</body>
+</html>

@@ -335,6 +335,68 @@ button:active { opacity: 0.7; }
   margin: 16px 0; font-weight: 900;
 }
 
+/* ── Simulation Cold Call module ── */
+.sim-type-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 18px; margin: 6px 0; cursor: pointer; transition: border-color 0.2s;
+  text-align: left; width: 100%; max-width: 400px;
+}
+.sim-type-card:hover { border-color: #e63946; }
+.sim-type-card h4 { font-size: 15px; margin-bottom: 3px; }
+.sim-type-card p { font-size: 12px; opacity: 0.6; }
+.sim-type-card .sim-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(230,57,70,0.15); color: #e63946;
+  font-size: 14px; font-weight: 700; margin-bottom: 6px;
+}
+
+.sim-persona-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 16px; margin: 6px 0; cursor: pointer; transition: border-color 0.2s;
+  text-align: left; width: 100%; max-width: 400px;
+}
+.sim-persona-card:hover { border-color: #e63946; }
+.sim-persona-card h4 { font-size: 15px; margin-bottom: 2px; }
+.sim-persona-card .persona-trait { font-size: 12px; color: #e63946; font-weight: 600; margin-bottom: 4px; }
+.sim-persona-card p { font-size: 12px; opacity: 0.6; }
+
+.sim-context-box {
+  background: #1a0a0a; border: 2px solid #331a1a; border-radius: 12px;
+  padding: 14px; margin: 12px 0; text-align: left; font-size: 13px;
+  line-height: 1.5; width: 100%; max-width: 400px;
+}
+.sim-context-box .ctx-label { font-size: 11px; font-weight: 600; color: #e63946; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.sim-context-box .ctx-detail { opacity: 0.7; margin: 2px 0; }
+
+.sim-prospect-box {
+  background: #1a1a2e; border: 2px solid #333; border-radius: 12px;
+  padding: 18px; margin: 12px 0; text-align: left;
+}
+.sim-prospect-box .sim-speaker { font-size: 12px; font-weight: 600; color: #e63946; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.sim-prospect-box .sim-name { color: #ff8888; font-weight: 500; }
+.sim-prospect-box .sim-text { font-size: 16px; line-height: 1.6; }
+.sim-prospect-box .sim-mood { font-size: 11px; opacity: 0.4; margin-top: 8px; font-style: italic; }
+
+.sim-coach-box {
+  background: #0a1a0a; border: 2px solid #1a3a1a; border-radius: 12px;
+  padding: 16px; margin: 12px 0; text-align: left;
+}
+.sim-coach-box .sim-speaker { font-size: 12px; font-weight: 600; color: #00c853; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.sim-coach-box .sim-text { font-size: 14px; line-height: 1.5; }
+.sim-coach-box .sim-hint { font-size: 12px; opacity: 0.5; margin-top: 8px; font-style: italic; }
+
+.sim-phase-tag {
+  display: inline-block; padding: 4px 12px; border-radius: 6px;
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+.sim-phase-tag.accroche { background: rgba(43,108,176,0.2); color: #63b3ed; }
+.sim-phase-tag.decouverte { background: rgba(47,133,90,0.2); color: #68d391; }
+.sim-phase-tag.objection { background: rgba(197,48,48,0.2); color: #fc8181; }
+.sim-phase-tag.solution { background: rgba(107,70,193,0.2); color: #b794f4; }
+.sim-phase-tag.close { background: rgba(214,158,46,0.2); color: #f6e05e; }
+
 /* ── Animations ── */
 @keyframes bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
 .bump { animation: bump 0.2s ease; }
@@ -388,6 +450,11 @@ button:active { opacity: 0.7; }
   <div id="opt-coldcall" class="module-option" onclick="startModule('coldcall')" style="border-color:#ff6600;">
     <h3>Cold Call</h3>
     <p>Scenarios de prospection : accroche, objections, prise de RDV</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-simulation" class="module-option" onclick="startModule('simulation')" style="border-color:#e63946;">
+    <h3>Simulation Realiste</h3>
+    <p>Cold call complet avec un gerant : restaurant, hotel, salon... 5 personnalites</p>
     <span class="tag mic">Micro requis</span>
   </div>
   <div class="btn-group">
@@ -828,9 +895,11 @@ let currentPaceWPM = 0;
     document.getElementById("opt-reading").classList.add("disabled");
     document.getElementById("opt-twisters").classList.add("disabled");
     document.getElementById("opt-coldcall").classList.add("disabled");
+    document.getElementById("opt-simulation").classList.add("disabled");
     document.getElementById("opt-reading").onclick = null;
     document.getElementById("opt-twisters").onclick = null;
     document.getElementById("opt-coldcall").onclick = null;
+    document.getElementById("opt-simulation").onclick = null;
   }
 })();
 
@@ -870,7 +939,7 @@ function showModuleSelect() {
 }
 
 function startModule(mod) {
-  if ((mod === "reading" || mod === "twisters" || mod === "coldcall") && !SPEECH_SUPPORTED) return;
+  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation") && !SPEECH_SUPPORTED) return;
   if (!sessionStartTime) sessionStartTime = Date.now();
   currentModule = mod;
   showExercise();
@@ -880,6 +949,7 @@ function startModule(mod) {
   else if (mod === "reading") startReading();
   else if (mod === "twisters") startTwisters();
   else if (mod === "coldcall") startColdCall();
+  else if (mod === "simulation") startSimulation();
 }
 
 function completeModule(mod) {
@@ -2114,7 +2184,7 @@ function showDone() {
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
 
-  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", coldcall: "Cold Call" };
+  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", coldcall: "Cold Call", simulation: "Simulation Realiste" };
   const modList = modulesCompleted.map(m => moduleNames[m] || m).join(", ");
 
   showScreen("done-screen");
@@ -2170,6 +2240,575 @@ async function sendToBeeminder(modules, seconds) {
 }
 
 // ════════════════════════════════════════════════════════════
+// MODULE 5: SIMULATION REALISTE
+// ════════════════════════════════════════════════════════════
+
+const SIM_COMMERCES = [
+  {
+    id: "restaurant",
+    icon: "R",
+    name: "Restaurant",
+    desc: "Restaurateur classique — service midi et soir",
+    businesses: [
+      { name: "Le Petit Palais", owner: "Michel", note: "3.8", avis: "267", sans_reponse: "180", concurrent: "La Table du Roi", note_concurrent: "4.3" },
+      { name: "Chez Mamie", owner: "Nathalie", note: "4.1", avis: "423", sans_reponse: "300", concurrent: "Le Bistrot du Coin", note_concurrent: "4.4" },
+      { name: "Le Comptoir d'Avignon", owner: "Karim", note: "3.5", avis: "612", sans_reponse: "520", concurrent: "La Mirande", note_concurrent: "4.6" }
+    ]
+  },
+  {
+    id: "hotel",
+    icon: "H",
+    name: "Hotel",
+    desc: "Hotelier — touristes et voyageurs d'affaires",
+    businesses: [
+      { name: "Hotel des Remparts", owner: "Jean-Pierre", note: "3.6", avis: "534", sans_reponse: "400", concurrent: "Hotel de l'Horloge", note_concurrent: "4.2" },
+      { name: "Le Clos Saint-Louis", owner: "Isabelle", note: "4.0", avis: "312", sans_reponse: "210", concurrent: "Hotel d'Europe", note_concurrent: "4.5" }
+    ]
+  },
+  {
+    id: "boulangerie",
+    icon: "B",
+    name: "Boulangerie / Patisserie",
+    desc: "Artisan boulanger — clientele locale fidele",
+    businesses: [
+      { name: "Au Pain Dore", owner: "Philippe", note: "4.2", avis: "89", sans_reponse: "65", concurrent: "La Mie Doree", note_concurrent: "4.5" },
+      { name: "Maison Dupont", owner: "Sophie", note: "3.9", avis: "142", sans_reponse: "110", concurrent: "Boulangerie Mistral", note_concurrent: "4.4" }
+    ]
+  },
+  {
+    id: "coiffure",
+    icon: "C",
+    name: "Salon de coiffure",
+    desc: "Coiffeur/coiffeuse — rendez-vous et sans RDV",
+    businesses: [
+      { name: "L'Atelier Beaute", owner: "Sandra", note: "3.7", avis: "198", sans_reponse: "150", concurrent: "Salon Elegance", note_concurrent: "4.3" },
+      { name: "Hair Style", owner: "Damien", note: "4.0", avis: "256", sans_reponse: "180", concurrent: "Coiff&Co", note_concurrent: "4.5" }
+    ]
+  },
+  {
+    id: "immo",
+    icon: "I",
+    name: "Agence immobiliere",
+    desc: "Agent immobilier — vente et location",
+    businesses: [
+      { name: "Avignon Immobilier", owner: "Stephane", note: "3.4", avis: "78", sans_reponse: "60", concurrent: "Century 21 Avignon", note_concurrent: "4.1" },
+      { name: "L'Agence du Palais", owner: "Caroline", note: "3.9", avis: "145", sans_reponse: "100", concurrent: "Orpi Centre", note_concurrent: "4.3" }
+    ]
+  }
+];
+
+const SIM_PERSONAS = [
+  {
+    id: "aigri",
+    name: "L'Aigri",
+    trait: "Agace, marre des demarcheurs",
+    desc: "Il en a vu passer 10 cette semaine. Il est sur la defensive, coupe la parole, soupire.",
+    mood: "hostile",
+    color: "#ff5252"
+  },
+  {
+    id: "curieux",
+    name: "Le Curieux",
+    trait: "Ouvert, pose des questions",
+    desc: "Il est receptif, il veut comprendre. Il teste, il challenge, mais avec bienveillance.",
+    mood: "receptif",
+    color: "#4fc3f7"
+  },
+  {
+    id: "neutre",
+    name: "Le Neutre",
+    trait: "Ni pour ni contre",
+    desc: "Il ecoute poliment mais sans enthousiasme. Il faut le convaincre avec des faits.",
+    mood: "neutre",
+    color: "#aaa"
+  },
+  {
+    id: "interesse",
+    name: "L'Interesse",
+    trait: "Deja conscient du probleme",
+    desc: "Il sait que ses avis posent probleme. Il attend la bonne solution au bon prix.",
+    mood: "favorable",
+    color: "#00c853"
+  },
+  {
+    id: "presse",
+    name: "Le Presse",
+    trait: "Pas le temps, en plein rush",
+    desc: "Il est entre deux services ou entre deux clients. Il te donne 30 secondes, maximum.",
+    mood: "presse",
+    color: "#ffab00"
+  }
+];
+
+// Responses par personnalite pour chaque phase du cold call
+function getSimSteps(commerce, biz, persona) {
+  const name = biz.owner;
+  const bizName = biz.name;
+
+  const RESPONSES = {
+    aigri: [
+      {
+        phase: "accroche", phaseClass: "accroche",
+        prospect: `*soupir* Encore un demarcheur... Non merci, j'ai pas le temps. On arrete pas de m'appeler.`,
+        coach: `Bonjour, c'est Chris. J'appelle parce que j'ai analyse votre fiche Google de ${bizName} et j'ai trouve quelque chose de concret. C'est pas un appel generique — vous avez 30 secondes ?`,
+        hint: "Reste calme. Reconnais son agacement. Ne te justifie pas, montre que tu as fait tes devoirs.",
+        keywords: ["bonjour", "chris", "google", bizName.toLowerCase().split(" ")[0], "analyse", "secondes"],
+        maxSeconds: 15
+      },
+      {
+        phase: "reaction", phaseClass: "accroche",
+        prospect: `Vous etes le combien cette semaine ? Allez, 30 secondes. Pas une de plus.`,
+        coach: `Je comprends, et je vais etre honnete, c'est un appel de prospection. Mais la difference c'est que j'ai regarde votre fiche avant d'appeler. ${bizName} a ${biz.avis} avis et ${biz.sans_reponse} sans reponse. C'est ca qui m'a interpelle.`,
+        hint: "Transparence totale. Montre que tu es different des 9 autres demarcheurs.",
+        keywords: ["comprends", "honnete", "prospection", "difference", "avis", "reponse"],
+        maxSeconds: 18
+      },
+      {
+        phase: "objection", phaseClass: "objection",
+        prospect: `Et alors ? On s'en sort tres bien comme ca. Les avis c'est n'importe quoi de toute facon, y'a que les mecontents qui ecrivent.`,
+        coach: `Je comprends ce que vous pensez. Mais les chiffres montrent que 90% de vos clients potentiels lisent les avis avant de venir. ${biz.concurrent} a ${biz.note_concurrent} avec des reponses a chaque avis. Les clients qui hesitent entre vous deux, ils comparent.`,
+        hint: "Ne contredis pas frontalement. Amene le concurrent. Les faits, pas l'opinion.",
+        keywords: ["comprends", "clients", "lisent", "avis", biz.concurrent.toLowerCase().split(" ")[0], "comparent"],
+        maxSeconds: 20
+      },
+      {
+        phase: "solution", phaseClass: "solution",
+        prospect: `Pfff... Meme si c'etait vrai, on n'a pas le temps de repondre a tout ca. C'est deja assez complique comme ca.`,
+        coach: `C'est justement pour ca que j'ai cree cet outil. En 10 secondes par avis, l'IA genere une reponse pro. Vous validez avant publication. Ca prend 30 secondes par jour au lieu de 30 minutes. Je vous envoie un rapport gratuit de votre reputation ?`,
+        hint: "Valide sa contrainte de temps. Montre que la solution est ultra legere.",
+        keywords: ["outil", "secondes", "reponse", "validez", "rapport", "gratuit"],
+        maxSeconds: 18
+      },
+      {
+        phase: "close", phaseClass: "close",
+        prospect: `Envoyez votre truc par email si vous voulez, mais je promets rien.`,
+        coach: `Parfait, je vous l'envoie dans l'heure. Est-ce qu'on peut se caler 10 minutes cette semaine pour que je vous montre directement sur vos avis ? C'est plus parlant qu'un email. Mercredi ou jeudi, qu'est-ce qui vous arrange ?`,
+        hint: "Il a ouvert la porte. Accepte l'email mais pousse le RDV. 2 creneaux precis.",
+        keywords: ["envoie", "caler", "minutes", "montrer", "mercredi", "jeudi"],
+        maxSeconds: 15
+      }
+    ],
+
+    curieux: [
+      {
+        phase: "accroche", phaseClass: "accroche",
+        prospect: `Bonjour ! Oui c'est moi, ${name}. C'est a propos de quoi ?`,
+        coach: `Bonjour ${name}, c'est Chris d'Adaptive Logic. J'ai analyse votre fiche Google de ${bizName} et j'ai repere 2-3 choses interessantes. Vous avez 2 minutes ?`,
+        hint: "Il est ouvert. Sois professionnel et va droit au but.",
+        keywords: ["bonjour", name.toLowerCase(), "chris", "analyse", "google", "minutes"],
+        maxSeconds: 12
+      },
+      {
+        phase: "decouverte", phaseClass: "decouverte",
+        prospect: `Oui, allez-y, ca m'interesse. On a effectivement pas mal d'avis mais c'est vrai qu'on les gere pas bien. Vous faites quoi exactement ?`,
+        coach: `En fait, j'ai vu que ${bizName} a ${biz.avis} avis mais ${biz.sans_reponse} sans reponse. Saviez-vous qu'un avis sans reponse pese 2 fois plus sur votre note qu'un avis avec reponse ? Les etudes montrent que 89% des clients lisent les reponses avant de choisir.`,
+        hint: "Il veut des faits. Donne-lui des chiffres. Il est receptif.",
+        keywords: ["avis", "reponse", "note", "pese", "clients", "lisent"],
+        maxSeconds: 18
+      },
+      {
+        phase: "questions", phaseClass: "decouverte",
+        prospect: `Ah oui, je savais pas pour les 89%. Et les concurrents, ils font ca ? Parce que ${biz.concurrent} a l'air de bien s'en sortir.`,
+        coach: `Exactement, ${biz.concurrent} a ${biz.note_concurrent} et repond a quasi tous ses avis. Un demi-point de plus sur Google, c'est entre 10 et 25% de clients en plus. C'est qui chez vous qui gere les avis en general ?`,
+        hint: "Il amene le concurrent lui-meme. Continue a eduquer, pose des questions.",
+        keywords: [biz.concurrent.toLowerCase().split(" ")[0], "point", "clients", "gere", "avis"],
+        maxSeconds: 18
+      },
+      {
+        phase: "solution", phaseClass: "solution",
+        prospect: `Honnement, personne. On a essaye mais on a jamais le temps. Comment ca marche votre truc ?`,
+        coach: `L'IA detecte chaque nouvel avis automatiquement, genere une reponse professionnelle en 10 secondes, et vous la valide avant publication. Si elle vous plait, un clic. Sinon vous modifiez. Ca prend 30 secondes par jour. C'est 100 euros la mise en place plus 100 par mois, ou 200 en une fois.`,
+        hint: "Il demande comment ca marche. Explique clairement, puis donne le prix naturellement.",
+        keywords: ["detecte", "avis", "reponse", "secondes", "validez", "euros"],
+        maxSeconds: 20
+      },
+      {
+        phase: "close", phaseClass: "close",
+        prospect: `C'est pas mal du tout. Et il y a un essai gratuit ou quelque chose ?`,
+        coach: `Oui, les 30 premiers jours c'est satisfait ou rembourse. Et si je ne vous ai pas rembourse sous 30 jours apres votre demande, je vous rends le double. Le plus simple c'est qu'on demarre la semaine prochaine. Vous preferez lundi ou mercredi ?`,
+        hint: "Il est quasi convaincu. Garantie + close presomptif. Ne pose pas de oui/non.",
+        keywords: ["jours", "satisfait", "rembourse", "semaine", "lundi", "mercredi"],
+        maxSeconds: 15
+      }
+    ],
+
+    neutre: [
+      {
+        phase: "accroche", phaseClass: "accroche",
+        prospect: `Oui bonjour... C'est pourquoi ?`,
+        coach: `Bonjour, c'est Chris. J'ai regarde votre fiche Google de ${bizName} et j'ai remarque quelque chose d'interessant sur votre reputation en ligne. Ca prend 2 minutes, et ca peut avoir un vrai impact sur votre visibilite.`,
+        hint: "Il est poli mais pas engage. Il faut capter son attention avec quelque chose de concret.",
+        keywords: ["bonjour", "chris", "google", "reputation", "minutes", "impact"],
+        maxSeconds: 15
+      },
+      {
+        phase: "decouverte", phaseClass: "decouverte",
+        prospect: `D'accord... Allez-y.`,
+        coach: `${bizName} a ${biz.avis} avis avec une note de ${biz.note}. Le truc c'est que ${biz.sans_reponse} n'ont aucune reponse. Les etudes montrent que les avis sans reponse pesent 2 fois plus negativement. Est-ce que vous avez remarque si votre note a evolue ces derniers mois ?`,
+        hint: "Il ecoute sans reagir. Apporte des faits, pose une question pour le faire parler.",
+        keywords: ["avis", "note", "reponse", "pesent", "evolue", "mois"],
+        maxSeconds: 18
+      },
+      {
+        phase: "objection", phaseClass: "objection",
+        prospect: `Mouais. Je sais pas trop. On a toujours fait sans et ca tourne quand meme. C'est combien votre truc ?`,
+        coach: `Je comprends. Pour comparaison, un community manager c'est 400 a 800 euros par mois. Nous c'est 100 euros la mise en place et 100 par mois. Mais la vraie question c'est pas le cout, c'est ce que ca vous rapporte. Un demi-point de plus sur Google, c'est entre 500 et 2000 euros de CA en plus.`,
+        hint: "Il va direct au prix. Ancrage CM + reframe sur le ROI.",
+        keywords: ["community", "manager", "euros", "mois", "rapporte", "point", "google"],
+        maxSeconds: 20
+      },
+      {
+        phase: "solution", phaseClass: "solution",
+        prospect: `Hmm. Et concretement ca se passe comment ?`,
+        coach: `L'IA repond a chaque avis en 10 secondes. Vous validez d'un clic avant publication. C'est 30 secondes par jour. Et si ca vous convient pas, les 30 premiers jours c'est satisfait ou rembourse — et si je ne vous ai pas rembourse sous 30 jours, je vous rends le double. Je vous prepare un rapport gratuit de votre reputation pour que vous voyiez ou vous en etes ?`,
+        hint: "Il commence a s'interesser. Processus simple + garantie + offre du rapport.",
+        keywords: ["avis", "secondes", "validez", "satisfait", "rembourse", "rapport", "gratuit"],
+        maxSeconds: 18
+      },
+      {
+        phase: "close", phaseClass: "close",
+        prospect: `Bon... Envoyez-moi le rapport, on verra bien.`,
+        coach: `Parfait, je vous l'envoie aujourd'hui. Par contre est-ce qu'on peut bloquer 10 minutes cette semaine ? C'est beaucoup plus parlant quand je vous montre sur vos vrais avis. Jeudi ou vendredi, ca irait ?`,
+        hint: "L'email c'est la porte ouverte. Pivote vers le RDV en personne.",
+        keywords: ["envoie", "bloquer", "minutes", "montrer", "jeudi", "vendredi"],
+        maxSeconds: 15
+      }
+    ],
+
+    interesse: [
+      {
+        phase: "accroche", phaseClass: "accroche",
+        prospect: `Ah oui les avis Google ! Justement on en parlait l'autre jour avec mon equipe, c'est un vrai sujet chez nous. Dites-moi tout.`,
+        coach: `Super, ${name} ! C'est Chris d'Adaptive Logic. J'ai analyse la fiche de ${bizName} — ${biz.avis} avis, note de ${biz.note}, et ${biz.sans_reponse} sans reponse. J'ai des solutions concretes. On prend 5 minutes ?`,
+        hint: "Il est deja chaud. Ne vends pas trop. Sois factuel et professionnel.",
+        keywords: ["chris", "analyse", "avis", "note", "reponse", "solutions"],
+        maxSeconds: 15
+      },
+      {
+        phase: "decouverte", phaseClass: "decouverte",
+        prospect: `Oui c'est vrai, on a essaye de repondre pendant un moment mais on a laisse tomber. Ca prenait trop de temps. Et la note a baisse depuis. Qu'est-ce que vous proposez ?`,
+        coach: `Je comprends tout a fait. En fait, 89% des clients lisent les reponses avant de choisir. ${biz.concurrent} est a ${biz.note_concurrent} et repond a tout. La bonne nouvelle c'est qu'on peut inverser la tendance. Notre IA genere une reponse pro en 10 secondes par avis, vous validez avant publication.`,
+        hint: "Il a deja le probleme. Valide, montre le concurrent, presente la solution.",
+        keywords: ["comprends", "clients", "lisent", biz.concurrent.toLowerCase().split(" ")[0], "reponse", "secondes", "validez"],
+        maxSeconds: 20
+      },
+      {
+        phase: "demo", phaseClass: "solution",
+        prospect: `Ah ca c'est interessant ! Et l'IA ca sonne pas trop robotique ? Parce que j'ai vu des trucs bizarres avec ChatGPT...`,
+        coach: `Excellente question. Notre IA est specialisee pour les reponses aux avis — le ton est adapte a votre etablissement. Et surtout, vous gardez le controle total : chaque reponse est validee par vous avant publication. Si un mot ne vous plait pas, vous le changez.`,
+        hint: "Objection classique IA. Controle total + specialisation = pas du ChatGPT generique.",
+        keywords: ["specialisee", "ton", "adapte", "controle", "validee", "publication"],
+        maxSeconds: 18
+      },
+      {
+        phase: "offre", phaseClass: "close",
+        prospect: `OK ca me plait. C'est combien et on peut commencer quand ?`,
+        coach: `C'est 100 euros la mise en place et 100 par mois pour le pilotage complet, ou 200 en une fois si vous preferez gerer en autonomie. Les 30 premiers jours c'est satisfait ou rembourse — si je ne vous ai pas rembourse sous 30 jours, je vous rends le double. Le plus simple c'est qu'on demarre la semaine prochaine. Lundi ou mercredi ?`,
+        hint: "Il demande le prix ET quand commencer. Close naturel. Donne les 2 options + garantie.",
+        keywords: ["euros", "mise en place", "mois", "satisfait", "rembourse", "lundi", "mercredi"],
+        maxSeconds: 18
+      },
+      {
+        phase: "close", phaseClass: "close",
+        prospect: `Allez, on fait ca mercredi. Vous passez directement ici ?`,
+        coach: `Parfait ${name}, mercredi c'est note ! Je passe directement a ${bizName} avec le rapport complet et des exemples de reponses sur vos vrais avis. Merci pour votre temps, a mercredi !`,
+        hint: "Il a dit oui. Confirme tout : jour, lieu, ce que tu apportes. Clos proprement.",
+        keywords: ["parfait", "mercredi", "note", "rapport", "merci"],
+        maxSeconds: 12
+      }
+    ],
+
+    presse: [
+      {
+        phase: "accroche", phaseClass: "accroche",
+        prospect: `Oui oui, vite, je suis en plein service la. C'est quoi ?`,
+        coach: `30 secondes ${name}. Chris, reputation en ligne. ${bizName} a ${biz.sans_reponse} avis sans reponse sur Google — ca vous coute des clients. J'ai une solution qui prend 30 secondes par jour.`,
+        hint: "Mode ultra-court. Pas de blabla. Faits + solution en une phrase.",
+        keywords: ["secondes", name.toLowerCase(), "avis", "reponse", "google", "clients", "solution"],
+        maxSeconds: 12
+      },
+      {
+        phase: "pitch-eclair", phaseClass: "solution",
+        prospect: `30 secondes par jour ? Comment ca ?`,
+        coach: `L'IA repond a chaque avis automatiquement. Vous validez d'un clic. Ca remonte votre note, ca attire plus de clients. 100 euros par mois. Satisfait ou rembourse 30 jours — sinon je rends le double. Je vous envoie un rapport gratuit par email ?`,
+        hint: "Il t'a donne 30 secondes. Utilise-les. Tout en une rafale.",
+        keywords: ["avis", "automatiquement", "clic", "note", "clients", "euros", "rembourse", "rapport"],
+        maxSeconds: 15
+      },
+      {
+        phase: "close-rapide", phaseClass: "close",
+        prospect: `Oui envoyez ca, j'y jette un oeil ce soir. Faut que j'y retourne la.`,
+        coach: `C'est parti. Vous me donnez votre email ? Et est-ce que je peux vous rappeler demain a un moment plus calme pour en parler 5 minutes ? Apres le service de midi, vers 15h ?`,
+        hint: "Il est ok pour l'email. Obtiens le callback. Propose un horaire hors rush.",
+        keywords: ["email", "rappeler", "demain", "minutes", "heures"],
+        maxSeconds: 12
+      }
+    ]
+  };
+
+  return RESPONSES[persona.id] || RESPONSES.neutre;
+}
+
+let simCommerce = null;
+let simBusiness = null;
+let simPersona = null;
+let simSteps = [];
+let simStepIndex = 0;
+let simListening = false;
+let simTimer = null;
+let simTimerValue = 0;
+let simScores = [];
+
+function startSimulation() {
+  document.getElementById("ex-title").textContent = "Simulation Realiste";
+  document.getElementById("ex-progress").textContent = "";
+  paceWordTimestamps = [];
+  currentPaceWPM = 0;
+  showSimCommerceSelect();
+}
+
+function showSimCommerceSelect() {
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <p style="opacity:0.6;font-size:14px;margin-bottom:16px;">Choisis le type de commerce :</p>
+    ${SIM_COMMERCES.map(c => `
+      <div class="sim-type-card" onclick="selectSimCommerce('${c.id}')">
+        <div class="sim-icon">${c.icon}</div>
+        <h4>${c.name}</h4>
+        <p>${c.desc}</p>
+      </div>
+    `).join("")}
+  `;
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `<button class="btn-secondary" onclick="skipModule('simulation')">Retour</button>`;
+}
+
+function selectSimCommerce(id) {
+  simCommerce = SIM_COMMERCES.find(c => c.id === id);
+  simBusiness = simCommerce.businesses[Math.floor(Math.random() * simCommerce.businesses.length)];
+  showSimPersonaSelect();
+}
+
+function showSimPersonaSelect() {
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="sim-context-box">
+      <div class="ctx-label">Contexte</div>
+      <div class="ctx-detail"><strong>${simBusiness.name}</strong> (${simCommerce.name})</div>
+      <div class="ctx-detail">Gerant : ${simBusiness.owner}</div>
+      <div class="ctx-detail">Note : ${simBusiness.note}/5 — ${simBusiness.avis} avis (${simBusiness.sans_reponse} sans reponse)</div>
+      <div class="ctx-detail">Concurrent : ${simBusiness.concurrent} (${simBusiness.note_concurrent}/5)</div>
+    </div>
+    <p style="opacity:0.6;font-size:14px;margin:16px 0 12px;">Choisis la personnalite du gerant :</p>
+    ${SIM_PERSONAS.map(p => `
+      <div class="sim-persona-card" onclick="selectSimPersona('${p.id}')" style="border-left:4px solid ${p.color};">
+        <h4>${p.name}</h4>
+        <div class="persona-trait">${p.trait}</div>
+        <p>${p.desc}</p>
+      </div>
+    `).join("")}
+    <div style="margin-top:12px;">
+      <button class="btn-secondary" onclick="selectSimPersona('random')" style="width:100%;max-width:400px;">Personnalite aleatoire</button>
+    </div>
+  `;
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `<button class="btn-secondary" onclick="showSimCommerceSelect()">Changer commerce</button>`;
+}
+
+function selectSimPersona(id) {
+  if (id === "random") {
+    simPersona = SIM_PERSONAS[Math.floor(Math.random() * SIM_PERSONAS.length)];
+  } else {
+    simPersona = SIM_PERSONAS.find(p => p.id === id);
+  }
+  simSteps = getSimSteps(simCommerce, simBusiness, simPersona);
+  simStepIndex = 0;
+  simScores = [];
+  renderSimStep();
+}
+
+function renderSimStep() {
+  if (!simSteps || simStepIndex >= simSteps.length) {
+    completeSimulation();
+    return;
+  }
+
+  const step = simSteps[simStepIndex];
+  const total = simSteps.length;
+
+  document.getElementById("ex-progress").textContent = `${simStepIndex + 1} / ${total}`;
+
+  const dots = Array.from({ length: total }, (_, i) => {
+    const cls = i < simStepIndex ? "done" : i === simStepIndex ? "active" : "";
+    return `<span class="cc-step-dot ${cls}"></span>`;
+  }).join("");
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="cc-step-indicator">${dots}</div>
+    <div class="sim-phase-tag ${step.phaseClass}">${step.phase}</div>
+
+    <div class="sim-prospect-box">
+      <div class="sim-speaker"><span class="sim-name">${simBusiness.owner}</span> (${simPersona.name}) :</div>
+      <div class="sim-text">"${step.prospect}"</div>
+      <div class="sim-mood">Attitude : ${simPersona.trait}</div>
+    </div>
+
+    <div class="sim-coach-box">
+      <div class="sim-speaker">Ton guide :</div>
+      <div class="sim-text">${step.coach}</div>
+      <div class="sim-hint">${step.hint}</div>
+    </div>
+
+    <div class="cc-timer" id="sim-timer-display" style="color:#e63946;">--</div>
+    <div class="cc-your-speech">
+      <div class="label">Ta reponse :</div>
+      <div class="transcript" id="sim-transcript">Appuie sur "Parler" pour commencer</div>
+    </div>
+    <div id="sim-feedback-area"></div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-sim-speak" onclick="toggleSimSpeak()" style="background:#e63946;">Parler</button>
+    <button class="btn-secondary" onclick="nextSimStep()">Passer</button>
+    <button class="btn-secondary" onclick="skipModule('simulation')">Quitter</button>
+  `;
+
+  simListening = false;
+}
+
+function toggleSimSpeak() {
+  const btn = document.getElementById("btn-sim-speak");
+  if (!simListening) {
+    initRecognition(onSimResult);
+    startRecognition();
+    initAudioAnalysis();
+    simListening = true;
+    btn.textContent = "Stop";
+    btn.style.background = "#dc2626";
+    document.getElementById("sim-transcript").textContent = "...";
+    document.getElementById("sim-feedback-area").innerHTML = "";
+
+    simTimerValue = 0;
+    const maxSec = simSteps[simStepIndex].maxSeconds;
+    const timerEl = document.getElementById("sim-timer-display");
+    timerEl.textContent = "0s";
+    timerEl.style.color = "#e63946";
+
+    simTimer = setInterval(() => {
+      simTimerValue++;
+      timerEl.textContent = simTimerValue + "s";
+      if (simTimerValue > maxSec) timerEl.style.color = "#ff5252";
+      else if (simTimerValue > maxSec * 0.7) timerEl.style.color = "#ffab00";
+    }, 1000);
+  } else {
+    simListening = false;
+    if (simTimer) { clearInterval(simTimer); simTimer = null; }
+    stopRecognition();
+    stopVoiceAnalysis();
+    document.getElementById("voice-panel").classList.remove("active");
+    btn.textContent = "Parler";
+    btn.style.background = "#e63946";
+    evaluateSimStep();
+  }
+}
+
+function onSimResult(event) {
+  let transcript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  document.getElementById("sim-transcript").textContent = transcript.trim() || "...";
+  const words = transcript.trim().split(/\s+/).filter(w => w.length > 0);
+  if (words.length > 0) trackPace(words.length);
+}
+
+function evaluateSimStep() {
+  const step = simSteps[simStepIndex];
+  const transcript = document.getElementById("sim-transcript").textContent.toLowerCase();
+  const transcriptNorm = normalizeWord(transcript);
+
+  let keywordsFound = 0;
+  for (const kw of step.keywords) {
+    if (transcript.includes(kw) || transcriptNorm.includes(normalizeWord(kw))) {
+      keywordsFound++;
+    }
+  }
+  const keywordScore = step.keywords.length > 0 ? keywordsFound / step.keywords.length : 0;
+
+  const maxSec = step.maxSeconds;
+  let timingScore = 1;
+  if (simTimerValue > maxSec * 1.5) timingScore = 0.3;
+  else if (simTimerValue > maxSec) timingScore = 0.6;
+  else if (simTimerValue < 3) timingScore = 0.2;
+
+  const wordCount = transcript.split(/\s+/).filter(w => w.length > 1).length;
+  const lengthScore = wordCount >= 8 ? 1 : wordCount >= 4 ? 0.5 : 0.2;
+
+  const overall = Math.round((keywordScore * 0.5 + timingScore * 0.25 + lengthScore * 0.25) * 100);
+  simScores.push(overall);
+
+  const feedbackArea = document.getElementById("sim-feedback-area");
+  let feedbackClass, feedbackText;
+
+  if (overall >= 70) {
+    feedbackClass = "good";
+    feedbackText = `Score : ${overall}% — ${keywordsFound}/${step.keywords.length} mots-cles, ${simTimerValue}s/${maxSec}s.`;
+  } else if (overall >= 40) {
+    feedbackClass = "ok";
+    feedbackText = `Score : ${overall}% — ${keywordsFound}/${step.keywords.length} mots-cles. ${simTimerValue > maxSec ? "Trop long !" : "Essaie d'etre plus complet."}`;
+  } else {
+    feedbackClass = "bad";
+    feedbackText = `Score : ${overall}% — ${wordCount < 5 ? "Reponse trop courte." : `Seulement ${keywordsFound}/${step.keywords.length} points cles.`}`;
+  }
+
+  feedbackArea.innerHTML = `<div class="cc-feedback ${feedbackClass}">${feedbackText}</div>`;
+}
+
+function nextSimStep() {
+  if (simListening) {
+    simListening = false;
+    if (simTimer) { clearInterval(simTimer); simTimer = null; }
+    stopRecognition();
+    stopVoiceAnalysis();
+    document.getElementById("voice-panel").classList.remove("active");
+  }
+  simStepIndex++;
+  renderSimStep();
+}
+
+function completeSimulation() {
+  const avgScore = simScores.length > 0 ? Math.round(simScores.reduce((a, b) => a + b, 0) / simScores.length) : 0;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;padding:30px 20px;">
+      <h2 style="font-size:22px;margin-bottom:8px;">Simulation terminee !</h2>
+      <p style="opacity:0.6;font-size:13px;margin-bottom:8px;">${simBusiness.name} — ${simPersona.name} (${simPersona.trait})</p>
+      <div class="cc-timer" style="font-size:64px;color:#e63946;">${avgScore}%</div>
+      <p style="opacity:0.6;margin-bottom:16px;">Score moyen sur ${simScores.length} phases</p>
+      <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+        ${simScores.map((s, i) => `<span style="background:${s >= 70 ? 'rgba(0,200,83,0.2)' : s >= 40 ? 'rgba(255,171,0,0.2)' : 'rgba(255,82,82,0.2)'};color:${s >= 70 ? '#00c853' : s >= 40 ? '#ffab00' : '#ff5252'};padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;">${simSteps[i]?.phase || i+1}: ${s}%</span>`).join("")}
+      </div>
+      ${avgScore >= 70
+        ? '<p style="color:#00c853;font-size:16px;font-weight:600;margin-top:16px;">Tu geres ce profil. Passe au suivant !</p>'
+        : avgScore >= 40
+          ? '<p style="color:#ffab00;font-size:14px;margin-top:16px;">Pas mal ! Retravaille les phases faibles.</p>'
+          : '<p style="color:#ff5252;font-size:14px;margin-top:16px;">Continue a pratiquer. Relis le guide avant de rejouer.</p>'
+      }
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="showSimPersonaSelect()" style="background:#e63946;">Changer persona</button>
+    <button class="btn-secondary" onclick="showSimCommerceSelect()">Changer commerce</button>
+    <button class="btn-secondary" onclick="completeModule('simulation')">Terminer</button>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════
 // EXPOSE FUNCTIONS TO GLOBAL SCOPE
 // ════════════════════════════════════════════════════════════
 window.startFullSession = startFullSession;
@@ -2186,6 +2825,14 @@ window.selectCCScenario = selectCCScenario;
 window.toggleCCSpeak = toggleCCSpeak;
 window.nextCCStep = nextCCStep;
 window.startColdCall = startColdCall;
+window.startSimulation = startSimulation;
+window.selectSimCommerce = selectSimCommerce;
+window.selectSimPersona = selectSimPersona;
+window.showSimCommerceSelect = showSimCommerceSelect;
+window.showSimPersonaSelect = showSimPersonaSelect;
+window.toggleSimSpeak = toggleSimSpeak;
+window.nextSimStep = nextSimStep;
+window.completeSimulation = completeSimulation;
 </script>
 </body>
 </html>
