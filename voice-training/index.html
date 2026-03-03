@@ -225,6 +225,116 @@ button:active { opacity: 0.7; }
   font-size: 13px; color: #ffab00;
 }
 
+/* ── Cold Call module ── */
+.cc-scenario-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; margin: 8px 0; cursor: pointer; transition: border-color 0.2s;
+  text-align: left; width: 100%; max-width: 400px;
+}
+.cc-scenario-card:hover { border-color: #ff6600; }
+.cc-scenario-card h4 { font-size: 16px; margin-bottom: 4px; }
+.cc-scenario-card p { font-size: 12px; opacity: 0.6; }
+.cc-scenario-card .cc-tag {
+  display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 4px; background: rgba(255,102,0,0.2); color: #ff8833; margin-top: 6px;
+}
+
+.cc-prompt-box {
+  background: #1a1a2e; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; margin: 16px 0; text-align: left;
+}
+.cc-prompt-box .cc-speaker { font-size: 12px; font-weight: 600; color: #ff6600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.cc-prompt-box .cc-text { font-size: 16px; line-height: 1.6; }
+
+.cc-guide-box {
+  background: #0a1a0a; border: 2px solid #1a3a1a; border-radius: 12px;
+  padding: 20px; margin: 16px 0; text-align: left;
+}
+.cc-guide-box .cc-speaker { font-size: 12px; font-weight: 600; color: #00c853; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.cc-guide-box .cc-text { font-size: 16px; line-height: 1.6; }
+.cc-guide-box .cc-hint { font-size: 12px; opacity: 0.5; margin-top: 8px; font-style: italic; }
+
+.cc-your-speech {
+  background: #111; border: 1px solid #333; border-radius: 8px;
+  padding: 16px; margin: 12px 0; min-height: 50px;
+}
+.cc-your-speech .label { font-size: 11px; opacity: 0.5; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.cc-your-speech .transcript { font-size: 14px; line-height: 1.5; min-height: 24px; }
+
+.cc-feedback {
+  padding: 12px 16px; border-radius: 8px; margin: 12px 0;
+  font-size: 14px; font-weight: 500;
+}
+.cc-feedback.good { background: rgba(0,200,83,0.15); color: #00c853; border: 1px solid rgba(0,200,83,0.3); }
+.cc-feedback.ok { background: rgba(255,171,0,0.15); color: #ffab00; border: 1px solid rgba(255,171,0,0.3); }
+.cc-feedback.bad { background: rgba(255,82,82,0.15); color: #ff5252; border: 1px solid rgba(255,82,82,0.3); }
+
+.cc-timer {
+  font-size: 48px; font-weight: 900; text-align: center;
+  color: #ff6600; text-shadow: 0 0 20px rgba(255,102,0,0.4);
+  margin: 12px 0;
+}
+.cc-step-indicator {
+  display: flex; gap: 8px; justify-content: center; margin: 12px 0;
+}
+.cc-step-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: #333;
+}
+.cc-step-dot.active { background: #ff6600; }
+.cc-step-dot.done { background: #00c853; }
+
+/* ── Vocal Warmup module ── */
+.warmup-exercise-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; margin: 8px 0; cursor: pointer; transition: border-color 0.2s;
+  text-align: left; width: 100%; max-width: 400px;
+}
+.warmup-exercise-card:hover { border-color: #aa00ff; }
+.warmup-exercise-card h4 { font-size: 16px; margin-bottom: 4px; }
+.warmup-exercise-card p { font-size: 12px; opacity: 0.6; }
+.warmup-exercise-card .warmup-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(170,0,255,0.2); color: #cc66ff;
+  font-size: 16px; font-weight: 700; margin-bottom: 8px;
+}
+
+.warmup-instruction-box {
+  background: #1a0a2e; border: 2px solid #2a1a3e; border-radius: 12px;
+  padding: 24px; margin: 16px 0; text-align: left;
+}
+.warmup-instruction-box h3 { font-size: 20px; margin-bottom: 12px; color: #cc66ff; }
+.warmup-instruction-box .instruction { font-size: 16px; line-height: 1.6; margin-bottom: 16px; }
+.warmup-instruction-box .tip {
+  font-size: 13px; opacity: 0.6; font-style: italic;
+  padding: 12px; background: rgba(170,0,255,0.1); border-radius: 8px;
+}
+
+.warmup-timer {
+  font-size: 64px; font-weight: 900; text-align: center;
+  color: #aa00ff; text-shadow: 0 0 30px rgba(170,0,255,0.5);
+  margin: 16px 0;
+}
+.warmup-rep-counter {
+  font-size: 16px; opacity: 0.6; text-align: center; margin: 8px 0;
+}
+.warmup-text-display {
+  font-size: 20px; line-height: 1.8; padding: 20px;
+  background: #111; border-radius: 12px; margin: 16px 0;
+}
+.warmup-phrase {
+  font-size: 22px; line-height: 1.6; text-align: center;
+  padding: 24px; margin: 16px 0;
+}
+.warmup-phrase .current-phrase {
+  color: #cc66ff; font-weight: 600;
+}
+.warmup-phrase .pause-indicator {
+  display: block; font-size: 48px; color: #aa00ff;
+  text-shadow: 0 0 20px rgba(170,0,255,0.4);
+  margin: 16px 0; font-weight: 900;
+}
+
 /* ── Animations ── */
 @keyframes bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
 .bump { animation: bump 0.2s ease; }
@@ -242,7 +352,7 @@ button:active { opacity: 0.7; }
   <div class="mode-cards">
     <div class="mode-card" onclick="startFullSession()">
       <h3>Mode complet</h3>
-      <p>Respiration + Lecture + Virelangues</p>
+      <p>Tous les modules dans l'ordre</p>
     </div>
     <div class="mode-card" onclick="showModuleSelect()">
       <h3>Choisir module</h3>
@@ -260,6 +370,11 @@ button:active { opacity: 0.7; }
     <p>Techniques de souffle : carree, Wim Hof, diaphragmatique</p>
     <span class="tag no-mic">Pas de micro</span>
   </div>
+  <div class="module-option" onclick="startModule('warmup')" style="border-color:#aa00ff;">
+    <h3>Echauffement Vocal</h3>
+    <p>Lip trill, palais souple, articulation, sirene, pauses (Vinh Giang)</p>
+    <span class="tag no-mic">Pas de micro</span>
+  </div>
   <div id="opt-reading" class="module-option" onclick="startModule('reading')">
     <h3>Lecture a voix haute</h3>
     <p>Textes classiques avec suivi karaoke mot par mot</p>
@@ -268,6 +383,11 @@ button:active { opacity: 0.7; }
   <div id="opt-twisters" class="module-option" onclick="startModule('twisters')">
     <h3>Virelangues</h3>
     <p>10 exercices de diction par difficulte croissante</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-coldcall" class="module-option" onclick="startModule('coldcall')" style="border-color:#ff6600;">
+    <h3>Cold Call</h3>
+    <p>Scenarios de prospection : accroche, objections, prise de RDV</p>
     <span class="tag mic">Micro requis</span>
   </div>
   <div class="btn-group">
@@ -358,6 +478,289 @@ const TWISTERS = [
   "Le mur murant Paris rend Paris murmurant"
 ];
 
+// ════════════════════════════════════════════════════════════
+// COLD CALL SCENARIOS
+// ════════════════════════════════════════════════════════════
+const COLDCALL_SCENARIOS = [
+  {
+    id: "accroche",
+    title: "L'accroche (30s)",
+    desc: "Premiere impression. Sois naturel, pose une question.",
+    steps: [
+      {
+        prompt: null,
+        guide: "Bonjour, c'est Chris. J'appelle parce que j'ai regarde vos avis Google et j'ai remarque quelque chose d'interessant. Vous avez 2 minutes ?",
+        hint: "Ton calme, pas de rush. Tu offres une opportunite.",
+        keywords: ["bonjour", "chris", "avis", "google", "minutes", "interesse"],
+        maxSeconds: 15
+      },
+      {
+        prompt: "Oui, allez-y, rapidement.",
+        guide: "En fait, j'ai fait une petite analyse de votre reputation en ligne et j'ai repere 2-3 choses que vos concurrents font et pas vous. Est-ce que vous repondez a vos avis Google ?",
+        hint: "Pose la question. Laisse-les parler.",
+        keywords: ["analyse", "reputation", "concurrents", "repondez", "avis"],
+        maxSeconds: 15
+      }
+    ]
+  },
+  {
+    id: "decouverte",
+    title: "Questions de decouverte",
+    desc: "Comprendre leur situation. Ecoute active.",
+    steps: [
+      {
+        prompt: "Non, on n'a pas le temps de repondre aux avis.",
+        guide: "Je comprends, c'est exactement ce que me disent la plupart des restaurateurs. Vous recevez combien de nouveaux avis par mois a peu pres ?",
+        hint: "Valide leur probleme, puis pose une question chiffree.",
+        keywords: ["comprends", "restaurateurs", "combien", "avis", "mois"],
+        maxSeconds: 15
+      },
+      {
+        prompt: "Aucune idee, peut-etre une dizaine ?",
+        guide: "D'accord. Et est-ce que vous avez remarque si votre note a baisse ces derniers mois ? Parce que les avis sans reponse, ca pese 2 fois plus sur votre note que les avis avec reponse.",
+        hint: "Apporte de la valeur. Eduque-les.",
+        keywords: ["note", "baisse", "reponse", "pese", "fois"],
+        maxSeconds: 20
+      }
+    ]
+  },
+  {
+    id: "objections",
+    title: "Gestion des objections",
+    desc: "Les 4 objections classiques. Reste calme.",
+    steps: [
+      {
+        prompt: "Ecoutez, on n'a pas le budget pour ca.",
+        guide: "Je comprends. La question c'est pas le cout, c'est ce que ca vous rapporte. Un demi-point de plus sur Google, pour un restaurant comme le votre, c'est entre 500 et 2000 euros de chiffre d'affaires en plus par mois. Et en plus, on offre 7 jours d'essai gratuit.",
+        hint: "Ne parle JAMAIS de prix. Parle de ROI + essai gratuit.",
+        keywords: ["comprends", "rapporte", "chiffre", "affaires", "essai", "gratuit"],
+        maxSeconds: 20
+      },
+      {
+        prompt: "On n'a pas besoin de ca, ca marche tres bien.",
+        guide: "Tant mieux ! C'est justement quand ca va bien qu'il faut proteger sa reputation. Vos concurrents repondent a leurs avis, et les clients comparent avant de choisir. Mon rapport gratuit vous montre exactement ou vous en etes par rapport a eux.",
+        hint: "Felicite + urgence douce + offre gratuite.",
+        keywords: ["justement", "reputation", "concurrents", "comparent", "rapport", "gratuit"],
+        maxSeconds: 20
+      },
+      {
+        prompt: "Envoyez-moi un email, on verra.",
+        guide: "Bien sur, je vous envoie ca aujourd'hui. Par contre, est-ce qu'on peut se caler 10 minutes cette semaine pour que je vous montre le rapport en direct ? C'est plus parlant qu'un email, et ca vous engage a rien.",
+        hint: "Accepte, mais obtiens le RDV quand meme.",
+        keywords: ["envoie", "caler", "minutes", "semaine", "montrer", "engage"],
+        maxSeconds: 15
+      },
+      {
+        prompt: "C'est pas le bon moment la.",
+        guide: "Pas de souci, je comprends. Est-ce que je peux vous rappeler en fin de semaine ? Ca prend vraiment 5 minutes et ca peut faire une grosse difference sur votre visibilite.",
+        hint: "Respecte le refus, mais garde la porte ouverte.",
+        keywords: ["comprends", "rappeler", "semaine", "minutes", "difference"],
+        maxSeconds: 12
+      }
+    ]
+  },
+  {
+    id: "rdv",
+    title: "Prise de RDV",
+    desc: "Verrouiller un creneau. Sois precis.",
+    steps: [
+      {
+        prompt: "OK, montrez-moi ca alors.",
+        guide: "Super ! On fait ca quand ? Moi je suis disponible mercredi apres-midi ou jeudi matin. Ca vous prendrait vraiment 10-15 minutes maximum.",
+        hint: "Propose 2 creneaux precis. Pas de 'quand vous voulez'.",
+        keywords: ["quand", "disponible", "mercredi", "jeudi", "minutes"],
+        maxSeconds: 12
+      },
+      {
+        prompt: "Jeudi matin ca irait.",
+        guide: "Parfait, jeudi matin. Je viens directement chez vous avec le rapport. Vers 10 heures, ca vous va ? Je prends pas plus de 15 minutes.",
+        hint: "Confirme l'heure, le lieu, la duree.",
+        keywords: ["parfait", "jeudi", "directement", "heures", "minutes"],
+        maxSeconds: 12
+      },
+      {
+        prompt: null,
+        guide: "Super, c'est note. Merci pour votre temps. Je vous envoie un petit recapitulatif par email. A jeudi !",
+        hint: "Conclus proprement. Recap par email = professionnel.",
+        keywords: ["note", "merci", "email", "jeudi"],
+        maxSeconds: 10
+      }
+    ]
+  },
+  {
+    id: "accroche2",
+    title: "Accroche : bonne/mauvaise nouvelle",
+    desc: "Technique de transparence. Desarmant et honnete.",
+    steps: [
+      {
+        prompt: null,
+        guide: "Bonjour, c'est Chris. Je vais etre honnete avec vous, c'est un appel de prospection. Mais la bonne nouvelle c'est que j'ai regarde votre fiche Google avant d'appeler et j'ai repere quelque chose de concret qui pourrait vous aider. Vous avez 30 secondes ?",
+        hint: "Sois direct et souriant. La transparence desarme.",
+        keywords: ["bonjour", "chris", "honnete", "prospection", "bonne nouvelle", "google", "secondes"],
+        maxSeconds: 15
+      },
+      {
+        prompt: "Encore un demarcheur... Allez, 30 secondes.",
+        guide: "Je comprends, moi aussi je recois des appels tout le temps et c'est chiant. La difference c'est que moi j'ai vraiment regarde votre fiche avant d'appeler. Vous avez des centaines d'avis et personne y repond. Est-ce que vous saviez que 89% des clients lisent les reponses du patron avant de reserver ?",
+        hint: "Empathie + fait concret. Tu es comme eux, tu comprends.",
+        keywords: ["comprends", "appels", "chiant", "difference", "avis", "repond", "clients", "reserver"],
+        maxSeconds: 18
+      },
+      {
+        prompt: "Non je savais pas. Mais on a pas le temps pour ca.",
+        guide: "C'est justement ca le truc. Personne a le temps de repondre a des centaines d'avis manuellement. C'est pour ca que j'ai cree un outil qui le fait en 10 secondes par avis, avec votre validation avant publication. Je vous envoie un rapport gratuit de votre reputation et on en reparle ?",
+        hint: "Valide le probleme, presente la solution, offre le rapport.",
+        keywords: ["temps", "manuellement", "outil", "secondes", "validation", "rapport", "gratuit"],
+        maxSeconds: 18
+      }
+    ]
+  },
+  {
+    id: "education",
+    title: "Convaincre un sceptique",
+    desc: "Il ne voit pas l'interet des avis. Change sa vision.",
+    steps: [
+      {
+        prompt: "Repondre aux avis ? Ca sert a rien, les gens s'en fichent.",
+        guide: "Je comprends ce que vous pensez. Mais laissez-moi vous poser une question : vous, quand vous cherchez un restaurant, vous regardez les avis Google ?",
+        hint: "Question miroir. Fais-le se mettre a la place du client.",
+        keywords: ["comprends", "question", "vous", "restaurant", "regardez", "avis"],
+        maxSeconds: 12
+      },
+      {
+        prompt: "Oui bien sur, tout le monde fait ca.",
+        guide: "Exactement. Et quand vous voyez un avis negatif, est-ce que ca change si le patron a repondu ou pas ?",
+        hint: "Continue a le guider. Il est en train de comprendre tout seul.",
+        keywords: ["exactement", "avis", "negatif", "patron", "repondu"],
+        maxSeconds: 10
+      },
+      {
+        prompt: "Oui c'est vrai, ca rassure quand il y a une reponse.",
+        guide: "Voila. Maintenant imaginez qu'un client se plaint dans votre salle, devant tout le monde. Vous allez pas l'ignorer, non ? Un avis Google c'est pareil, sauf que c'est pas 20 personnes qui regardent, c'est des milliers.",
+        hint: "L'analogie du restaurant. Concret et visuel.",
+        keywords: ["imaginez", "client", "plaint", "salle", "ignorer", "avis", "google", "milliers"],
+        maxSeconds: 18
+      },
+      {
+        prompt: "Vu comme ca... Mais j'ai pas le temps de repondre a tout.",
+        guide: "Et c'est normal, personne l'a. C'est exactement pour ca que j'ai cree cet outil. En plus, votre concurrent repond a tous ses avis. Un client qui hesite entre vous deux, il va choisir celui qui montre qu'il ecoute. Je vous prepare un rapport gratuit pour que vous voyiez ou vous en etes ?",
+        hint: "Le concurrent + l'offre gratuite. Double motivation.",
+        keywords: ["normal", "concurrent", "repond", "client", "hesite", "choisir", "ecoute", "rapport", "gratuit"],
+        maxSeconds: 20
+      }
+    ]
+  },
+  {
+    id: "complet",
+    title: "Simulation complete",
+    desc: "Un cold call de A a Z. Mode realiste.",
+    steps: [
+      {
+        prompt: null,
+        guide: "Bonjour, c'est Chris d'Adaptive Logic. J'appelle parce que j'ai analyse votre fiche Google et j'ai trouve 2-3 opportunites interessantes pour ameliorer votre visibilite. Vous avez 2 minutes ?",
+        hint: "L'accroche. Calme, confiant, souriant.",
+        keywords: ["bonjour", "chris", "analyse", "google", "opportunites", "minutes"],
+        maxSeconds: 15
+      },
+      {
+        prompt: "Qu'est-ce que c'est ?",
+        guide: "En fait, j'ai remarque que vous avez beaucoup d'avis mais que vous n'y repondez pas. Les etudes montrent que 89% des clients lisent les reponses avant de reserver. Est-ce que vous arrivez a gerer ca ?",
+        hint: "Apporte un fait, pose une question ouverte.",
+        keywords: ["avis", "repondez", "etudes", "clients", "reserver", "gerer"],
+        maxSeconds: 18
+      },
+      {
+        prompt: "Non, on a pas le temps. Et puis ca sert a quoi ?",
+        guide: "C'est justement la. Un restaurant qui repond a ses avis voit sa note monter de 0.3 a 0.5 points en quelques mois. Et un demi-point en plus, c'est entre 10 et 25% de clients supplementaires. J'ai prepare un rapport gratuit qui montre exactement votre situation.",
+        hint: "Chiffres concrets. Offre le rapport.",
+        keywords: ["note", "monter", "points", "clients", "supplementaires", "rapport", "gratuit"],
+        maxSeconds: 20
+      },
+      {
+        prompt: "Envoyez-moi le rapport par email.",
+        guide: "Avec plaisir, je vous l'envoie dans l'heure. Par contre, est-ce qu'on peut bloquer 10 minutes cette semaine ? C'est beaucoup plus parlant quand je vous montre en direct sur vos propres avis.",
+        hint: "Accepte puis pivote vers le RDV.",
+        keywords: ["envoie", "bloquer", "minutes", "semaine", "montrer", "direct"],
+        maxSeconds: 15
+      },
+      {
+        prompt: "OK, passez jeudi vers 14h.",
+        guide: "Parfait, jeudi 14 heures, c'est note. Je viendrai avec votre rapport et quelques exemples sur vos vrais avis. Merci pour votre temps, a jeudi !",
+        hint: "Confirme tout. Clos proprement.",
+        keywords: ["parfait", "jeudi", "note", "rapport", "merci"],
+        maxSeconds: 12
+      }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════════════════
+// VOCAL WARMUP EXERCISES (inspired by Vinh Giang)
+// ════════════════════════════════════════════════════════════
+const VOCAL_EXERCISES = [
+  {
+    id: "lip-trill",
+    title: "Lip Trill",
+    desc: "Detend les cordes vocales, ameliore le controle du souffle",
+    instruction: "Inspirez profondement, puis faites vibrer vos levres (comme un cheval) sur une seule note. Tenez le plus longtemps possible.",
+    tip: "Gardez les levres detendues. Si ca s'arrete, recommencez avec moins de pression.",
+    duration: 30,
+    reps: 3,
+    icon: "~"
+  },
+  {
+    id: "soft-palate",
+    title: "Palais souple",
+    desc: "Ouvre la resonance naturelle — plus de volume sans forcer",
+    instruction: "Faites comme si vous bailliez et dites 'ahhhhhh' avec cette sensation d'ouverture. Votre voix doit sonner ronde et profonde.",
+    tip: "Pensez au son d'un baillement. C'est la que votre palais s'ouvre naturellement.",
+    duration: 5,
+    reps: 10,
+    icon: "O"
+  },
+  {
+    id: "articulation",
+    title: "Sur-articulation",
+    desc: "Renforce les muscles du visage — diction nette et puissante",
+    instruction: "Lisez le texte ci-dessous en EXAGERANT chaque mouvement de bouche. Etirez les levres, utilisez la langue, ouvrez grand.",
+    tip: "Plus c'est exagere, mieux c'est. On entraine les muscles, pas l'elegance.",
+    duration: 180,
+    reps: 1,
+    text: "Les grandes personnes aiment les chiffres. Quand vous leur parlez d'un nouvel ami, elles ne vous questionnent jamais sur l'essentiel. Elles ne vous disent jamais : Quel est le son de sa voix ? Quels sont les jeux qu'il prefere ? Est-ce qu'il collectionne les papillons ?",
+    icon: "A"
+  },
+  {
+    id: "siren",
+    title: "La Sirene",
+    desc: "Etend votre registre vocal — du grave a l'aigu",
+    instruction: "Faites glisser votre voix du son le plus grave au plus aigu, puis redescendez. Comme une sirene de pompier. Lentement et regulierement.",
+    tip: "Ne forcez pas dans les extremes. L'objectif est la fluidite de la transition.",
+    duration: 10,
+    reps: 5,
+    icon: "S"
+  },
+  {
+    id: "pause-power",
+    title: "Le pouvoir de la pause",
+    desc: "Maitrisez le silence — l'arme secrete des grands orateurs",
+    instruction: "Lisez la phrase, puis COMPTEZ 3 secondes de silence avant la suivante. Le silence n'est pas du vide, c'est du poids.",
+    tip: "Vinh Giang : 'La pause donne aux gens le temps de comprendre ce que vous dites.'",
+    duration: 120,
+    reps: 1,
+    phrases: [
+      "Je vais etre honnete avec vous.",
+      "Ce que je vais vous montrer va changer votre facon de voir votre business.",
+      "89% de vos clients lisent les reponses avant de reserver.",
+      "Votre concurrent repond a tous ses avis.",
+      "La question n'est pas le cout.",
+      "C'est ce que ca vous rapporte.",
+      "Un demi-point de plus sur Google.",
+      "C'est entre 500 et 2000 euros de CA en plus par mois."
+    ],
+    icon: "||"
+  }
+];
+
 const BREATHING_TECHNIQUES = {
   square: { name: "Carree", desc: "4-4-4-4", cycles: 6, phases: [
     { label: "Inspirez", duration: 4, scale: 2.0 },
@@ -424,8 +827,10 @@ let currentPaceWPM = 0;
     document.getElementById("browser-warning").style.display = "block";
     document.getElementById("opt-reading").classList.add("disabled");
     document.getElementById("opt-twisters").classList.add("disabled");
+    document.getElementById("opt-coldcall").classList.add("disabled");
     document.getElementById("opt-reading").onclick = null;
     document.getElementById("opt-twisters").onclick = null;
+    document.getElementById("opt-coldcall").onclick = null;
   }
 })();
 
@@ -456,7 +861,7 @@ function startFullSession() {
   sessionMode = "full";
   sessionStartTime = Date.now();
   modulesCompleted = [];
-  fullSessionQueue = ["breathing", "reading", "twisters"];
+  fullSessionQueue = ["breathing", "warmup", "reading", "twisters", "coldcall"];
   startModule(fullSessionQueue.shift());
 }
 
@@ -465,14 +870,16 @@ function showModuleSelect() {
 }
 
 function startModule(mod) {
-  if ((mod === "reading" || mod === "twisters") && !SPEECH_SUPPORTED) return;
+  if ((mod === "reading" || mod === "twisters" || mod === "coldcall") && !SPEECH_SUPPORTED) return;
   if (!sessionStartTime) sessionStartTime = Date.now();
   currentModule = mod;
   showExercise();
 
   if (mod === "breathing") startBreathing();
+  else if (mod === "warmup") startWarmup();
   else if (mod === "reading") startReading();
   else if (mod === "twisters") startTwisters();
+  else if (mod === "coldcall") startColdCall();
 }
 
 function completeModule(mod) {
@@ -504,11 +911,23 @@ function initRecognition(onResult, onEnd) {
   recognition.onerror = function(e) {
     if (e.error === "no-speech" || e.error === "aborted") return;
     console.warn("SpeechRecognition error:", e.error);
+    // On network or audio errors, retry after a short delay
+    if (recognizing && (e.error === "network" || e.error === "audio-capture")) {
+      setTimeout(() => {
+        if (recognizing) {
+          try { recognition.start(); } catch(ex) {}
+        }
+      }, 500);
+    }
   };
   recognition.onend = function() {
     // Auto-restart (Chrome cuts after ~15s of silence)
     if (recognizing) {
-      try { recognition.start(); } catch(e) {}
+      setTimeout(() => {
+        if (recognizing && recognition) {
+          try { recognition.start(); } catch(e) {}
+        }
+      }, 100);
     }
     if (onEnd) onEnd();
   };
@@ -681,6 +1100,255 @@ function trackPace(wordCount) {
 }
 
 // ════════════════════════════════════════════════════════════
+// MODULE 0: VOCAL WARMUP (Vinh Giang)
+// ════════════════════════════════════════════════════════════
+let warmupExIndex = 0;
+let warmupRepCount = 0;
+let warmupTimer = null;
+let warmupTimeLeft = 0;
+let warmupPhraseIndex = 0;
+let warmupPauseActive = false;
+
+function startWarmup() {
+  document.getElementById("ex-title").textContent = "Echauffement Vocal";
+  warmupExIndex = 0;
+  showWarmupMenu();
+}
+
+function showWarmupMenu() {
+  document.getElementById("ex-progress").textContent = "";
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px;">
+      <p style="opacity:0.6;font-size:13px;">Methode Vinh Giang — 5 fondations vocales</p>
+    </div>
+    ${VOCAL_EXERCISES.map((ex, i) => `
+      <div class="warmup-exercise-card" onclick="startWarmupExercise(${i})">
+        <div class="warmup-icon">${ex.icon}</div>
+        <h4>${ex.title}</h4>
+        <p>${ex.desc}</p>
+      </div>
+    `).join("")}
+    <div style="margin-top:16px;text-align:center;">
+      <button class="btn-primary" onclick="startWarmupAll()" style="background:#aa00ff;">Enchainer tout</button>
+    </div>
+  `;
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="skipModule('warmup')">Retour</button>
+  `;
+}
+
+function startWarmupAll() {
+  warmupExIndex = 0;
+  runWarmupExercise();
+}
+
+function startWarmupExercise(idx) {
+  warmupExIndex = idx;
+  runWarmupExercise();
+}
+
+function runWarmupExercise() {
+  const ex = VOCAL_EXERCISES[warmupExIndex];
+  if (!ex) { completeModule("warmup"); return; }
+
+  warmupRepCount = 0;
+  document.getElementById("ex-progress").textContent = `${warmupExIndex + 1} / ${VOCAL_EXERCISES.length}`;
+
+  if (ex.id === "pause-power") {
+    runPauseExercise(ex);
+  } else if (ex.id === "articulation") {
+    runArticulationExercise(ex);
+  } else {
+    runTimedExercise(ex);
+  }
+}
+
+function runTimedExercise(ex) {
+  warmupRepCount = 0;
+  warmupTimeLeft = ex.duration;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="warmup-instruction-box">
+      <h3>${ex.icon} ${ex.title}</h3>
+      <div class="instruction">${ex.instruction}</div>
+      <div class="tip">${ex.tip}</div>
+    </div>
+    <div class="warmup-timer" id="warmup-time">${ex.duration}</div>
+    <div class="warmup-rep-counter" id="warmup-reps">Repetition 1 / ${ex.reps}</div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-warmup-go" onclick="startWarmupTimer()" style="background:#aa00ff;">C'est parti</button>
+    <button class="btn-secondary" onclick="skipWarmupExercise()">Suivant</button>
+  `;
+}
+
+function startWarmupTimer() {
+  const ex = VOCAL_EXERCISES[warmupExIndex];
+  const btn = document.getElementById("btn-warmup-go");
+  if (btn) btn.disabled = true;
+
+  warmupTimeLeft = ex.duration;
+  updateWarmupTimerDisplay();
+
+  if (warmupTimer) clearInterval(warmupTimer);
+  warmupTimer = setInterval(() => {
+    warmupTimeLeft--;
+    updateWarmupTimerDisplay();
+    if (warmupTimeLeft <= 0) {
+      clearInterval(warmupTimer);
+      warmupTimer = null;
+      warmupRepCount++;
+
+      const repsEl = document.getElementById("warmup-reps");
+      if (warmupRepCount < ex.reps) {
+        if (repsEl) repsEl.textContent = `Repetition ${warmupRepCount + 1} / ${ex.reps}`;
+        // Short break then restart
+        warmupTimeLeft = ex.duration;
+        const timerEl = document.getElementById("warmup-time");
+        if (timerEl) { timerEl.textContent = "OK"; timerEl.style.color = "#00c853"; }
+        setTimeout(() => {
+          if (timerEl) timerEl.style.color = "#aa00ff";
+          startWarmupTimer();
+        }, 1500);
+      } else {
+        // All reps done
+        const timerEl = document.getElementById("warmup-time");
+        if (timerEl) { timerEl.textContent = "FAIT"; timerEl.style.color = "#00c853"; }
+        setTimeout(() => skipWarmupExercise(), 1200);
+      }
+    }
+  }, 1000);
+}
+
+function updateWarmupTimerDisplay() {
+  const el = document.getElementById("warmup-time");
+  if (el) el.textContent = warmupTimeLeft;
+}
+
+function runArticulationExercise(ex) {
+  warmupTimeLeft = ex.duration;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="warmup-instruction-box">
+      <h3>${ex.icon} ${ex.title}</h3>
+      <div class="instruction">${ex.instruction}</div>
+      <div class="tip">${ex.tip}</div>
+    </div>
+    <div class="warmup-text-display">${ex.text}</div>
+    <div class="warmup-timer" id="warmup-time">${Math.floor(ex.duration / 60)}:00</div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-warmup-go" onclick="startArticulationTimer()" style="background:#aa00ff;">C'est parti</button>
+    <button class="btn-secondary" onclick="skipWarmupExercise()">Suivant</button>
+  `;
+}
+
+function startArticulationTimer() {
+  const btn = document.getElementById("btn-warmup-go");
+  if (btn) btn.disabled = true;
+
+  if (warmupTimer) clearInterval(warmupTimer);
+  warmupTimer = setInterval(() => {
+    warmupTimeLeft--;
+    const mins = Math.floor(warmupTimeLeft / 60);
+    const secs = warmupTimeLeft % 60;
+    const el = document.getElementById("warmup-time");
+    if (el) el.textContent = `${mins}:${String(secs).padStart(2, "0")}`;
+
+    if (warmupTimeLeft <= 0) {
+      clearInterval(warmupTimer);
+      warmupTimer = null;
+      if (el) { el.textContent = "FAIT"; el.style.color = "#00c853"; }
+      setTimeout(() => skipWarmupExercise(), 1200);
+    }
+  }, 1000);
+}
+
+function runPauseExercise(ex) {
+  warmupPhraseIndex = 0;
+  warmupPauseActive = false;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="warmup-instruction-box">
+      <h3>${ex.icon} ${ex.title}</h3>
+      <div class="instruction">${ex.instruction}</div>
+      <div class="tip">${ex.tip}</div>
+    </div>
+    <div class="warmup-phrase" id="pause-area">
+      <div class="current-phrase" id="pause-phrase">${ex.phrases[0]}</div>
+      <div class="pause-indicator" id="pause-indicator" style="display:none;">...</div>
+    </div>
+    <div class="warmup-rep-counter" id="pause-counter">Phrase 1 / ${ex.phrases.length}</div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-pause-next" onclick="advancePause()" style="background:#aa00ff;">Phrase dite — Pause</button>
+    <button class="btn-secondary" onclick="skipWarmupExercise()">Suivant</button>
+  `;
+}
+
+function advancePause() {
+  const ex = VOCAL_EXERCISES[warmupExIndex];
+  const phraseEl = document.getElementById("pause-phrase");
+  const indicatorEl = document.getElementById("pause-indicator");
+  const btn = document.getElementById("btn-pause-next");
+  const counterEl = document.getElementById("pause-counter");
+
+  if (!warmupPauseActive) {
+    // Start the 3-second pause
+    warmupPauseActive = true;
+    if (btn) btn.disabled = true;
+    if (indicatorEl) indicatorEl.style.display = "block";
+
+    let countdown = 3;
+    if (indicatorEl) indicatorEl.textContent = countdown;
+    const pauseInt = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        if (indicatorEl) indicatorEl.textContent = countdown;
+      } else {
+        clearInterval(pauseInt);
+        warmupPauseActive = false;
+        warmupPhraseIndex++;
+
+        if (warmupPhraseIndex < ex.phrases.length) {
+          if (phraseEl) phraseEl.textContent = ex.phrases[warmupPhraseIndex];
+          if (indicatorEl) indicatorEl.style.display = "none";
+          if (counterEl) counterEl.textContent = `Phrase ${warmupPhraseIndex + 1} / ${ex.phrases.length}`;
+          if (btn) btn.disabled = false;
+        } else {
+          if (phraseEl) { phraseEl.textContent = "FAIT"; phraseEl.style.color = "#00c853"; }
+          if (indicatorEl) indicatorEl.style.display = "none";
+          setTimeout(() => skipWarmupExercise(), 1200);
+        }
+      }
+    }, 1000);
+  }
+}
+
+function skipWarmupExercise() {
+  if (warmupTimer) { clearInterval(warmupTimer); warmupTimer = null; }
+
+  // If launched from "Enchainer tout", go to next exercise
+  warmupExIndex++;
+  if (warmupExIndex < VOCAL_EXERCISES.length) {
+    runWarmupExercise();
+  } else {
+    completeModule("warmup");
+  }
+}
+
+// ════════════════════════════════════════════════════════════
 // MODULE 1: READING
 // ════════════════════════════════════════════════════════════
 let selectedTextIndex = 0;
@@ -821,11 +1489,15 @@ function updatePrecision() {
 // MODULE 2: TONGUE TWISTERS
 // ════════════════════════════════════════════════════════════
 let twisterListening = false;
+let twisterAdvancing = false; // prevent double-validation race condition
+let twisterLastResultIndex = 0; // track processed results
 
 function startTwisters() {
   document.getElementById("ex-title").textContent = "Virelangues";
   twisterIndex = 0;
   twistersCompleted = 0;
+  twisterAdvancing = false;
+  twisterLastResultIndex = 0;
   paceWordTimestamps = [];
   currentPaceWPM = 0;
   renderTwister();
@@ -863,6 +1535,8 @@ function renderTwister() {
 function toggleTwisterListen() {
   const btn = document.getElementById("btn-twister-listen");
   if (!twisterListening) {
+    twisterLastResultIndex = 0;
+    twisterAdvancing = false;
     initRecognition(onTwisterResult);
     startRecognition();
     initAudioAnalysis();
@@ -880,14 +1554,20 @@ function toggleTwisterListen() {
 }
 
 function onTwisterResult(event) {
+  // Skip if already advancing to next twister (prevent race condition)
+  if (twisterAdvancing) return;
+
   const target = TWISTERS[twisterIndex];
   let bestScore = 0;
   let bestTranscript = "";
 
-  for (let i = 0; i < event.results.length; i++) {
+  // Only process NEW results (from resultIndex onwards), not old ones
+  const startIdx = event.resultIndex || 0;
+  for (let i = startIdx; i < event.results.length; i++) {
     const result = event.results[i];
     for (let a = 0; a < result.length; a++) {
       const transcript = result[a].transcript.trim();
+      if (!transcript) continue;
       const score = fuzzyMatch(normalizeWord(transcript), normalizeWord(target));
       if (score > bestScore) {
         bestScore = score;
@@ -896,15 +1576,19 @@ function onTwisterResult(event) {
     }
   }
 
-  if (bestTranscript) {
-    document.getElementById("twister-heard").textContent = bestTranscript;
-    trackPace(bestTranscript.split(/\s+/).length);
-  }
+  if (!bestTranscript) return;
+
+  const heardEl = document.getElementById("twister-heard");
+  if (heardEl) heardEl.textContent = bestTranscript;
+  trackPace(bestTranscript.split(/\s+/).length);
 
   const resultArea = document.getElementById("twister-result-area");
+  if (!resultArea) return;
   const pct = Math.round(bestScore * 100);
 
   if (bestScore >= 0.85) {
+    // Lock to prevent double-validation
+    twisterAdvancing = true;
     resultArea.innerHTML = `<div class="twister-result success">Valide ! (${pct}% de correspondance)</div>`;
     twistersCompleted++;
 
@@ -914,6 +1598,8 @@ function onTwisterResult(event) {
       stopVoiceAnalysis();
       document.getElementById("voice-panel").classList.remove("active");
       twisterListening = false;
+      twisterAdvancing = false;
+      twisterLastResultIndex = 0;
 
       if (twisterIndex < TWISTERS.length - 1) {
         twisterIndex++;
@@ -1176,12 +1862,244 @@ function stopBreathingExercise() {
 }
 
 // ════════════════════════════════════════════════════════════
+// MODULE 4: COLD CALL
+// ════════════════════════════════════════════════════════════
+let ccScenario = null;
+let ccStepIndex = 0;
+let ccListening = false;
+let ccTimer = null;
+let ccTimerValue = 0;
+let ccScores = [];
+
+function startColdCall() {
+  document.getElementById("ex-title").textContent = "Cold Call";
+  document.getElementById("ex-progress").textContent = "";
+  paceWordTimestamps = [];
+  currentPaceWPM = 0;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <p style="opacity:0.6;font-size:14px;margin-bottom:16px;">Choisissez un scenario :</p>
+    ${COLDCALL_SCENARIOS.map(s => `
+      <div class="cc-scenario-card" onclick="selectCCScenario('${s.id}')">
+        <h4>${s.title}</h4>
+        <p>${s.desc}</p>
+        <span class="cc-tag">${s.steps.length} etapes</span>
+      </div>
+    `).join("")}
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="skipModule('coldcall')">Retour</button>
+  `;
+}
+
+function selectCCScenario(id) {
+  ccScenario = COLDCALL_SCENARIOS.find(s => s.id === id);
+  ccStepIndex = 0;
+  ccScores = [];
+  renderCCStep();
+}
+
+function renderCCStep() {
+  if (!ccScenario || ccStepIndex >= ccScenario.steps.length) {
+    completeCCScenario();
+    return;
+  }
+
+  const step = ccScenario.steps[ccStepIndex];
+  const totalSteps = ccScenario.steps.length;
+
+  document.getElementById("ex-progress").textContent = `Etape ${ccStepIndex + 1} / ${totalSteps}`;
+
+  // Step dots
+  const dots = Array.from({ length: totalSteps }, (_, i) => {
+    const cls = i < ccStepIndex ? "done" : i === ccStepIndex ? "active" : "";
+    return `<span class="cc-step-dot ${cls}"></span>`;
+  }).join("");
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="cc-step-indicator">${dots}</div>
+    ${step.prompt ? `
+      <div class="cc-prompt-box">
+        <div class="cc-speaker">Le prospect dit :</div>
+        <div class="cc-text">"${step.prompt}"</div>
+      </div>
+    ` : `
+      <div class="cc-prompt-box" style="border-color:#444;">
+        <div class="cc-speaker" style="color:#888;">C'est toi qui parles en premier</div>
+        <div class="cc-text" style="opacity:0.5;">Prends l'initiative.</div>
+      </div>
+    `}
+    <div class="cc-guide-box">
+      <div class="cc-speaker">Ton guide :</div>
+      <div class="cc-text">${step.guide}</div>
+      <div class="cc-hint">${step.hint}</div>
+    </div>
+    <div class="cc-timer" id="cc-timer-display">--</div>
+    <div class="cc-your-speech">
+      <div class="label">Ta reponse :</div>
+      <div class="transcript" id="cc-transcript">Appuie sur "Parler" pour commencer</div>
+    </div>
+    <div id="cc-feedback-area"></div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-cc-speak" onclick="toggleCCSpeak()" style="background:#ff6600;">Parler</button>
+    <button class="btn-secondary" onclick="nextCCStep()">Passer</button>
+    <button class="btn-secondary" onclick="skipModule('coldcall')">Quitter</button>
+  `;
+
+  ccListening = false;
+}
+
+function toggleCCSpeak() {
+  const btn = document.getElementById("btn-cc-speak");
+  if (!ccListening) {
+    // Start listening
+    initRecognition(onCCResult);
+    startRecognition();
+    initAudioAnalysis();
+    ccListening = true;
+    btn.textContent = "Stop";
+    btn.style.background = "#dc2626";
+    document.getElementById("cc-transcript").textContent = "...";
+    document.getElementById("cc-feedback-area").innerHTML = "";
+
+    // Start timer
+    ccTimerValue = 0;
+    const maxSec = ccScenario.steps[ccStepIndex].maxSeconds;
+    const timerEl = document.getElementById("cc-timer-display");
+    timerEl.textContent = "0s";
+    timerEl.style.color = "#ff6600";
+
+    ccTimer = setInterval(() => {
+      ccTimerValue++;
+      timerEl.textContent = ccTimerValue + "s";
+      if (ccTimerValue > maxSec) {
+        timerEl.style.color = "#ff5252";
+      } else if (ccTimerValue > maxSec * 0.7) {
+        timerEl.style.color = "#ffab00";
+      }
+    }, 1000);
+  } else {
+    // Stop listening & evaluate
+    ccListening = false;
+    if (ccTimer) { clearInterval(ccTimer); ccTimer = null; }
+    stopRecognition();
+    stopVoiceAnalysis();
+    document.getElementById("voice-panel").classList.remove("active");
+    btn.textContent = "Parler";
+    btn.style.background = "#ff6600";
+    evaluateCCStep();
+  }
+}
+
+function onCCResult(event) {
+  let transcript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  document.getElementById("cc-transcript").textContent = transcript.trim() || "...";
+
+  const words = transcript.trim().split(/\s+/).filter(w => w.length > 0);
+  if (words.length > 0) {
+    trackPace(words.length);
+  }
+}
+
+function evaluateCCStep() {
+  const step = ccScenario.steps[ccStepIndex];
+  const transcript = document.getElementById("cc-transcript").textContent.toLowerCase();
+  const transcriptNorm = normalizeWord(transcript);
+
+  // Score: keyword coverage
+  let keywordsFound = 0;
+  for (const kw of step.keywords) {
+    if (transcript.includes(kw) || transcriptNorm.includes(normalizeWord(kw))) {
+      keywordsFound++;
+    }
+  }
+  const keywordScore = step.keywords.length > 0 ? keywordsFound / step.keywords.length : 0;
+
+  // Score: timing
+  const maxSec = step.maxSeconds;
+  let timingScore = 1;
+  if (ccTimerValue > maxSec * 1.5) timingScore = 0.3;
+  else if (ccTimerValue > maxSec) timingScore = 0.6;
+  else if (ccTimerValue < 3) timingScore = 0.2; // too short
+
+  // Score: word count (did they actually speak enough?)
+  const wordCount = transcript.split(/\s+/).filter(w => w.length > 1).length;
+  const lengthScore = wordCount >= 8 ? 1 : wordCount >= 4 ? 0.5 : 0.2;
+
+  // Overall
+  const overall = Math.round((keywordScore * 0.5 + timingScore * 0.25 + lengthScore * 0.25) * 100);
+  ccScores.push(overall);
+
+  // Feedback
+  const feedbackArea = document.getElementById("cc-feedback-area");
+  let feedbackClass, feedbackText;
+
+  if (overall >= 70) {
+    feedbackClass = "good";
+    feedbackText = `Score : ${overall}% — Bien joue ! ${keywordsFound}/${step.keywords.length} mots-cles, ${ccTimerValue}s/${maxSec}s.`;
+  } else if (overall >= 40) {
+    feedbackClass = "ok";
+    feedbackText = `Score : ${overall}% — Pas mal. ${keywordsFound}/${step.keywords.length} mots-cles couverts. ${ccTimerValue > maxSec ? "Trop long !" : "Essaie d'etre plus complet."}`;
+  } else {
+    feedbackClass = "bad";
+    feedbackText = `Score : ${overall}% — A retravailler. ${wordCount < 5 ? "Reponse trop courte." : `Seulement ${keywordsFound}/${step.keywords.length} points cles abordes.`}`;
+  }
+
+  feedbackArea.innerHTML = `<div class="cc-feedback ${feedbackClass}">${feedbackText}</div>`;
+}
+
+function nextCCStep() {
+  if (ccListening) {
+    ccListening = false;
+    if (ccTimer) { clearInterval(ccTimer); ccTimer = null; }
+    stopRecognition();
+    stopVoiceAnalysis();
+    document.getElementById("voice-panel").classList.remove("active");
+  }
+  ccStepIndex++;
+  renderCCStep();
+}
+
+function completeCCScenario() {
+  const avgScore = ccScores.length > 0 ? Math.round(ccScores.reduce((a, b) => a + b, 0) / ccScores.length) : 0;
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;padding:40px 20px;">
+      <h2 style="font-size:24px;margin-bottom:12px;">Scenario termine !</h2>
+      <div class="cc-timer" style="font-size:72px;">${avgScore}%</div>
+      <p style="opacity:0.6;margin-bottom:20px;">Score moyen sur ${ccScores.length} etapes</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        ${ccScores.map((s, i) => `<span style="background:${s >= 70 ? 'rgba(0,200,83,0.2)' : s >= 40 ? 'rgba(255,171,0,0.2)' : 'rgba(255,82,82,0.2)'};color:${s >= 70 ? '#00c853' : s >= 40 ? '#ffab00' : '#ff5252'};padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;">Etape ${i + 1}: ${s}%</span>`).join("")}
+      </div>
+      ${avgScore >= 70 ? '<p style="color:#00c853;font-size:18px;font-weight:600;margin-top:20px;">Tu es pret pour le vrai appel !</p>' : avgScore >= 40 ? '<p style="color:#ffab00;font-size:16px;margin-top:20px;">Encore un peu de pratique et ca sera bon.</p>' : '<p style="color:#ff5252;font-size:16px;margin-top:20px;">Continue a pratiquer. Relis le guide avant chaque etape.</p>'}
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="startColdCall()" style="background:#ff6600;">Rejouer</button>
+    <button class="btn-secondary" onclick="completeModule('coldcall')">Terminer</button>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════
 // SKIP MODULE
 // ════════════════════════════════════════════════════════════
 function skipModule(mod) {
   breathingActive = false;
   if (breathingInterval) clearInterval(breathingInterval);
   if (breathingTimeout) clearTimeout(breathingTimeout);
+  if (warmupTimer) { clearInterval(warmupTimer); warmupTimer = null; }
   stopRecognition();
   stopVoiceAnalysis();
   document.getElementById("voice-panel").classList.remove("active");
@@ -1196,7 +2114,7 @@ function showDone() {
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
 
-  const moduleNames = { breathing: "Respiration", reading: "Lecture", twisters: "Virelangues" };
+  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", coldcall: "Cold Call" };
   const modList = modulesCompleted.map(m => moduleNames[m] || m).join(", ");
 
   showScreen("done-screen");
@@ -1264,6 +2182,10 @@ window.toggleTwisterListen = toggleTwisterListen;
 window.selectTechnique = selectTechnique;
 window.stopBreathingExercise = stopBreathingExercise;
 window.skipModule = skipModule;
+window.selectCCScenario = selectCCScenario;
+window.toggleCCSpeak = toggleCCSpeak;
+window.nextCCStep = nextCCStep;
+window.startColdCall = startColdCall;
 </script>
 </body>
 </html>
