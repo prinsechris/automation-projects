@@ -7,12 +7,14 @@ CRON (6h) → fetch commits 3 repos → fetch Notion tasks → Claude analysis �
 import json
 import requests
 
+import os
+
 N8N_URL = "https://n8n.srv842982.hstgr.cloud"
-N8N_API_KEY = "***N8N_API_KEY***"
+N8N_API_KEY = open(os.path.expanduser("~/.n8n-api-key")).read().strip()
 HEADERS = {"X-N8N-API-KEY": N8N_API_KEY, "Content-Type": "application/json"}
 
-GITHUB_TOKEN = "***GITHUB_TOKEN***"
-ANTHROPIC_KEY = "***ANTHROPIC_KEY***"
+GITHUB_TOKEN = open(os.path.expanduser("~/.github-token")).read().strip() if os.path.exists(os.path.expanduser("~/.github-token")) else os.environ.get("GITHUB_TOKEN", "")
+ANTHROPIC_KEY = open(os.path.expanduser("~/.anthropic-key")).read().strip() if os.path.exists(os.path.expanduser("~/.anthropic-key")) else os.environ.get("ANTHROPIC_API_KEY", "")
 
 REPOS = [
     "prinsechris/AI-Business-Automation-Suite",
