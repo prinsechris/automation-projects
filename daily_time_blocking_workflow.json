@@ -1,0 +1,506 @@
+{
+  "name": "Daily Time Blocking",
+  "nodes": [
+    {
+      "id": "35a4de85-2afc-4688-b806-6ece94846949",
+      "name": "Daily 6h30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 6 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "db8b9f4c-821f-4dbe-8154-74670e3ee2f4",
+      "name": "Date Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "parameters": {
+        "jsCode": "\nconst now = new Date();\n// Force Europe/Paris\nconst parisOffset = new Date().toLocaleString('en-US', {timeZone: 'Europe/Paris'});\nconst paris = new Date(parisOffset);\n\nconst year = paris.getFullYear();\nconst month = String(paris.getMonth() + 1).padStart(2, '0');\nconst day = String(paris.getDate()).padStart(2, '0');\nconst today = `${year}-${month}-${day}`;\n\nconst dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];\nconst dayName = dayNames[paris.getDay()];\nconst dayOfWeek = paris.getDay(); // 0=Sunday\n\n// Google Calendar time range (full day)\nconst todayStart = `${today}T00:00:00+01:00`;\nconst todayEnd = `${today}T23:59:59+01:00`;\n\n// Tomorrow for Notion date filter\nconst tomorrow = new Date(paris);\ntomorrow.setDate(tomorrow.getDate() + 1);\nconst tYear = tomorrow.getFullYear();\nconst tMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');\nconst tDay = String(tomorrow.getDate()).padStart(2, '0');\nconst tomorrowStr = `${tYear}-${tMonth}-${tDay}`;\n\nreturn [{json: {today, dayName, dayOfWeek, todayStart, todayEnd, tomorrow: tomorrowStr}}];\n"
+      }
+    },
+    {
+      "id": "b5a42664-5657-4465-bc67-3d1d64620630",
+      "name": "Google Calendar Events",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        480,
+        100
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "__GOOGLE_CALENDAR_CRED_ID__",
+          "name": "Google Calendar"
+        }
+      },
+      "parameters": {
+        "operation": "getAll",
+        "calendarId": "primary",
+        "returnAll": true,
+        "options": {
+          "singleEvents": true,
+          "timeMin": "={{$json.todayStart}}",
+          "timeMax": "={{$json.todayEnd}}",
+          "orderBy": "startTime"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "continueOnFail": true
+    },
+    {
+      "id": "cbe1220f-3b23-4cec-bfce-ff4849eda1f0",
+      "name": "Query Tasks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FPqqVYnRbUnwRzrY",
+          "name": "Notion account"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/databases/305da200-b2d6-8145-bc16-eaee02925a14/query",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Notion-Version",
+              "value": "2022-06-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\"filter\":{\"and\":[{\"or\":[{\"property\":\"Due Date\",\"date\":{\"equals\":\"{{$json.today}}\"}},{\"property\":\"Due Date\",\"date\":{\"before\":\"{{$json.today}}\"}},{\"property\":\"Status\",\"status\":{\"equals\":\"In Progress\"}}]},{\"property\":\"Status\",\"status\":{\"does_not_equal\":\"Complete\"}},{\"property\":\"Status\",\"status\":{\"does_not_equal\":\"Archive\"}},{\"or\":[{\"property\":\"Type\",\"select\":{\"equals\":\"Task\"}},{\"property\":\"Type\",\"select\":{\"equals\":\"Sub-task\"}}]}]},\"sorts\":[{\"property\":\"Priority\",\"direction\":\"ascending\"}],\"page_size\":20}) }}"
+      }
+    },
+    {
+      "id": "d6041d11-df5a-45c5-ae8f-268618fb9171",
+      "name": "Query Habits",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        500
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FPqqVYnRbUnwRzrY",
+          "name": "Notion account"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/databases/305da200-b2d6-8139-b19f-d2a0d46cf7e6/query",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Notion-Version",
+              "value": "2022-06-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"filter\": {\"property\": \"Status\", \"status\": {\"equals\": \"In Progress\"}}, \"page_size\": 30}"
+      }
+    },
+    {
+      "id": "c61c1323-e31c-4aeb-8e21-93e4d51c3179",
+      "name": "Merge & Free Slots",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        740,
+        300
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\n// Get inputs from all 3 branches\nconst dateCtx = $input.all().find(i => i.json.today) || $('Date Context').first();\nconst ctx = dateCtx.json;\n\n// ── Parse Google Calendar events ──\nlet calEvents = [];\ntry {\n    const gcalItems = $('Google Calendar Events').all();\n    for (const item of gcalItems) {\n        const d = item.json;\n        // Skip if error (continueOnFail)\n        if (d.error || !d.start) continue;\n        const startTime = d.start?.dateTime || d.start?.date;\n        const endTime = d.end?.dateTime || d.end?.date;\n        if (!startTime || !endTime) continue;\n        const sH = new Date(startTime).toLocaleTimeString('fr-FR', {timeZone:'Europe/Paris', hour:'2-digit', minute:'2-digit', hour12:false});\n        const eH = new Date(endTime).toLocaleTimeString('fr-FR', {timeZone:'Europe/Paris', hour:'2-digit', minute:'2-digit', hour12:false});\n        calEvents.push({\n            start: sH,\n            end: eH,\n            title: d.summary || 'Evenement',\n            type: 'blocked'\n        });\n    }\n} catch(e) {\n    // No calendar data — full day available\n    calEvents = [];\n}\n\n// ── Parse Notion tasks ──\nlet tasks = [];\ntry {\n    const taskData = $('Query Tasks').first().json;\n    const results = taskData.results || [];\n    for (const page of results) {\n        const props = page.properties || {};\n        const name = props['Name']?.title?.[0]?.plain_text || props['Task Name']?.title?.[0]?.plain_text || 'Tache sans nom';\n        const priority = props['Priority']?.select?.name || 'Medium';\n        const difficulty = props['Difficulty']?.select?.name || 'Moderate';\n        const category = props['Category']?.select?.name || '';\n        const dueDate = props['Due Date']?.date?.start || '';\n        const status = props['Status']?.status?.name || '';\n\n        // Estimate duration from difficulty\n        let durationMin = 60;\n        if (difficulty === 'Easy' || difficulty === 'Trivial') durationMin = 30;\n        else if (difficulty === 'Hard' || difficulty === 'Expert') durationMin = 120;\n        else durationMin = 60; // Moderate\n\n        const isOverdue = dueDate && dueDate < ctx.today;\n\n        tasks.push({name, priority, difficulty, category, dueDate, status, durationMin, isOverdue});\n    }\n} catch(e) {\n    tasks = [];\n}\n\n// ── Parse Habits due today ──\nlet habits = [];\ntry {\n    const habitData = $('Query Habits').first().json;\n    const results = habitData.results || [];\n    const dayOfWeek = ctx.dayOfWeek; // 0=Sun\n\n    for (const page of results) {\n        const props = page.properties || {};\n        const name = props['Name']?.title?.[0]?.plain_text || props['Habit']?.title?.[0]?.plain_text || '';\n        if (!name) continue;\n\n        const freqRaw = props['Frequency']?.select?.name || '1 - Daily';\n        const freqNum = parseInt(freqRaw) || 1;\n\n        // Determine if habit is due today\n        let isDueToday = false;\n        if (freqNum === 1) {\n            isDueToday = true; // Daily\n        } else if (freqNum === 7) {\n            // Weekly — check specific days or default to certain days\n            // Mon/Wed/Fri for 3x/week type habits\n            isDueToday = [1, 3, 5].includes(dayOfWeek);\n        } else if (freqNum === 2) {\n            isDueToday = [1, 4].includes(dayOfWeek); // Mon, Thu\n        } else if (freqNum === 3) {\n            isDueToday = [1, 3, 5].includes(dayOfWeek); // Mon, Wed, Fri\n        } else if (freqNum === 4) {\n            isDueToday = [1, 2, 4, 5].includes(dayOfWeek); // Mon-Fri minus Wed\n        } else if (freqNum === 5) {\n            isDueToday = [1, 2, 3, 4, 5].includes(dayOfWeek); // Weekdays\n        } else if (freqNum === 6) {\n            isDueToday = dayOfWeek !== 0; // All except Sunday\n        }\n\n        if (!isDueToday) continue;\n\n        // Estimate duration based on habit name\n        let durationMin = 15;\n        const nameLower = name.toLowerCase();\n        if (nameLower.includes('muscul') || nameLower.includes('muscu') || nameLower.includes('gym')) {\n            durationMin = 90;\n        } else if (nameLower.includes('course') || nameLower.includes('running') || nameLower.includes('jogging') || nameLower.includes('cardio')) {\n            durationMin = 45;\n        } else if (nameLower.includes('meditation') || nameLower.includes('lecture') || nameLower.includes('read')) {\n            durationMin = 30;\n        } else if (nameLower.includes('stretching') || nameLower.includes('yoga')) {\n            durationMin = 30;\n        }\n\n        const isSport = nameLower.includes('muscul') || nameLower.includes('muscu') || nameLower.includes('course') || nameLower.includes('running') || nameLower.includes('cardio') || nameLower.includes('gym') || nameLower.includes('sport');\n\n        habits.push({name, frequency: freqRaw, durationMin, type: isSport ? 'sport' : 'habit'});\n    }\n} catch(e) {\n    habits = [];\n}\n\n// ── Compute free slots ──\n// Day window: 7:00 - 22:00\nconst dayStart = 7 * 60; // minutes from midnight\nconst dayEnd = 22 * 60;\n\n// Convert calendar events to minute ranges\nconst blocked = calEvents.map(e => {\n    const [sH, sM] = e.start.split(':').map(Number);\n    const [eH, eM] = e.end.split(':').map(Number);\n    return {start: sH * 60 + sM, end: eH * 60 + eM, title: e.title};\n}).sort((a, b) => a.start - b.start);\n\n// Compute free slots\nlet freeSlots = [];\nlet cursor = dayStart;\nfor (const b of blocked) {\n    if (b.start > cursor) {\n        freeSlots.push({\n            start: `${String(Math.floor(cursor/60)).padStart(2,'0')}:${String(cursor%60).padStart(2,'0')}`,\n            end: `${String(Math.floor(b.start/60)).padStart(2,'0')}:${String(b.start%60).padStart(2,'0')}`,\n            durationMin: b.start - cursor\n        });\n    }\n    cursor = Math.max(cursor, b.end);\n}\nif (cursor < dayEnd) {\n    freeSlots.push({\n        start: `${String(Math.floor(cursor/60)).padStart(2,'0')}:${String(cursor%60).padStart(2,'0')}`,\n        end: `${String(Math.floor(dayEnd/60)).padStart(2,'0')}:${String(dayEnd%60).padStart(2,'0')}`,\n        durationMin: dayEnd - cursor\n    });\n}\n\nconst totalFreeMin = freeSlots.reduce((s, f) => s + f.durationMin, 0);\nconst totalFreeHours = Math.round(totalFreeMin / 60 * 10) / 10;\n\nreturn [{json: {\n    ...ctx,\n    calEvents,\n    blocked: blocked.map(b => ({...b, start: calEvents.find(c => c.title === b.title)?.start, end: calEvents.find(c => c.title === b.title)?.end})),\n    calEventsFormatted: calEvents,\n    tasks,\n    habits,\n    freeSlots,\n    totalFreeHours,\n    totalTasks: tasks.length,\n    totalHabits: habits.length,\n    hasTasks: tasks.length > 0 || habits.length > 0\n}}];\n"
+      }
+    },
+    {
+      "id": "84a8b2f1-5982-484f-bb85-20e8d0bf92b2",
+      "name": "Has Tasks?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b4aa7a7a-c246-4bae-bf03-f9cde71c99c8",
+              "leftValue": "={{$json.hasTasks}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "96a4f035-8e8d-4804-b577-2cea160aa5ca",
+      "name": "Build Claude Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        200
+      ],
+      "parameters": {
+        "jsCode": "\nconst d = $json;\n\nconst systemPrompt = `Tu es un assistant de planification quotidienne pour Chris, entrepreneur et employe McDonald's a Avignon.\nCree un planning heure par heure optimise pour sa journee.\n\nREGLES STRICTES:\n- Ne JAMAIS planifier sur les creneaux bloques (McDo, RDV, etc.)\n- Sport (muscu/course): matin de preference, ou soir. JAMAIS juste avant un shift McDo.\n- Taches business Critical/High en debut de journee quand l'energie est haute\n- Pause de 15min entre les blocs de travail de 2h+\n- Dejeuner entre 12h-14h (30min minimum) sauf si creneau bloque\n- Taches faciles/admin en fin de journee\n- Si peu de temps libre (<3h), garder UNIQUEMENT Critical/High + sport\n- Arrondir les heures a 00, 15, 30, 45 minutes\n- Retourne UNIQUEMENT un JSON valide, rien d'autre\n\nFORMAT DE SORTIE (JSON strict):\n{\n  \"timeBlocks\": [\n    {\"start\": \"HH:MM\", \"end\": \"HH:MM\", \"activity\": \"Nom\", \"type\": \"sport|task|habit|break|meal\", \"priority\": \"Critical|High|Medium|Low\", \"details\": \"Note courte\"}\n  ],\n  \"summary\": \"Resume de la journee en 1 phrase\",\n  \"tip\": \"Conseil motivant pour la journee\"\n}`;\n\nlet userMsg = `PLANNING POUR: ${d.dayName} ${d.today}\n\nCRENEAUX BLOQUES (ne PAS toucher):\n`;\n\nif (d.calEventsFormatted && d.calEventsFormatted.length > 0) {\n    for (const e of d.calEventsFormatted) {\n        userMsg += `- ${e.start} - ${e.end}: ${e.title}\\n`;\n    }\n} else {\n    userMsg += '- Aucun creneau bloque (journee libre)\\n';\n}\n\nuserMsg += `\nCRENEAUX LIBRES:\n`;\nfor (const f of d.freeSlots) {\n    userMsg += `- ${f.start} - ${f.end} (${f.durationMin} min libres)\\n`;\n}\n\nuserMsg += `\\nTOTAL TEMPS LIBRE: ${d.totalFreeHours}h\n\nTACHES A PLANIFIER (par priorite):\n`;\nif (d.tasks.length > 0) {\n    for (const t of d.tasks) {\n        const overdue = t.isOverdue ? ' [EN RETARD]' : '';\n        userMsg += `- ${t.name} | Priorite: ${t.priority} | Difficulte: ${t.difficulty} | Duree estimee: ${t.durationMin}min${overdue}\\n`;\n    }\n} else {\n    userMsg += '- Aucune tache\\n';\n}\n\nuserMsg += `\nHABITUDES/SPORT DU JOUR:\n`;\nif (d.habits.length > 0) {\n    for (const h of d.habits) {\n        userMsg += `- ${h.name} (${h.type}) | Duree: ${h.durationMin}min\\n`;\n    }\n} else {\n    userMsg += '- Aucune habitude\\n';\n}\n\nuserMsg += `\nGenere le planning optimal en JSON.`;\n\nreturn [{json: {...d, systemPrompt, userMsg}}];\n"
+      }
+    },
+    {
+      "id": "23ebb44d-96ea-44e6-a68b-e25c1324dcdb",
+      "name": "Claude Time Block",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpCustomAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\"model\":\"claude-sonnet-4-20250514\",\"max_tokens\":4096,\"system\":$json.systemPrompt,\"messages\":[{\"role\":\"user\",\"content\":$json.userMsg}]}) }}"
+      },
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sE8nBT8crViDOv1E",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "id": "317ccf25-92e2-4869-b689-df12851c04e0",
+      "name": "Parse Schedule",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        200
+      ],
+      "parameters": {
+        "jsCode": "\nconst prev = $('Build Claude Prompt').first().json;\nlet schedule = null;\nlet usedFallback = false;\n\ntry {\n    const content = $json.content?.[0]?.text || $json.content || '';\n    // Extract JSON from response\n    const jsonMatch = content.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n        schedule = JSON.parse(jsonMatch[0]);\n    }\n} catch(e) {\n    // fallback\n}\n\nif (!schedule || !schedule.timeBlocks || schedule.timeBlocks.length === 0) {\n    // ── FALLBACK: Round-robin scheduling ──\n    usedFallback = true;\n    const blocks = [];\n    const freeSlots = [...prev.freeSlots];\n\n    // Sort: sport first, then tasks by priority\n    const priorityOrder = {'Critical': 0, 'High': 1, 'Medium': 2, 'Low': 3};\n    const sportHabits = prev.habits.filter(h => h.type === 'sport');\n    const otherHabits = prev.habits.filter(h => h.type !== 'sport');\n    const sortedTasks = [...prev.tasks].sort((a, b) => (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2));\n\n    const allItems = [\n        ...sportHabits.map(h => ({name: h.name, duration: h.durationMin, type: h.type, priority: 'High'})),\n        ...sortedTasks.map(t => ({name: t.name, duration: t.durationMin, type: 'task', priority: t.priority})),\n        ...otherHabits.map(h => ({name: h.name, duration: h.durationMin, type: 'habit', priority: 'Medium'})),\n    ];\n\n    let slotIdx = 0;\n    let slotCursor = 0; // minutes into current slot\n\n    for (const item of allItems) {\n        if (slotIdx >= freeSlots.length) break;\n        const slot = freeSlots[slotIdx];\n        const [sH, sM] = slot.start.split(':').map(Number);\n        const slotStartMin = sH * 60 + sM;\n        const currentStart = slotStartMin + slotCursor;\n        const currentEnd = currentStart + item.duration;\n\n        const [eH, eM] = slot.end.split(':').map(Number);\n        const slotEndMin = eH * 60 + eM;\n\n        if (currentEnd <= slotEndMin) {\n            blocks.push({\n                start: `${String(Math.floor(currentStart/60)).padStart(2,'0')}:${String(currentStart%60).padStart(2,'0')}`,\n                end: `${String(Math.floor(currentEnd/60)).padStart(2,'0')}:${String(currentEnd%60).padStart(2,'0')}`,\n                activity: item.name,\n                type: item.type,\n                priority: item.priority,\n                details: ''\n            });\n            slotCursor += item.duration + 15; // 15min break\n            // Check if remaining slot is too small\n            if (slotStartMin + slotCursor >= slotEndMin) {\n                slotIdx++;\n                slotCursor = 0;\n            }\n        } else {\n            slotIdx++;\n            slotCursor = 0;\n            // retry this item in next slot (simple approach)\n        }\n    }\n\n    schedule = {\n        timeBlocks: blocks,\n        summary: `Planning auto-genere: ${blocks.length} blocs planifies.`,\n        tip: 'Planning genere en fallback. Ajuste selon ton energie!'\n    };\n}\n\n// Add calendar events as blocked entries for display\nconst allBlocks = [\n    ...prev.calEventsFormatted.map(e => ({start: e.start, end: e.end, activity: e.title, type: 'blocked', priority: '', details: 'Creneau bloque'})),\n    ...schedule.timeBlocks\n].sort((a, b) => a.start.localeCompare(b.start));\n\nreturn [{json: {\n    ...prev,\n    schedule: {...schedule, timeBlocks: allBlocks},\n    usedFallback,\n    summary: schedule.summary,\n    tip: schedule.tip\n}}];\n"
+      }
+    },
+    {
+      "id": "28983240-53e3-4c12-82f8-2638e339d07e",
+      "name": "Build Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        100
+      ],
+      "parameters": {
+        "jsCode": "\nconst d = $json;\nconst blocks = d.schedule.timeBlocks || [];\n\nconst typeIcons = {\n    'blocked': '\\u2B1B',\n    'sport': '\\u26A1',\n    'task': '\\u2705',\n    'habit': '\\u2728',\n    'break': '\\u2615',\n    'meal': '\\u2615'\n};\n\nlet msg = `<b>PLANNING DU JOUR</b> — ${d.dayName} ${d.today}\\n\\n`;\n\nfor (const b of blocks) {\n    const icon = typeIcons[b.type] || '\\u25AA';\n    const prio = (b.priority && b.type === 'task') ? ` [${b.priority}]` : '';\n    const blocked = b.type === 'blocked' ? ' (bloque)' : '';\n    msg += `<code>${b.start}-${b.end}</code>  ${icon} ${b.activity}${prio}${blocked}\\n`;\n}\n\nconst taskCount = blocks.filter(b => b.type === 'task').length;\nconst sportCount = blocks.filter(b => b.type === 'sport').length;\nconst habitCount = blocks.filter(b => b.type === 'habit').length;\n\nmsg += `\\n<b>${taskCount} taches</b> | <b>${sportCount} sport</b> | <b>${habitCount} habitudes</b>`;\nmsg += `\\n${d.totalFreeHours}h de temps libre`;\n\nif (d.summary) msg += `\\n\\n${d.summary}`;\nif (d.tip) msg += `\\n\\n<i>${d.tip}</i>`;\nif (d.usedFallback) msg += `\\n\\n<i>⚠ Planning genere en mode fallback</i>`;\n\nreturn [{json: {message: msg, ...d}}];\n"
+      }
+    },
+    {
+      "id": "1541727b-5e15-40d3-ab15-e42ad340dc29",
+      "name": "Split Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2140,
+        100
+      ],
+      "parameters": {
+        "jsCode": "\nconst msg = $json.message;\nconst MAX = 4096;\nconst chunks = [];\nlet current = msg;\nwhile (current.length > MAX) {\n    let cut = current.lastIndexOf('\\n', MAX);\n    if (cut <= 0) cut = MAX;\n    chunks.push(current.slice(0, cut));\n    current = current.slice(cut);\n}\nchunks.push(current);\nreturn chunks.map(c => ({json: {text: c}}));\n"
+      }
+    },
+    {
+      "id": "3b2949b7-2be8-4150-be6e-55425868031f",
+      "name": "Send Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2360,
+        100
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "37SeOsuQW7RBmQTl",
+          "name": "Orun Telegram Bot"
+        }
+      },
+      "parameters": {
+        "chatId": "7342622615",
+        "text": "={{$json.text}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      }
+    },
+    {
+      "id": "511486a1-db6d-4183-87fd-7a1703f340c7",
+      "name": "Build Notion Page",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        350
+      ],
+      "parameters": {
+        "jsCode": "\nconst d = $json;\nconst blocks = d.schedule.timeBlocks || [];\n\nlet content = '';\nfor (const b of blocks) {\n    const prio = (b.priority && b.type === 'task') ? ` [${b.priority}]` : '';\n    const blocked = b.type === 'blocked' ? ' (bloque)' : '';\n    content += `**${b.start} - ${b.end}** | ${b.activity}${prio}${blocked}\\n\\n`;\n}\n\nif (d.summary) content += `---\\n\\n${d.summary}\\n\\n`;\nif (d.tip) content += `*${d.tip}*\\n`;\n\nconst title = `Planning ${d.dayName} ${d.today}`;\n\n// Create page via Notion API\nconst pageData = {\n    parent: {database_id: '305da200-b2d6-8145-bc16-eaee02925a14'},\n    properties: {\n        'Name': {title: [{text: {content: title}}]},\n        'Type': {select: {name: 'Sub-task'}},\n        'Status': {status: {name: 'Ready To Start'}},\n        'Due Date': {date: {start: d.today}},\n        'Category': {select: {name: 'Personal'}},\n    },\n    children: []\n};\n\n// Build children blocks (paragraphs)\nfor (const b of blocks) {\n    const prio = (b.priority && b.type === 'task') ? ` [${b.priority}]` : '';\n    const blocked = b.type === 'blocked' ? ' (bloque)' : '';\n    const text = `${b.start} - ${b.end} | ${b.activity}${prio}${blocked}`;\n\n    pageData.children.push({\n        object: 'block',\n        type: 'paragraph',\n        paragraph: {\n            rich_text: [{\n                type: 'text',\n                text: {content: text},\n                annotations: {bold: b.type === 'blocked'}\n            }]\n        }\n    });\n}\n\nif (d.summary) {\n    pageData.children.push({\n        object: 'block', type: 'divider', divider: {}\n    });\n    pageData.children.push({\n        object: 'block',\n        type: 'paragraph',\n        paragraph: {rich_text: [{type: 'text', text: {content: d.summary}}]}\n    });\n}\n\nreturn [{json: {pageData: JSON.stringify(pageData), ...d}}];\n"
+      }
+    },
+    {
+      "id": "40836f56-2d52-406b-af39-fabed6834b55",
+      "name": "Create Planning Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2140,
+        350
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FPqqVYnRbUnwRzrY",
+          "name": "Notion account"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Notion-Version",
+              "value": "2022-06-28"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.pageData}}"
+      }
+    }
+  ],
+  "connections": {
+    "Daily 6h30": {
+      "main": [
+        [
+          {
+            "node": "Date Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date Context": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar Events",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Query Tasks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Query Habits",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar Events": {
+      "main": [
+        [
+          {
+            "node": "Merge & Free Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Tasks": {
+      "main": [
+        [
+          {
+            "node": "Merge & Free Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Habits": {
+      "main": [
+        [
+          {
+            "node": "Merge & Free Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge & Free Slots": {
+      "main": [
+        [
+          {
+            "node": "Has Tasks?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Tasks?": {
+      "main": [
+        [
+          {
+            "node": "Build Claude Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Build Claude Prompt": {
+      "main": [
+        [
+          {
+            "node": "Claude Time Block",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Time Block": {
+      "main": [
+        [
+          {
+            "node": "Parse Schedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Schedule": {
+      "main": [
+        [
+          {
+            "node": "Build Telegram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Notion Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Telegram": {
+      "main": [
+        [
+          {
+            "node": "Split Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Message": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Notion Page": {
+      "main": [
+        [
+          {
+            "node": "Create Planning Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "saveManualExecutions": true
+  }
+}

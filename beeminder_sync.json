@@ -1,0 +1,230 @@
+{
+  "name": "Beeminder Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 22 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-beeminder",
+      "name": "CRON 22h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst cetFormatter = new Intl.DateTimeFormat('fr-FR', {\n  timeZone: 'Europe/Paris',\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n  hour12: false\n});\n\nconst parts = cetFormatter.formatToParts(now);\nconst year = parts.find(p => p.type === 'year').value;\nconst month = parts.find(p => p.type === 'month').value;\nconst day = parts.find(p => p.type === 'day').value;\n\nconst today = `${year}-${month}-${day}`;\nconst cetMidnight = new Date(`${today}T00:00:00+01:00`);\nconst timestamp = Math.floor(cetMidnight.getTime() / 1000);\n\nreturn [{ json: { today, timestamp, iso: now.toISOString() } }];"
+      },
+      "id": "date-context",
+      "name": "Date Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/databases/c36269c4-df76-4c8a-9ac2-0085724a8573/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Notion-Version", "value": "2022-06-28" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ filter: { and: [ { property: 'Date Contact', date: { equals: $json.today } }, { property: 'Status', select: { does_not_equal: 'A contacter' } }, { property: 'Status', select: { does_not_equal: 'Perdu' } } ] }, page_size: 100 }) }}",
+        "options": {}
+      },
+      "id": "query-prospects",
+      "name": "Query Prospects Contactes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, 140],
+      "credentials": { "notionApi": { "id": "FPqqVYnRbUnwRzrY", "name": "Notion account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const queryResult = $('Query Prospects Contactes').first().json;\nconst results = queryResult.results || [];\nconst count = Array.isArray(results) ? results.length : 0;\n\nconst names = [];\nif (Array.isArray(results)) {\n  for (const page of results) {\n    const props = page.properties || {};\n    const nomProp = props['Nom'] || props['Name'] || {};\n    const titleArr = nomProp.title || [];\n    const name = titleArr.map(t => t.plain_text || '').join('') || 'Sans nom';\n    const statusProp = props['Status'] || {};\n    const status = (statusProp.select || {}).name || '?';\n    names.push(`${name} (${status})`);\n  }\n}\n\nconst ctx = $('Date Context').first().json;\n\nreturn [{\n  json: {\n    value: count,\n    timestamp: ctx.timestamp,\n    comment: `Auto-sync: ${count} prospect(s) contacte(s) le ${ctx.today}` + (names.length > 0 ? ' — ' + names.join(', ') : ''),\n    label: 'Prospection',\n    names\n  }\n}];"
+      },
+      "id": "process-prospects",
+      "name": "Process Prospects",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [840, 140]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.beeminder.com/api/v1/users/prinsechris/goals/prospection/datapoints.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ auth_token: '28f1_C1a-W6ZPtA1joXN', value: $json.value, timestamp: $json.timestamp, comment: $json.comment }) }}",
+        "options": {}
+      },
+      "id": "beeminder-prospection",
+      "name": "Beeminder Prospection",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 140],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/databases/305da200-b2d6-819f-915f-d35f51386aa8/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Notion-Version", "value": "2022-06-28" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ filter: { and: [ { property: 'Date', date: { equals: $json.today } } ] }, page_size: 100 }) }}",
+        "options": {}
+      },
+      "id": "query-judgment",
+      "name": "Query Daily Judgment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, 460],
+      "credentials": { "notionApi": { "id": "FPqqVYnRbUnwRzrY", "name": "Notion account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const queryResult = $('Query Daily Judgment').first().json;\nconst results = queryResult.results || [];\n\nlet doucheFroide = false;\nlet journaling = false;\nconst details = [];\n\nif (Array.isArray(results)) {\n  for (const page of results) {\n    const props = page.properties || {};\n    const nameProp = props['Name'] || props['name'] || {};\n    const titleArr = nameProp.title || [];\n    const title = titleArr.map(t => t.plain_text || '').join('').toLowerCase();\n\n    if (title.includes('douche') || title.includes('cold') || title.includes('froide')) {\n      doucheFroide = true;\n      details.push('Douche Froide');\n    }\n    if (title.includes('journal') || title.includes('journaling')) {\n      journaling = true;\n      details.push('Journaling');\n    }\n  }\n}\n\n// Count only these 2 habits (push-ups sent separately by the app)\nconst score = (doucheFroide ? 1 : 0) + (journaling ? 1 : 0);\n\nconst ctx = $('Date Context').first().json;\n\nreturn [{\n  json: {\n    value: score,\n    timestamp: ctx.timestamp,\n    comment: `Auto-sync: ${details.length > 0 ? details.join(' + ') : 'aucune habitude detectee'} (${score}/2 via Notion) le ${ctx.today}`,\n    label: 'Habitudes',\n    doucheFroide,\n    journaling,\n    details\n  }\n}];"
+      },
+      "id": "process-judgment",
+      "name": "Process Judgment",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [840, 460]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.beeminder.com/api/v1/users/prinsechris/goals/habitudes/datapoints.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ auth_token: '28f1_C1a-W6ZPtA1joXN', value: $json.value, timestamp: $json.timestamp, comment: $json.comment }) }}",
+        "options": {}
+      },
+      "id": "beeminder-habitudes",
+      "name": "Beeminder Habitudes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 460],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "let prospectionData, habitudesData;\n\ntry {\n  prospectionData = $('Process Prospects').first().json;\n} catch(e) {\n  prospectionData = { value: '?', label: 'Prospection' };\n}\n\ntry {\n  habitudesData = $('Process Judgment').first().json;\n} catch(e) {\n  habitudesData = { value: '?', label: 'Habitudes' };\n}\n\nlet beeminderErrors = [];\ntry {\n  const bpResp = $('Beeminder Prospection').first().json;\n  if (bpResp.errors) beeminderErrors.push(`Prospection: ${JSON.stringify(bpResp.errors)}`);\n} catch(e) { beeminderErrors.push(`Prospection: ${e.message}`); }\n\ntry {\n  const bhResp = $('Beeminder Habitudes').first().json;\n  if (bhResp.errors) beeminderErrors.push(`Habitudes: ${JSON.stringify(bhResp.errors)}`);\n} catch(e) { beeminderErrors.push(`Habitudes: ${e.message}`); }\n\nconst ctx = $('Date Context').first().json;\n\nconst prospVal = prospectionData.value;\nconst prospIcon = prospVal >= 1 ? 'OK' : 'MANQUE';\n\nconst habVal = habitudesData.value;\nconst habIcon = habVal >= 2 ? 'OK' : (habVal > 0 ? 'PARTIEL' : 'MANQUE');\n\nlet msg = `<b>Beeminder Sync — ${ctx.today}</b>\\n\\n`;\n\nmsg += `<b>Prospection:</b> ${prospVal} prospect(s) [${prospIcon}]\\n`;\nmsg += `  Objectif: 1/jour | Pledge: $5\\n`;\nif (prospectionData.names && prospectionData.names.length > 0) {\n  msg += `  Contactes: ${prospectionData.names.join(', ')}\\n`;\n}\n\nmsg += `\\n<b>Habitudes (Notion):</b> ${habVal}/2 [${habIcon}]\\n`;\nmsg += `  Douche Froide: ${habitudesData.doucheFroide ? 'OK' : 'NON'}\\n`;\nmsg += `  Journaling: ${habitudesData.journaling ? 'OK' : 'NON'}\\n`;\nmsg += `  (Pompes envoyees separement par l app)\\n`;\n\nif (beeminderErrors.length > 0) {\n  msg += `\\n<b>Erreurs Beeminder:</b>\\n`;\n  for (const err of beeminderErrors) {\n    msg += `  ${err}\\n`;\n  }\n}\n\nmsg += `\\nbeeminder.com/prinsechris`;\n\nreturn [{ json: { message: msg } }];"
+      },
+      "id": "build-recap",
+      "name": "Build Recap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8245723499:AAHdk-CSEBzrUDIYKEqn80DrzI5yoGq4YQQ/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: '7342622615', text: $json.message, parse_mode: 'HTML' }) }}",
+        "options": {}
+      },
+      "id": "send-telegram",
+      "name": "Send Telegram Recap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1660, 300],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "CRON 22h": {
+      "main": [
+        [
+          { "node": "Date Context", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Date Context": {
+      "main": [
+        [
+          { "node": "Query Prospects Contactes", "type": "main", "index": 0 },
+          { "node": "Query Daily Judgment", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Query Prospects Contactes": {
+      "main": [
+        [
+          { "node": "Process Prospects", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Process Prospects": {
+      "main": [
+        [
+          { "node": "Beeminder Prospection", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Beeminder Prospection": {
+      "main": [
+        [
+          { "node": "Build Recap", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Query Daily Judgment": {
+      "main": [
+        [
+          { "node": "Process Judgment", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Process Judgment": {
+      "main": [
+        [
+          { "node": "Beeminder Habitudes", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Beeminder Habitudes": {
+      "main": [
+        [
+          { "node": "Build Recap", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Build Recap": {
+      "main": [
+        [
+          { "node": "Send Telegram Recap", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris"
+  }
+}

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Nutrition Scanner</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 12px;
+}
+.header {
+    text-align: center;
+    padding: 16px 0 12px;
+}
+.header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #4ade80;
+}
+.header p {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+}
+
+/* Scanner */
+#scanner-section {
+    background: #1a1a1a;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+#reader {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+#reader video { border-radius: 12px; }
+#reader__scan_region { border-radius: 12px !important; }
+
+/* Product Card */
+#product-card {
+    display: none;
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #333;
+}
+#product-card.show { display: block; }
+.product-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
+.product-brand {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 12px;
+}
+.product-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    float: right;
+    margin-left: 12px;
+}
+.macros-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.macro-box {
+    background: #222;
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+}
+.macro-value {
+    font-size: 20px;
+    font-weight: 700;
+}
+.macro-label {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+}
+.macro-box.cal .macro-value { color: #f59e0b; }
+.macro-box.prot .macro-value { color: #ef4444; }
+.macro-box.carb .macro-value { color: #3b82f6; }
+.macro-box.fat .macro-value { color: #a855f7; }
+
+/* Quantity & Meal Type */
+.form-section {
+    display: none;
+    margin-bottom: 16px;
+}
+.form-section.show { display: block; }
+.form-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+}
+.form-row label {
+    font-size: 13px;
+    color: #aaa;
+    min-width: 70px;
+}
+.form-row input, .form-row select {
+    flex: 1;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 15px;
+}
+.form-row select { appearance: none; }
+
+/* Meal type pills */
+.meal-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+.meal-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #222;
+    border: 1px solid #444;
+    color: #ccc;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.meal-pill.active {
+    background: #4ade80;
+    color: #000;
+    border-color: #4ade80;
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-log {
+    background: #4ade80;
+    color: #000;
+}
+.btn-log:active { background: #22c55e; transform: scale(0.98); }
+.btn-log:disabled { background: #333; color: #666; }
+.btn-scan {
+    background: #222;
+    color: #4ade80;
+    border: 1px solid #4ade80;
+    margin-top: 8px;
+}
+.btn-manual {
+    background: #222;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+    margin-top: 8px;
+}
+
+/* Manual entry */
+#manual-section {
+    display: none;
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+#manual-section.show { display: block; }
+#manual-section input, #manual-section textarea {
+    width: 100%;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+#manual-section textarea { height: 60px; resize: none; }
+
+/* Status */
+.status {
+    text-align: center;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: none;
+}
+.status.show { display: block; }
+.status.success { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+.status.error { background: #2a0a0a; color: #ef4444; border: 1px solid #7f1d1d; }
+.status.loading { background: #1a1a2e; color: #818cf8; border: 1px solid #3730a3; }
+
+/* Today's log */
+#today-log {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 16px;
+}
+#today-log h3 {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 8px;
+}
+.today-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+.today-totals .macro-box { background: #0a0a0a; }
+.log-entries {
+    margin-top: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.log-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #222;
+    font-size: 13px;
+}
+.log-entry-name { color: #ccc; }
+.log-entry-cal { color: #f59e0b; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>NUTRITION SCANNER</h1>
+    <p>Scanne un code-barres ou entre manuellement</p>
+</div>
+
+<div id="status" class="status"></div>
+
+<div id="scanner-section">
+    <div id="reader"></div>
+</div>
+
+<div id="product-card">
+    <img id="product-img" class="product-image" src="" alt="" style="display:none">
+    <div class="product-name" id="product-name"></div>
+    <div class="product-brand" id="product-brand"></div>
+    <div style="clear:both"></div>
+    <div class="macros-grid" id="macros-grid">
+        <div class="macro-box cal">
+            <div class="macro-value" id="m-cal">0</div>
+            <div class="macro-label">kcal</div>
+        </div>
+        <div class="macro-box prot">
+            <div class="macro-value" id="m-prot">0g</div>
+            <div class="macro-label">Prot</div>
+        </div>
+        <div class="macro-box carb">
+            <div class="macro-value" id="m-carb">0g</div>
+            <div class="macro-label">Gluc</div>
+        </div>
+        <div class="macro-box fat">
+            <div class="macro-value" id="m-fat">0g</div>
+            <div class="macro-label">Lip</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <label>Quantite (g)</label>
+        <input type="number" id="quantity" value="100" min="1" max="5000" step="10">
+    </div>
+    <div class="meal-pills" id="meal-pills">
+        <div class="meal-pill" data-meal="Petit Dej">Petit Dej</div>
+        <div class="meal-pill active" data-meal="Dejeuner">Dejeuner</div>
+        <div class="meal-pill" data-meal="Diner">Diner</div>
+        <div class="meal-pill" data-meal="Snack">Snack</div>
+    </div>
+    <button class="btn btn-log" id="btn-log" onclick="logMeal()">LOGGER CE REPAS</button>
+    <button class="btn btn-scan" onclick="resetScanner()">SCANNER UN AUTRE</button>
+</div>
+
+<div id="manual-section">
+    <input type="text" id="manual-name" placeholder="Nom du repas (ex: Poulet grille + riz)">
+    <textarea id="manual-foods" placeholder="Details aliments (optionnel)"></textarea>
+    <div class="form-row">
+        <label>Calories</label>
+        <input type="number" id="manual-cal" placeholder="kcal" min="0">
+    </div>
+    <div class="form-row">
+        <label>Proteines</label>
+        <input type="number" id="manual-prot" placeholder="g" min="0">
+    </div>
+    <div class="form-row">
+        <label>Glucides</label>
+        <input type="number" id="manual-carb" placeholder="g" min="0">
+    </div>
+    <div class="form-row">
+        <label>Lipides</label>
+        <input type="number" id="manual-fat" placeholder="g" min="0">
+    </div>
+    <div class="meal-pills" id="manual-meal-pills">
+        <div class="meal-pill" data-meal="Petit Dej">Petit Dej</div>
+        <div class="meal-pill active" data-meal="Dejeuner">Dejeuner</div>
+        <div class="meal-pill" data-meal="Diner">Diner</div>
+        <div class="meal-pill" data-meal="Snack">Snack</div>
+    </div>
+    <button class="btn btn-log" onclick="logManual()">LOGGER</button>
+    <button class="btn btn-scan" onclick="showScanner()">RETOUR SCANNER</button>
+</div>
+
+<button class="btn btn-manual" id="btn-manual" onclick="showManual()">ENTREE MANUELLE</button>
+
+<div id="today-log">
+    <h3>AUJOURD'HUI</h3>
+    <div class="today-totals">
+        <div class="macro-box cal">
+            <div class="macro-value" id="t-cal">0</div>
+            <div class="macro-label">kcal</div>
+        </div>
+        <div class="macro-box prot">
+            <div class="macro-value" id="t-prot">0g</div>
+            <div class="macro-label">Prot</div>
+        </div>
+        <div class="macro-box carb">
+            <div class="macro-value" id="t-carb">0g</div>
+            <div class="macro-label">Gluc</div>
+        </div>
+        <div class="macro-box fat">
+            <div class="macro-value" id="t-fat">0g</div>
+            <div class="macro-label">Lip</div>
+        </div>
+    </div>
+    <div class="log-entries" id="log-entries"></div>
+</div>
+
+<script>
+const WEBHOOK_URL = 'https://n8n.srv842982.hstgr.cloud/webhook/nutrition-log';
+const OFF_API = 'https://world.openfoodfacts.org/api/v2/product/';
+
+let scanner = null;
+let currentProduct = null;
+let todayLog = JSON.parse(localStorage.getItem('nutritionLog_' + new Date().toISOString().split('T')[0]) || '[]');
+
+// Auto-select meal type based on time
+function autoMealType() {
+    const h = new Date().getHours();
+    if (h < 10) return 'Petit Dej';
+    if (h < 14) return 'Dejeuner';
+    if (h < 18) return 'Snack';
+    return 'Diner';
+}
+
+function initMealPills() {
+    const auto = autoMealType();
+    document.querySelectorAll('.meal-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.meal === auto);
+        p.addEventListener('click', () => {
+            p.parentElement.querySelectorAll('.meal-pill').forEach(x => x.classList.remove('active'));
+            p.classList.add('active');
+        });
+    });
+}
+
+function getSelectedMeal(containerId) {
+    const container = document.getElementById(containerId || 'meal-pills');
+    const active = container.querySelector('.meal-pill.active');
+    return active ? active.dataset.meal : 'Dejeuner';
+}
+
+function showStatus(msg, type) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status show ' + type;
+    if (type === 'success') setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// Scanner
+async function initScanner() {
+    scanner = new Html5Qrcode("reader");
+    try {
+        await scanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 250, height: 150 }, formatsToSupport: [
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8,
+                Html5QrcodeSupportedFormats.UPC_A,
+                Html5QrcodeSupportedFormats.UPC_E,
+                Html5QrcodeSupportedFormats.CODE_128,
+            ]},
+            onScanSuccess,
+            () => {}
+        );
+    } catch (err) {
+        showStatus('Camera non disponible: ' + err, 'error');
+    }
+}
+
+async function onScanSuccess(barcode) {
+    // Stop scanner
+    if (scanner) {
+        try { await scanner.stop(); } catch(e) {}
+    }
+
+    showStatus('Recherche produit...', 'loading');
+
+    try {
+        const resp = await fetch(OFF_API + barcode + '.json');
+        const data = await resp.json();
+
+        if (data.status === 1 && data.product) {
+            const p = data.product;
+            const nuts = p.nutriments || {};
+
+            currentProduct = {
+                name: p.product_name_fr || p.product_name || 'Produit inconnu',
+                brand: p.brands || '',
+                barcode: barcode,
+                image: p.image_small_url || p.image_url || '',
+                per100: {
+                    cal: Math.round(nuts['energy-kcal_100g'] || nuts['energy-kcal'] || 0),
+                    prot: Math.round((nuts.proteins_100g || 0) * 10) / 10,
+                    carb: Math.round((nuts.carbohydrates_100g || 0) * 10) / 10,
+                    fat: Math.round((nuts.fat_100g || 0) * 10) / 10,
+                },
+            };
+
+            showProduct();
+            showStatus('Produit trouve !', 'success');
+        } else {
+            showStatus('Produit non trouve dans Open Food Facts', 'error');
+            setTimeout(() => resetScanner(), 2000);
+        }
+    } catch (err) {
+        showStatus('Erreur recherche: ' + err.message, 'error');
+    }
+}
+
+function showProduct() {
+    if (!currentProduct) return;
+
+    document.getElementById('product-name').textContent = currentProduct.name;
+    document.getElementById('product-brand').textContent = currentProduct.brand;
+
+    const img = document.getElementById('product-img');
+    if (currentProduct.image) {
+        img.src = currentProduct.image;
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+
+    updateMacros(100);
+    document.getElementById('quantity').value = 100;
+    document.getElementById('product-card').classList.add('show');
+    document.getElementById('scanner-section').style.display = 'none';
+    document.getElementById('btn-manual').style.display = 'none';
+}
+
+function updateMacros(grams) {
+    if (!currentProduct) return;
+    const ratio = grams / 100;
+    document.getElementById('m-cal').textContent = Math.round(currentProduct.per100.cal * ratio);
+    document.getElementById('m-prot').textContent = Math.round(currentProduct.per100.prot * ratio) + 'g';
+    document.getElementById('m-carb').textContent = Math.round(currentProduct.per100.carb * ratio) + 'g';
+    document.getElementById('m-fat').textContent = Math.round(currentProduct.per100.fat * ratio) + 'g';
+}
+
+document.getElementById('quantity').addEventListener('input', (e) => {
+    updateMacros(Number(e.target.value) || 100);
+});
+
+async function logMeal() {
+    if (!currentProduct) return;
+    const grams = Number(document.getElementById('quantity').value) || 100;
+    const ratio = grams / 100;
+    const mealType = getSelectedMeal('meal-pills');
+
+    const entry = {
+        repas: currentProduct.name,
+        type_repas: mealType,
+        aliments: currentProduct.name + (currentProduct.brand ? ' (' + currentProduct.brand + ')' : '') + ' - ' + grams + 'g',
+        calories: Math.round(currentProduct.per100.cal * ratio),
+        proteines: Math.round(currentProduct.per100.prot * ratio),
+        glucides: Math.round(currentProduct.per100.carb * ratio),
+        lipides: Math.round(currentProduct.per100.fat * ratio),
+        source: 'Scanner',
+        code_barres: currentProduct.barcode,
+        date: new Date().toISOString().split('T')[0],
+    };
+
+    await sendToWebhook(entry);
+}
+
+async function logManual() {
+    const name = document.getElementById('manual-name').value;
+    if (!name) { showStatus('Nom du repas requis', 'error'); return; }
+
+    const entry = {
+        repas: name,
+        type_repas: getSelectedMeal('manual-meal-pills'),
+        aliments: document.getElementById('manual-foods').value || name,
+        calories: Number(document.getElementById('manual-cal').value) || 0,
+        proteines: Number(document.getElementById('manual-prot').value) || 0,
+        glucides: Number(document.getElementById('manual-carb').value) || 0,
+        lipides: Number(document.getElementById('manual-fat').value) || 0,
+        source: 'Manuel',
+        date: new Date().toISOString().split('T')[0],
+    };
+
+    await sendToWebhook(entry);
+}
+
+async function sendToWebhook(entry) {
+    showStatus('Envoi...', 'loading');
+    document.getElementById('btn-log').disabled = true;
+
+    try {
+        const resp = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(entry),
+        });
+
+        if (resp.ok) {
+            // Save locally
+            todayLog.push(entry);
+            localStorage.setItem('nutritionLog_' + new Date().toISOString().split('T')[0], JSON.stringify(todayLog));
+            updateTodayLog();
+
+            showStatus(entry.repas + ' logue ! ' + entry.calories + ' kcal', 'success');
+
+            // Reset after 1.5s
+            setTimeout(() => resetScanner(), 1500);
+        } else {
+            showStatus('Erreur serveur', 'error');
+        }
+    } catch (err) {
+        showStatus('Erreur: ' + err.message, 'error');
+    }
+    document.getElementById('btn-log').disabled = false;
+}
+
+function resetScanner() {
+    currentProduct = null;
+    document.getElementById('product-card').classList.remove('show');
+    document.getElementById('scanner-section').style.display = 'block';
+    document.getElementById('manual-section').classList.remove('show');
+    document.getElementById('btn-manual').style.display = 'block';
+    initScanner();
+}
+
+function showManual() {
+    if (scanner) { try { scanner.stop(); } catch(e) {} }
+    document.getElementById('scanner-section').style.display = 'none';
+    document.getElementById('product-card').classList.remove('show');
+    document.getElementById('manual-section').classList.add('show');
+    document.getElementById('btn-manual').style.display = 'none';
+}
+
+function showScanner() {
+    document.getElementById('manual-section').classList.remove('show');
+    document.getElementById('scanner-section').style.display = 'block';
+    document.getElementById('btn-manual').style.display = 'block';
+    initScanner();
+}
+
+function updateTodayLog() {
+    let totalCal = 0, totalProt = 0, totalCarb = 0, totalFat = 0;
+    let html = '';
+
+    for (const e of todayLog) {
+        totalCal += e.calories || 0;
+        totalProt += e.proteines || 0;
+        totalCarb += e.glucides || 0;
+        totalFat += e.lipides || 0;
+        html += '<div class="log-entry"><span class="log-entry-name">' +
+            e.repas + '</span><span class="log-entry-cal">' +
+            (e.calories || 0) + ' kcal</span></div>';
+    }
+
+    document.getElementById('t-cal').textContent = totalCal;
+    document.getElementById('t-prot').textContent = totalProt + 'g';
+    document.getElementById('t-carb').textContent = totalCarb + 'g';
+    document.getElementById('t-fat').textContent = totalFat + 'g';
+    document.getElementById('log-entries').innerHTML = html;
+}
+
+// Init
+initMealPills();
+updateTodayLog();
+initScanner();
+</script>
+</body>
+</html>

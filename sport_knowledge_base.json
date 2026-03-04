@@ -1,0 +1,206 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-03-04",
+  "athlete_profile": {
+    "name": "Chris",
+    "level": "beginner_restart",
+    "goal_physique": "Baki / Garou / Gun Park — combattant fonctionnel, sec, explosif",
+    "target_body_fat": "10-12%",
+    "equipment": {
+      "home": ["barre de traction", "sol", "tapis"],
+      "gym": ["barres", "halteres", "machines", "cables", "kettlebells", "box"]
+    },
+    "injuries": [],
+    "schedule_constraints": ["shifts McDonald's (variable)", "entrepreneur horaires flexibles"]
+  },
+
+  "nutrition": {
+    "principles": {
+      "deficit_calorique": "Leger deficit 200-300kcal pour seche progressive sans perte de force",
+      "proteines": "1.8-2.2g par kg de poids de corps. Repartir sur 4-5 repas.",
+      "glucides": "3-5g/kg selon intensite du jour. Plus les jours d'entrainement intense.",
+      "lipides": "0.8-1g/kg minimum. Essentiels pour hormones et recuperation.",
+      "hydratation": "Minimum 2.5L/jour. +500mL par heure d'entrainement."
+    },
+    "timing": {
+      "pre_workout": "Repas 2-3h avant: glucides complexes + proteines. Ex: riz + poulet",
+      "intra_workout": "Eau. BCAA optionnel si entrainement a jeun.",
+      "post_workout": "Dans les 2h: proteines rapides (whey/oeufs) + glucides. Ex: shake + banane",
+      "avant_dormir": "Caseine ou fromage blanc pour recuperation nocturne"
+    },
+    "supplements": {
+      "essentiels": ["Creatine monohydrate 5g/jour", "Vitamine D3 2000UI/jour", "Omega-3 2g/jour"],
+      "utiles": ["Magnesium bisglycinate 400mg/soir", "Zinc 15mg/jour", "Whey protein si apport insuffisant"],
+      "optionnels": ["Beta-alanine 3-5g/jour (endurance)", "Cafeine 200mg pre-workout"]
+    },
+    "meal_examples": {
+      "petit_dejeuner": ["Oeufs brouilles (4) + pain complet + avocat", "Porridge avoine + whey + fruits rouges + beurre cacahuete", "Yaourt grec + granola + banane"],
+      "dejeuner": ["Riz basmati + poulet grille + legumes verts + huile olive", "Pates completes + thon + tomates + mozzarella", "Patate douce + saumon + brocolis"],
+      "diner": ["Salade composee + oeufs + quinoa", "Steak hache 5% + haricots verts + riz", "Omelette + legumes + pain complet"],
+      "snacks": ["Banane + beurre cacahuete", "Shake whey + flocons avoine", "Amandes + fruit", "Fromage blanc + miel"]
+    }
+  },
+
+  "recovery": {
+    "sleep": {
+      "heures": "7-9h minimum. La GH (hormone de croissance) est liberee pendant le sommeil profond.",
+      "tips": ["Ecran off 1h avant. Chambre fraiche 18-20C.", "Magnesium 30min avant coucher.", "Routine fixe: meme heure chaque soir."]
+    },
+    "stretching": {
+      "post_workout": "10-15min statique. Maintenir 30-60s par position.",
+      "off_days": "20-30min yoga/mobilite. Focus hanches, epaules, ischio-jambiers.",
+      "objectif_grand_ecart": {
+        "frequence": "5-7x/semaine",
+        "routine": ["Fente basse 60s chaque cote", "Grand ecart lateral progressif 60-90s", "Grand ecart frontal progressif 60-90s", "Papillon assis 60s", "Pigeon pose 60s chaque cote"],
+        "timeline": "3-6 mois pour grand ecart complet avec pratique quotidienne"
+      }
+    },
+    "foam_rolling": {
+      "quand": "Avant stretching ou off-days. 1-2min par groupe musculaire.",
+      "zones": ["Quadriceps", "IT band", "Mollets", "Dos (thoracique)", "Fessiers", "Pectoraux (balle de tennis)"]
+    },
+    "deload": {
+      "frequence": "Toutes les 4-6 semaines",
+      "protocole": "Volume -40%, intensite -20%. Focus technique et mobilite.",
+      "signes_surmenage": ["Fatigue persistante", "Performances en baisse 2+ seances", "Douleurs articulaires", "Sommeil perturbe", "Irritabilite"]
+    },
+    "active_recovery": ["Marche 30-45min", "Natation legere", "Yoga", "Foam rolling + stretching", "Velo leger 20-30min"]
+  },
+
+  "calisthenics_progressions": {
+    "muscle_up": {
+      "levels": [
+        {"name": "Tractions strictes x10", "description": "Prerequis: 10 tractions propres, menton au-dessus de la barre"},
+        {"name": "Tractions explosives", "description": "Tirer aussi haut que possible, poitrine a la barre"},
+        {"name": "Tractions hautes + transition", "description": "Monter jusqu'au nombril, pratiquer la transition"},
+        {"name": "Muscle-up avec bande", "description": "Mouvement complet assiste par bande elastique"},
+        {"name": "Muscle-up negatif", "description": "Se placer en haut, descendre lentement (5s)"},
+        {"name": "Muscle-up strict", "description": "Mouvement complet sans kipping"}
+      ]
+    },
+    "front_lever": {
+      "levels": [
+        {"name": "Tuck front lever", "description": "Genoux a la poitrine, corps horizontal. Tenir 15-20s."},
+        {"name": "Advanced tuck", "description": "Genoux legerement eloignes de la poitrine. 10-15s."},
+        {"name": "One leg extended", "description": "Une jambe tendue, l'autre repliee. 10s chaque cote."},
+        {"name": "Straddle front lever", "description": "Jambes ecartees et tendues. 5-10s."},
+        {"name": "Full front lever", "description": "Corps droit, horizontal, jambes jointes. 5s+."}
+      ]
+    },
+    "planche": {
+      "levels": [
+        {"name": "Planche lean", "description": "Pompes position, pencher en avant mains au niveau des hanches. 15-30s."},
+        {"name": "Tuck planche", "description": "Genoux a la poitrine, pieds decolles du sol. 10-15s."},
+        {"name": "Advanced tuck planche", "description": "Dos plat, genoux eloignes. 5-10s."},
+        {"name": "Straddle planche", "description": "Jambes ecartees tendues. 3-5s."},
+        {"name": "Full planche", "description": "Corps droit horizontal. Objectif ultime."}
+      ]
+    },
+    "handstand": {
+      "levels": [
+        {"name": "Wall handstand", "description": "Dos au mur, monter en appui renverse. 30-60s."},
+        {"name": "Chest-to-wall", "description": "Ventre face au mur. Meilleur alignement. 30s."},
+        {"name": "Wall handstand toe taps", "description": "Decoller un pied du mur alternativement."},
+        {"name": "Freestanding handstand", "description": "Equilibre libre. Objectif 10-30s."},
+        {"name": "Handstand push-ups (wall)", "description": "Pike push-ups -> wall HSPU -> freestanding HSPU"}
+      ]
+    },
+    "human_flag": {
+      "levels": [
+        {"name": "Vertical flag (tuck)", "description": "Corps vertical, genoux replies. 10s."},
+        {"name": "Tuck human flag", "description": "Corps horizontal, genoux a la poitrine. 5-10s."},
+        {"name": "Straddle human flag", "description": "Jambes ecartees horizontales. 3-5s."},
+        {"name": "Full human flag", "description": "Corps droit horizontal. Objectif ultime."}
+      ]
+    },
+    "pistol_squat": {
+      "levels": [
+        {"name": "Squat profond", "description": "Squat complet sur deux jambes, fesses aux talons."},
+        {"name": "Pistol assiste", "description": "Se tenir a un support. Descendre sur une jambe."},
+        {"name": "Pistol sur box", "description": "Debout sur box, descendre une jambe dans le vide."},
+        {"name": "Pistol avec contrepoids", "description": "Tenir un poids devant soi pour l'equilibre."},
+        {"name": "Full pistol squat", "description": "Squat une jambe complet sans assistance."}
+      ]
+    }
+  },
+
+  "rep_ranges": {
+    "force_max": {"reps": "1-5", "sets": "4-6", "rest": "3-5min", "objectif": "Force pure, recrutement neural"},
+    "hypertrophie": {"reps": "6-12", "sets": "3-4", "rest": "60-90s", "objectif": "Croissance musculaire, physique Baki"},
+    "endurance_musculaire": {"reps": "15-25", "sets": "2-3", "rest": "30-60s", "objectif": "Endurance, definition"},
+    "isometrique": {"hold": "10-60s", "sets": "3-5", "rest": "2-3min", "objectif": "Force statique, calisthenics holds"},
+    "explosif": {"reps": "3-8", "sets": "3-5", "rest": "2-3min", "objectif": "Puissance, vitesse, combat readiness"}
+  },
+
+  "running_restart_program": {
+    "week_1_2": {"type": "run/walk", "duration": "20-25min", "intervals": "2min course / 1min marche", "pace": "conversationnel", "frequency": "5x/semaine"},
+    "week_3_4": {"type": "run/walk", "duration": "25-30min", "intervals": "3min course / 1min marche", "pace": "conversationnel", "frequency": "5x/semaine"},
+    "week_5_6": {"type": "run/walk", "duration": "30min", "intervals": "5min course / 1min marche", "pace": "conversationnel", "frequency": "5x/semaine"},
+    "week_7_8": {"type": "continuous", "duration": "30-35min", "intervals": "course continue", "pace": "facile (zone 2)", "frequency": "5x/semaine"},
+    "week_9_plus": {
+      "distribution": {
+        "endurance_facile": {"frequency": "3x/semaine", "duration": "30-45min", "intensity": "zone 2 (80% effort)"},
+        "tempo": {"frequency": "1x/semaine", "duration": "25-35min", "intensity": "zone 3-4 (85-90%)"},
+        "intervalles": {"frequency": "1x/semaine", "duration": "25-30min", "intensity": "30s sprint / 90s repos x 8-10"}
+      }
+    }
+  },
+
+  "combat_conditioning": {
+    "exercises": [
+      {"name": "Shadow boxing", "duration": "3x3min rounds", "rest": "1min", "notes": "Jab-cross-hook-uppercut. Travail des pieds."},
+      {"name": "Sprawls", "reps": "10-15", "sets": 3, "notes": "Anti-takedown. Explosif."},
+      {"name": "Bear crawl", "distance": "20m aller-retour", "sets": 3, "notes": "Core + epaules + cardio"},
+      {"name": "Burpees", "reps": "10-15", "sets": 3, "rest": "60s", "notes": "Full body explosif"},
+      {"name": "Medicine ball slams", "reps": "10-12", "sets": 3, "notes": "Puissance de frappe"},
+      {"name": "Battle ropes", "duration": "30s on / 30s off", "sets": "5-8", "notes": "Endurance bras + cardio"},
+      {"name": "Turkish get-up", "reps": "3 chaque cote", "sets": 3, "notes": "Stabilite, mobilite, force fonctionnelle"},
+      {"name": "Farmers walk", "distance": "40m", "sets": 3, "notes": "Grip strength, core, endurance"}
+    ]
+  },
+
+  "weekly_split_template": {
+    "option_1_push_pull_legs_explosive": {
+      "lundi": "PUSH + Course facile",
+      "mardi": "PULL + Course facile",
+      "mercredi": "Course tempo + Stretching long",
+      "jeudi": "LEGS + Plyometrie",
+      "vendredi": "FULL BODY EXPLOSIF (combat conditioning)",
+      "samedi": "Course intervalles/sprints",
+      "dimanche": "REPOS COMPLET ou active recovery"
+    },
+    "option_2_upper_lower": {
+      "lundi": "UPPER (push focus) + Course facile",
+      "mardi": "Course facile + Stretching",
+      "mercredi": "LOWER (squat focus) + Core",
+      "jeudi": "UPPER (pull focus) + Course tempo",
+      "vendredi": "Course facile",
+      "samedi": "LOWER (explosive) + Combat conditioning",
+      "dimanche": "REPOS COMPLET"
+    }
+  },
+
+  "progression_principles": {
+    "progressive_overload": "Chaque semaine: +1-2 reps OU +2.5kg OU variante plus dure",
+    "deload": "Toutes les 4-6 semaines: volume -40%, intensite -20%",
+    "periodisation": {
+      "phase_1_adaptation": {"weeks": "1-4", "focus": "Technique, volume bas, apprendre les mouvements"},
+      "phase_2_hypertrophie": {"weeks": "5-12", "focus": "Volume + pour croissance musculaire. Rep range 8-12."},
+      "phase_3_force": {"weeks": "13-16", "focus": "Charges lourdes, rep range 3-6. Progressions calisthenics avancees."},
+      "phase_4_power": {"weeks": "17-20", "focus": "Explosivite, plyometrie, sprint intervals. Style combat."}
+    },
+    "signs_to_progress": "3 sets de reps max atteintes avec forme parfaite = passer a la variante suivante",
+    "signs_to_regress": "Forme qui se degrade, douleur (pas courbature), fatigue chronique = revenir en arriere"
+  },
+
+  "body_metrics_tracking": {
+    "weekly": ["Poids (matin a jeun)", "Tour de taille", "Photo front/side/back"],
+    "monthly": ["Tour de bras", "Tour de poitrine", "Tour de cuisses", "% body fat (estimation visuelle ou pince)"],
+    "performance_benchmarks": {
+      "beginner": {"tractions": 5, "pompes": 20, "dips": 10, "squat_1rm_bw": 0.8, "deadlift_1rm_bw": 1.0, "5km_time": "35min"},
+      "intermediate": {"tractions": 15, "pompes": 50, "dips": 20, "muscle_up": 1, "squat_1rm_bw": 1.2, "deadlift_1rm_bw": 1.5, "5km_time": "25min"},
+      "advanced": {"tractions": 25, "pompes": 75, "muscle_up": 5, "front_lever": "5s", "planche": "tuck 10s", "squat_1rm_bw": 1.5, "deadlift_1rm_bw": 2.0, "5km_time": "22min"},
+      "baki_level": {"muscle_up": 10, "front_lever": "15s", "planche": "straddle 5s", "human_flag": "5s", "handstand_pushup": 5, "pistol_squat": 10, "squat_1rm_bw": 2.0, "deadlift_1rm_bw": 2.5, "5km_time": "20min"}
+    }
+  }
+}
