@@ -335,6 +335,20 @@ button:active { opacity: 0.7; }
   margin: 16px 0; font-weight: 900;
 }
 
+/* ── Improv module ── */
+.improv-word {
+  font-size: 56px; font-weight: 800; color: #ff9100;
+  margin: 30px 0 10px; letter-spacing: 2px; text-transform: uppercase;
+}
+.improv-timer {
+  font-size: 72px; font-weight: 700; color: #ff9100;
+  font-variant-numeric: tabular-nums; margin: 20px 0;
+}
+.improv-hint {
+  font-size: 14px; opacity: 0.5; max-width: 300px;
+  line-height: 1.5; margin-top: 16px;
+}
+
 /* ── Simulation Cold Call module ── */
 .sim-type-card {
   background: #111; border: 2px solid #333; border-radius: 12px;
@@ -456,6 +470,11 @@ button:active { opacity: 0.7; }
     <h3>Simulation Realiste</h3>
     <p>Cold call complet avec un gerant : restaurant, hotel, salon... 5 personnalites</p>
     <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-improv" class="module-option" onclick="startModule('improv')" style="border-color:#ff9100;">
+    <h3>Improvisation</h3>
+    <p>Un mot au hasard — parle 90 secondes sur le sujet (methode Vinh Giang)</p>
+    <span class="tag no-mic">Pas de micro</span>
   </div>
   <div class="btn-group">
     <button class="btn-secondary" onclick="showScreen('setup')">Retour</button>
@@ -843,6 +862,23 @@ const BREATHING_TECHNIQUES = {
 };
 
 // ════════════════════════════════════════════════════════════
+// IMPROV WORDS (methode Vinh Giang — parler sur un mot au hasard)
+// ════════════════════════════════════════════════════════════
+const IMPROV_WORDS = [
+  "confiance", "liberte", "echec", "silence", "courage",
+  "argent", "temps", "peur", "creativite", "solitude",
+  "habitude", "risque", "curiosite", "patience", "ambition",
+  "erreur", "pouvoir", "simplicite", "passion", "discipline",
+  "voyage", "succes", "obstacle", "changement", "respect",
+  "decision", "energie", "honnetete", "apprentissage", "resilience",
+  "communication", "gratitude", "doute", "responsabilite", "influence",
+  "innovation", "perseverance", "equilibre", "leadership", "authenticite",
+  "vitesse", "frontiere", "racine", "miroir", "ombre",
+  "graine", "horizon", "ancre", "flamme", "pont"
+];
+const IMPROV_DURATION = 90; // seconds
+
+// ════════════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════════════
 let sessionStartTime = null;
@@ -881,6 +917,12 @@ let breathingTechnique = null;
 let breathingInterval = null;
 let breathingTimeout = null;
 let breathingActive = false;
+
+// Improv state
+let improvTimer = null;
+let improvTimeLeft = 0;
+let improvWord = "";
+let improvWordsUsed = [];
 
 // Pace tracking
 let paceWordTimestamps = [];
@@ -930,7 +972,7 @@ function startFullSession() {
   sessionMode = "full";
   sessionStartTime = Date.now();
   modulesCompleted = [];
-  fullSessionQueue = ["breathing", "warmup", "reading", "twisters", "coldcall"];
+  fullSessionQueue = ["breathing", "warmup", "reading", "twisters", "improv", "coldcall"];
   startModule(fullSessionQueue.shift());
 }
 
@@ -950,6 +992,7 @@ function startModule(mod) {
   else if (mod === "twisters") startTwisters();
   else if (mod === "coldcall") startColdCall();
   else if (mod === "simulation") startSimulation();
+  else if (mod === "improv") startImprov();
 }
 
 function completeModule(mod) {
@@ -2163,6 +2206,94 @@ function completeCCScenario() {
 }
 
 // ════════════════════════════════════════════════════════════
+// IMPROVISATION MODULE (methode Vinh Giang)
+// ════════════════════════════════════════════════════════════
+function startImprov() {
+  document.getElementById("ex-title").textContent = "Improvisation";
+  document.getElementById("ex-progress").textContent = "";
+  pickNewImprovWord();
+}
+
+function pickNewImprovWord() {
+  // Pick a word not yet used this session
+  const available = IMPROV_WORDS.filter(w => !improvWordsUsed.includes(w));
+  if (available.length === 0) improvWordsUsed = [];
+  const pool = available.length > 0 ? available : IMPROV_WORDS;
+  improvWord = pool[Math.floor(Math.random() * pool.length)];
+  improvWordsUsed.push(improvWord);
+  improvTimeLeft = IMPROV_DURATION;
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;">
+      <p style="opacity:0.5;font-size:13px;margin-bottom:8px;">Methode Vinh Giang</p>
+      <p style="font-size:16px;margin-bottom:30px;">Parle de ce mot pendant ${IMPROV_DURATION} secondes</p>
+      <div class="improv-word" id="improv-word-display">${improvWord}</div>
+      <div class="improv-timer" id="improv-timer-display">${formatImprovTime(improvTimeLeft)}</div>
+      <p class="improv-hint">Pas de preparation. Parle spontanement. L'objectif est de structurer ta pensee en temps reel, pas d'etre parfait.</p>
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-improv-start" onclick="startImprovTimer()" style="background:#ff9100;">C'est parti</button>
+    <button class="btn-secondary" onclick="pickNewImprovWord()">Autre mot</button>
+    <button class="btn-secondary" onclick="skipModule('improv')">Retour</button>
+  `;
+}
+
+function formatImprovTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return m > 0 ? `${m}:${sec.toString().padStart(2, "0")}` : `${sec}`;
+}
+
+function startImprovTimer() {
+  const btn = document.getElementById("btn-improv-start");
+  if (btn) btn.disabled = true;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="skipImprovToNext()">Mot suivant</button>
+    <button class="btn-secondary" onclick="skipModule('improv')">Terminer</button>
+  `;
+
+  if (improvTimer) clearInterval(improvTimer);
+  improvTimer = setInterval(() => {
+    improvTimeLeft--;
+    const el = document.getElementById("improv-timer-display");
+    if (el) {
+      el.textContent = formatImprovTime(improvTimeLeft);
+      if (improvTimeLeft <= 10) el.style.color = "#ff5252";
+    }
+    if (improvTimeLeft <= 0) {
+      clearInterval(improvTimer);
+      improvTimer = null;
+      improvDone();
+    }
+  }, 1000);
+}
+
+function improvDone() {
+  const el = document.getElementById("improv-timer-display");
+  if (el) { el.textContent = "BRAVO"; el.style.color = "#00c853"; }
+
+  const wordEl = document.getElementById("improv-word-display");
+  if (wordEl) wordEl.style.color = "#00c853";
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="pickNewImprovWord()" style="background:#ff9100;">Encore un mot</button>
+    <button class="btn-success" onclick="completeModule('improv')">Terminer</button>
+  `;
+}
+
+function skipImprovToNext() {
+  if (improvTimer) { clearInterval(improvTimer); improvTimer = null; }
+  pickNewImprovWord();
+}
+
+// ════════════════════════════════════════════════════════════
 // SKIP MODULE
 // ════════════════════════════════════════════════════════════
 function skipModule(mod) {
@@ -2170,6 +2301,7 @@ function skipModule(mod) {
   if (breathingInterval) clearInterval(breathingInterval);
   if (breathingTimeout) clearTimeout(breathingTimeout);
   if (warmupTimer) { clearInterval(warmupTimer); warmupTimer = null; }
+  if (improvTimer) { clearInterval(improvTimer); improvTimer = null; }
   stopRecognition();
   stopVoiceAnalysis();
   document.getElementById("voice-panel").classList.remove("active");
@@ -2184,7 +2316,7 @@ function showDone() {
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
 
-  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", coldcall: "Cold Call", simulation: "Simulation Realiste" };
+  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", improv: "Improvisation", coldcall: "Cold Call", simulation: "Simulation Realiste" };
   const modList = modulesCompleted.map(m => moduleNames[m] || m).join(", ");
 
   showScreen("done-screen");
@@ -2833,6 +2965,10 @@ window.showSimPersonaSelect = showSimPersonaSelect;
 window.toggleSimSpeak = toggleSimSpeak;
 window.nextSimStep = nextSimStep;
 window.completeSimulation = completeSimulation;
+window.startImprov = startImprov;
+window.startImprovTimer = startImprovTimer;
+window.pickNewImprovWord = pickNewImprovWord;
+window.skipImprovToNext = skipImprovToNext;
 </script>
 </body>
 </html>
