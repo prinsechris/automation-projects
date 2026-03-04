@@ -38,8 +38,8 @@ def uid():
 def build_workflow():
     trigger_id = uid()
     week_ctx_id = uid()
-    query_templates_id = uid()
     query_gcal_id = uid()
+    query_tasks_id = uid()
     generate_blocks_id = uid()
     split_blocks_id = uid()
     create_block_id = uid()
@@ -89,29 +89,6 @@ return [{json: {dates, weekStart, weekEnd, weekStartISO: weekStart + 'T00:00:00+
         },
     }
 
-    query_templates = {
-        "id": query_templates_id,
-        "name": "Query Recurring Templates",
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.2,
-        "position": [480, 200],
-        "credentials": NOTION_CRED,
-        "parameters": {
-            "method": "POST",
-            "url": f"https://api.notion.com/v1/databases/{TIME_BLOCKS_DB}/query",
-            "sendHeaders": True,
-            "headerParameters": {"parameters": [{"name": "Notion-Version", "value": "2022-06-28"}]},
-            "sendBody": True,
-            "specifyBody": "json",
-            "jsonBody": json.dumps({
-                "filter": {
-                    "property": "Recurrence",
-                    "select": {"does_not_equal": "None"}
-                }
-            }),
-        },
-    }
-
     query_gcal = {
         "id": query_gcal_id,
         "name": "Google Calendar Next Week",
@@ -134,6 +111,37 @@ return [{json: {dates, weekStart, weekEnd, weekStartISO: weekStart + 'T00:00:00+
         "continueOnFail": True,
     }
 
+    query_tasks = {
+        "id": query_tasks_id,
+        "name": "Query Priority Tasks",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [480, 200],
+        "credentials": NOTION_CRED,
+        "parameters": {
+            "method": "POST",
+            "url": "https://api.notion.com/v1/databases/305da200-b2d6-8145-bc16-eaee02925a14/query",
+            "authentication": "predefinedCredentialType",
+            "nodeCredentialType": "notionApi",
+            "sendHeaders": True,
+            "headerParameters": {"parameters": [{"name": "Notion-Version", "value": "2022-06-28"}]},
+            "sendBody": True,
+            "specifyBody": "json",
+            "jsonBody": json.dumps({
+                "filter": {
+                    "and": [
+                        {"property": "Type", "select": {"equals": "Task"}},
+                        {"property": "Status", "status": {"equals": "In Progress"}},
+                    ]
+                },
+                "sorts": [
+                    {"property": "Priority", "direction": "ascending"},
+                ],
+                "page_size": 20,
+            }),
+        },
+    }
+
     generate_blocks = {
         "id": generate_blocks_id,
         "name": "Generate Week Blocks",
@@ -144,17 +152,11 @@ return [{json: {dates, weekStart, weekEnd, weekStartISO: weekStart + 'T00:00:00+
             "mode": "runOnceForAllItems",
             "jsCode": """
 const ctx = $('Next Week Context').first().json;
-const dates = ctx.dates; // [{date, dayName, dayOfWeek}]
+const dates = ctx.dates; // [{date, dayName, dayOfWeek}] 1=Mon..7=Sun
+const dayKeys = ['', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-// Parse templates
-let templates = [];
-try {
-    const data = $('Query Recurring Templates').first().json;
-    templates = data.results || [];
-} catch(e) { templates = []; }
-
-// Parse Google Calendar events
-let calEvents = [];
+// --- Parse Google Calendar shifts (McDo etc.) ---
+let shifts = [];
 try {
     const gcalItems = $('Google Calendar Next Week').all();
     for (const item of gcalItems) {
@@ -163,120 +165,167 @@ try {
         const startTime = d.start?.dateTime || d.start?.date;
         const endTime = d.end?.dateTime || d.end?.date;
         if (!startTime) continue;
-        const startDate = startTime.substring(0, 10);
-        calEvents.push({
-            date: startDate,
+        shifts.push({
+            date: startTime.substring(0, 10),
             start: startTime,
             end: endTime,
-            title: d.summary || 'Evenement',
+            title: (d.summary || '').toLowerCase(),
         });
     }
 } catch(e) {}
 
-// Generate blocks for each day
+// Helper: add minutes to HH:MM
+function addMin(hhmm, mins) {
+    const total = parseInt(hhmm.split(':')[0]) * 60 + parseInt(hhmm.split(':')[1]) + mins;
+    return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+}
+function toMin(hhmm) {
+    return parseInt(hhmm.split(':')[0]) * 60 + parseInt(hhmm.split(':')[1]);
+}
+
+// --- TEMPLATE (embedded from weekly_template.json) ---
+const dailyBlocks = [
+    {nom: 'Routine Matin', type: 'Routine', time: '07:00', dur: 30, priority: 'Medium', notes: 'Reveil, hygiene, petit-dej', weekdayOverride: {sat: '09:00'}, skipDays: []},
+    {nom: 'Course a pied', type: 'Sport', time: '07:30', dur: 30, priority: 'High', notes: 'Run/walk reprise progressive', weekdayOverride: {}, skipDays: ['sat']},
+    {nom: 'Dejeuner', type: 'Break', time: '13:00', dur: 60, priority: null, notes: '', weekdayOverride: {}, skipDays: []},
+    {nom: 'Stretching', type: 'Sport', time: '15:00', dur: 30, priority: null, notes: 'Etirements, grand ecart', weekdayOverride: {}, skipDays: []},
+    {nom: 'Routine Soir', type: 'Routine', time: '21:00', dur: 60, priority: null, notes: '', weekdayOverride: {}, skipDays: ['sat']},
+];
+
+const weeklyBlocks = [
+    {nom: 'Musculation Push', type: 'Sport', day: 'mon', time: '14:00', dur: 60, priority: 'High', notes: 'Push: pompes, dips, OHP'},
+    {nom: 'Musculation Pull', type: 'Sport', day: 'tue', time: '14:30', dur: 60, priority: 'High', notes: 'Pull: tractions, rows, biceps'},
+    {nom: 'Musculation Legs', type: 'Sport', day: 'wed', time: '14:30', dur: 60, priority: 'High', notes: 'Legs + plyo: squats, fentes, box jumps'},
+    {nom: 'Grasse matinee + Routine', type: 'Routine', day: 'sat', time: '09:00', dur: 30, priority: null, notes: 'Repos, petit-dej tranquille'},
+    {nom: 'Active Recovery', type: 'Sport', day: 'sat', time: '10:00', dur: 45, priority: 'Medium', notes: 'Marche, yoga, foam rolling'},
+    {nom: 'Meal prep semaine', type: 'Personal', day: 'sat', time: '11:00', dur: 90, priority: null, notes: 'Prep repas semaine prochaine'},
+    {nom: 'Weekly Review', type: 'Routine', day: 'sat', time: '20:00', dur: 60, priority: 'High', notes: 'Bilan semaine, planifier la suivante'},
+];
+
 const newBlocks = [];
 
-// Add Google Calendar events as Meeting blocks
-for (const ev of calEvents) {
-    const startDT = new Date(ev.start);
-    const endDT = new Date(ev.end);
-    const duration = Math.round((endDT - startDT) / 60000);
-    newBlocks.push({
-        block: ev.title,
-        type: 'Meeting',
-        startISO: ev.start,
-        endISO: ev.end,
-        duration: duration,
-        recurrence: 'None',
-        priority: null,
-        notes: 'Import Google Calendar',
-    });
+function pushBlock(nom, type, date, time, dur, priority, notes) {
+    const startISO = date + 'T' + time + ':00';
+    const endISO = date + 'T' + addMin(time, dur) + ':00';
+    newBlocks.push({block: nom, type, startISO, endISO, recurrence: 'Template', priority, notes});
 }
 
-// Process recurring templates
-for (const tpl of templates) {
-    const props = tpl.properties || {};
-    const name = (props['Block']?.title || []).map(t => t.plain_text).join('') || 'Bloc';
-    const type = props['Type']?.select?.name || 'Task';
-    const recurrence = props['Recurrence']?.select?.name || 'None';
-    const duration = props['Duration']?.number || 60;
-    const priority = props['Priority']?.select?.name || null;
-    const notes = (props['Notes']?.rich_text || []).map(t => t.plain_text).join('') || '';
+// --- 1. Fixed daily blocks ---
+for (const dayInfo of dates) {
+    const dk = dayKeys[dayInfo.dayOfWeek];
+    for (const db of dailyBlocks) {
+        if (db.skipDays.includes(dk)) continue;
+        const time = db.weekdayOverride?.[dk] || db.time;
 
-    // Get original time from Start property
-    const origStart = props['Start']?.date?.start || '';
-    let timeStr = '09:00';
-    if (origStart.includes('T')) {
-        timeStr = origStart.split('T')[1].substring(0, 5);
-    }
+        // If shift conflicts, adjust: dejeuner shifts after shift end
+        const dayShifts = shifts.filter(s => s.date === dayInfo.date);
+        let finalTime = time;
 
-    // Get original day of week
-    const origDate = new Date(origStart.substring(0, 10) + 'T12:00:00');
-    const origDow = origDate.getDay(); // 0=Sun, 1=Mon...
-
-    // Determine which days to create blocks
-    let targetDays = [];
-
-    if (recurrence === 'Daily') {
-        targetDays = [1, 2, 3, 4, 5, 6, 7]; // All week
-    } else if (recurrence === 'Weekly') {
-        // Check notes for specific days (e.g., "Lundi / Mercredi / Vendredi")
-        const notesLower = notes.toLowerCase();
-        const dayMap = {'lundi':1, 'mardi':2, 'mercredi':3, 'jeudi':4, 'vendredi':5, 'samedi':6, 'dimanche':7};
-        for (const [dayName, dayNum] of Object.entries(dayMap)) {
-            if (notesLower.includes(dayName)) {
-                targetDays.push(dayNum);
+        if (db.nom === 'Dejeuner' && dayShifts.length > 0) {
+            // Place dejeuner 30min after last shift ends
+            for (const sh of dayShifts) {
+                const shEnd = sh.end?.substring(11, 16) || '';
+                if (shEnd && toMin(shEnd) > toMin(finalTime) - 30) {
+                    finalTime = addMin(shEnd, 30);
+                }
             }
         }
-        // If no specific days found, use the original day
-        if (targetDays.length === 0) {
-            const mappedDow = origDow === 0 ? 7 : origDow; // Convert to 1=Mon
-            targetDays = [mappedDow];
-        }
-    } else if (recurrence === 'Bi-Weekly') {
-        // Every other week — check if this is the right week
-        const weekNum = Math.ceil(new Date(dates[0].date).getDate() / 7);
-        if (weekNum % 2 === 0) {
-            const mappedDow = origDow === 0 ? 7 : origDow;
-            targetDays = [mappedDow];
-        }
-    }
 
-    // Create blocks for target days
-    for (const dayNum of targetDays) {
-        const dayInfo = dates.find(d => d.dayOfWeek === dayNum);
-        if (!dayInfo) continue;
-
-        const startISO = dayInfo.date + 'T' + timeStr + ':00';
-        // Calculate end time
-        const startMin = parseInt(timeStr.split(':')[0]) * 60 + parseInt(timeStr.split(':')[1]);
-        const endMin = startMin + duration;
-        const endH = String(Math.floor(endMin / 60)).padStart(2, '0');
-        const endM = String(endMin % 60).padStart(2, '0');
-        const endISO = dayInfo.date + 'T' + endH + ':' + endM + ':00';
-
-        // Check for conflicts with calendar events
-        const hasConflict = calEvents.some(ev => {
-            return ev.date === dayInfo.date &&
-                   ev.start < endISO && ev.end > startISO;
+        // Skip if conflicts with a shift
+        const blockStart = toMin(finalTime);
+        const blockEnd = blockStart + db.dur;
+        const conflicts = dayShifts.some(sh => {
+            const ss = toMin(sh.start?.substring(11, 16) || '00:00');
+            const se = toMin(sh.end?.substring(11, 16) || '00:00');
+            return ss < blockEnd && se > blockStart;
         });
 
-        if (!hasConflict) {
-            newBlocks.push({
-                block: name,
-                type: type,
-                startISO: startISO,
-                endISO: endISO,
-                duration: duration,
-                recurrence: recurrence,
-                priority: priority,
-                notes: notes,
-            });
+        if (!conflicts) {
+            pushBlock(db.nom, db.type, dayInfo.date, finalTime, db.dur, db.priority, db.notes);
         }
     }
 }
 
-// Sort by date and start time
+// --- 2. Fixed weekly blocks ---
+for (const wb of weeklyBlocks) {
+    const dayInfo = dates.find(d => dayKeys[d.dayOfWeek] === wb.day);
+    if (!dayInfo) continue;
+    pushBlock(wb.nom, wb.type, dayInfo.date, wb.time, wb.dur, wb.priority, wb.notes);
+}
+
+// --- 3. Prep/trajet around each shift ---
+for (const sh of shifts) {
+    const shStart = sh.start?.substring(11, 16) || '';
+    const shEnd = sh.end?.substring(11, 16) || '';
+    if (!shStart || !shEnd) continue;
+
+    // 30min prep before shift
+    const prepTime = addMin(shStart, -30);
+    pushBlock('Prep + trajet McDo', 'Personal', sh.date, prepTime, 30, null, 'Trajet a pied');
+
+    // 30min trajet after shift
+    pushBlock('Trajet retour', 'Personal', sh.date, shEnd, 30, null, 'Trajet retour a pied');
+}
+
+// --- 4. Parse priority tasks from Notion ---
+let tasks = [];
+try {
+    const data = $('Query Priority Tasks').first().json;
+    const results = data.results || [];
+    for (const t of results) {
+        const props = t.properties || {};
+        const name = (props['Nom']?.title || []).map(x => x.plain_text).join('') || '?';
+        const priority = props['Priority']?.select?.name || 'Medium';
+        const category = props['Category']?.select?.name || '';
+        tasks.push({name, priority, category});
+    }
+} catch(e) {}
+
+// --- 5. Deep Work in free morning/afternoon slots, assigned to real tasks ---
+let taskIdx = 0;
+for (const dayInfo of dates) {
+    const dk = dayKeys[dayInfo.dayOfWeek];
+    if (dk === 'sat' || dk === 'sun') continue;
+
+    const dayShifts = shifts.filter(s => s.date === dayInfo.date);
+
+    const existing = newBlocks.filter(b => b.startISO.startsWith(dayInfo.date));
+    const occupied = [
+        ...existing.map(b => ({s: toMin(b.startISO.substring(11,16)), e: toMin(b.endISO.substring(11,16))})),
+        ...dayShifts.map(sh => ({s: toMin(sh.start?.substring(11,16)||'0:0'), e: toMin(sh.end?.substring(11,16)||'0:0')})),
+    ];
+
+    function findSlot(windowStart, windowEnd, minDur) {
+        for (let t = windowStart; t + minDur <= windowEnd; t += 15) {
+            const free = !occupied.some(o => o.s < t + minDur && o.e > t);
+            if (free) return t;
+        }
+        return -1;
+    }
+
+    // Try to fill 1-2 deep work slots per day
+    for (let attempt = 0; attempt < 2; attempt++) {
+        let slot = findSlot(toMin('08:00'), toMin('12:00'), 90);
+        if (slot < 0) slot = findSlot(toMin('15:30'), toMin('19:00'), 90);
+        if (slot < 0) break;
+
+        let dur = 120;
+        while (dur > 90 && occupied.some(o => o.s < slot + dur && o.e > slot)) dur -= 15;
+
+        // Assign real task name if available
+        const task = tasks[taskIdx] || null;
+        const blockName = task ? 'Deep Work: ' + task.name : 'Deep Work';
+        const blockPriority = task ? task.priority : 'Critical';
+        const blockNotes = task ? task.category : '';
+        if (task) taskIdx++;
+
+        const slotTime = String(Math.floor(slot/60)).padStart(2,'0') + ':' + String(slot%60).padStart(2,'0');
+        pushBlock(blockName, 'Task', dayInfo.date, slotTime, dur, blockPriority, blockNotes);
+        occupied.push({s: slot, e: slot + dur});
+    }
+}
+
+// Sort by date and time
 newBlocks.sort((a, b) => a.startISO.localeCompare(b.startISO));
 
 return [{json: {blocks: newBlocks, totalBlocks: newBlocks.length, weekStart: ctx.weekStart, weekEnd: ctx.weekEnd}}];
@@ -317,7 +366,7 @@ return blocks.map(b => ({json: {...b, weekStart: data.weekStart, weekEnd: data.w
             ]},
             "sendBody": True,
             "specifyBody": "json",
-            "jsonBody": '={{ JSON.stringify({parent: {database_id: "' + TIME_BLOCKS_DB + '"}, properties: {"Block": {title: [{text: {content: $json.block}}]}, "Type": {select: {name: $json.type}}, "Start": {date: {start: $json.startISO}}, "End": {date: {start: $json.endISO}}, "Duration": {number: $json.duration}, "Recurrence": {select: {name: $json.recurrence}}, ...($json.priority ? {"Priority": {select: {name: $json.priority}}} : {}), "Notes": {rich_text: [{text: {content: $json.notes || ""}}]}}}) }}',
+            "jsonBody": '={{ JSON.stringify({parent: {database_id: "' + TIME_BLOCKS_DB + '"}, properties: {"Nom": {title: [{text: {content: $json.block}}]}, "Type": {select: {name: $json.type}}, "Date": {date: {start: $json.startISO, end: $json.endISO}}, "Recurrence": {select: {name: $json.recurrence}}, ...($json.priority ? {"Priority": {select: {name: $json.priority}}} : {}), "Notes": {rich_text: [{text: {content: $json.notes || ""}}]}}}) }}',
         },
         "executeOnce": False,
     }
@@ -373,11 +422,11 @@ return [{json: {text: msg}}];
     connections = {
         "Sunday 20h": {"main": [[{"node": "Next Week Context", "type": "main", "index": 0}]]},
         "Next Week Context": {"main": [[
-            {"node": "Query Recurring Templates", "type": "main", "index": 0},
             {"node": "Google Calendar Next Week", "type": "main", "index": 0},
+            {"node": "Query Priority Tasks", "type": "main", "index": 0},
         ]]},
-        "Query Recurring Templates": {"main": [[{"node": "Generate Week Blocks", "type": "main", "index": 0}]]},
         "Google Calendar Next Week": {"main": [[{"node": "Generate Week Blocks", "type": "main", "index": 0}]]},
+        "Query Priority Tasks": {"main": [[{"node": "Generate Week Blocks", "type": "main", "index": 0}]]},
         "Generate Week Blocks": {"main": [[{"node": "Split Blocks", "type": "main", "index": 0}]]},
         "Split Blocks": {"main": [[{"node": "Create Time Block", "type": "main", "index": 0}]]},
         "Create Time Block": {"main": [[{"node": "Build Recap", "type": "main", "index": 0}]]},
@@ -386,7 +435,7 @@ return [{json: {text: msg}}];
 
     return {
         "name": WORKFLOW_NAME,
-        "nodes": [trigger, week_ctx, query_templates, query_gcal, generate_blocks, split_blocks, create_block, build_recap, send_tg],
+        "nodes": [trigger, week_ctx, query_gcal, query_tasks, generate_blocks, split_blocks, create_block, build_recap, send_tg],
         "connections": connections,
         "settings": {"executionOrder": "v1", "timezone": "Europe/Paris", "saveManualExecutions": True},
     }

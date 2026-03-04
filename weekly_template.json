@@ -1,0 +1,40 @@
+{
+  "description": "Template hebdomadaire Time Blocking - base sur semaine du 4 mars 2026",
+  "notes": "Les shifts McDo sont lus depuis Google Calendar. Les blocs sont places autour.",
+
+  "recurring_daily": [
+    {"nom": "Routine Matin", "type": "Routine", "time": "07:00", "duration": 30, "priority": "Medium", "notes": "Reveil, hygiene, petit-dej",
+     "weekday_override": {"sat": "09:00"}},
+    {"nom": "Course a pied", "type": "Sport", "time": "07:30", "duration": 30, "priority": "High", "notes": "Run/walk reprise progressive",
+     "skip_days": ["sat"]},
+    {"nom": "Dejeuner", "type": "Break", "time": "13:00", "duration": 60, "priority": null, "notes": ""},
+    {"nom": "Stretching", "type": "Sport", "time": "15:00", "duration": 30, "priority": null, "notes": "Etirements, grand ecart"},
+    {"nom": "Routine Soir", "type": "Routine", "time": "21:00", "duration": 60, "priority": null, "notes": "",
+     "skip_days": ["sat"]}
+  ],
+
+  "recurring_weekly": [
+    {"nom": "Musculation Push", "type": "Sport", "day": "mon", "time": "14:00", "duration": 60, "priority": "High", "notes": "Push: pompes, dips, OHP"},
+    {"nom": "Musculation Pull", "type": "Sport", "day": "tue", "time": "14:30", "duration": 60, "priority": "High", "notes": "Pull: tractions, rows, biceps"},
+    {"nom": "Musculation Legs", "type": "Sport", "day": "wed", "time": "14:30", "duration": 60, "priority": "High", "notes": "Legs + plyo: squats, fentes, box jumps"},
+    {"nom": "Grasse matinee + Routine", "type": "Routine", "day": "sat", "time": "09:00", "duration": 30, "priority": null, "notes": "Repos, petit-dej tranquille"},
+    {"nom": "Active Recovery", "type": "Sport", "day": "sat", "time": "10:00", "duration": 45, "priority": "Medium", "notes": "Marche, yoga, foam rolling"},
+    {"nom": "Meal prep semaine", "type": "Personal", "day": "sat", "time": "11:00", "duration": 90, "priority": null, "notes": "Prep repas semaine prochaine"},
+    {"nom": "Weekly Review", "type": "Routine", "day": "sat", "time": "20:00", "duration": 60, "priority": "High", "notes": "Bilan semaine, planifier la suivante"}
+  ],
+
+  "around_shifts": {
+    "prep_before": {"nom": "Prep + trajet McDo", "type": "Personal", "duration": 30, "notes": "Trajet a pied"},
+    "trajet_after": {"nom": "Trajet retour", "type": "Personal", "duration": 30, "notes": "Trajet retour a pied"}
+  },
+
+  "deep_work_slots": {
+    "description": "Deep Work de 90-120min place dans les creneaux libres, avant ou apres les shifts",
+    "min_duration": 90,
+    "max_duration": 120,
+    "priority": "Critical",
+    "type": "Task",
+    "preferred_window": {"start": "08:00", "end": "12:00"},
+    "fallback_window": {"start": "15:00", "end": "19:00"}
+  }
+}
