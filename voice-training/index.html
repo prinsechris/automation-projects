@@ -80,13 +80,26 @@ button:active { opacity: 0.7; }
 
 #exercise-content {
   flex: 1; overflow-y: auto; padding: 20px;
-  padding-bottom: 180px; /* space for voice panel */
+  padding-bottom: 220px; /* space for fixed controls + voice panel */
 }
 
 #exercise-controls {
-  padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 20px));
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 20px));
   background: #111; display: flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap;
   border-top: 1px solid #222;
+  z-index: 12;
+  transition: bottom 0.25s ease;
+}
+#exercise-controls.voice-active {
+  bottom: 80px;
+}
+#exercise-controls button {
+  min-width: 100px;
+  min-height: 54px;
+  font-size: 16px;
+  touch-action: manipulation;
 }
 
 /* ── Reading module ── */
@@ -189,8 +202,16 @@ button:active { opacity: 0.7; }
   position: fixed; bottom: 0; left: 0; width: 100%;
   background: #111; border-top: 1px solid #333;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
-  z-index: 8; display: none;
+  z-index: 11; display: none;
 }
+#mic-status {
+  position: fixed; top: 12px; right: 12px; z-index: 50;
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  display: none; transition: opacity 0.3s;
+}
+#mic-status.listening { display: block; background: rgba(0,200,83,0.2); color: #00c853; }
+#mic-status.error { display: block; background: rgba(255,82,82,0.2); color: #ff5252; }
+#mic-status.retrying { display: block; background: rgba(255,171,0,0.2); color: #ffab00; }
 #voice-panel.active { display: block; }
 .voice-metrics { display: flex; gap: 12px; justify-content: space-between; }
 .voice-metric {
@@ -490,6 +511,8 @@ button:active { opacity: 0.7; }
   <div id="exercise-content"></div>
   <div id="exercise-controls"></div>
 </div>
+
+<div id="mic-status"></div>
 
 <!-- ═══════════════════ VOICE ANALYSIS PANEL ═══════════════════ -->
 <div id="voice-panel">
@@ -907,6 +930,7 @@ let readingIndex = 0;
 let readingCorrect = 0;
 let readingTotal = 0;
 let readingTranscriptWords = [];
+let readingLastResultIndex = 0;
 
 // Twister state
 let twisterIndex = 0;
@@ -981,7 +1005,10 @@ function showModuleSelect() {
 }
 
 function startModule(mod) {
-  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation") && !SPEECH_SUPPORTED) return;
+  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation") && !SPEECH_SUPPORTED) {
+    showMicError({name: 'NotSupported', message: 'Speech Recognition non supporte sur ce navigateur.'});
+    return;
+  }
   if (!sessionStartTime) sessionStartTime = Date.now();
   currentModule = mod;
   showExercise();
@@ -999,7 +1026,6 @@ function completeModule(mod) {
   modulesCompleted.push(mod);
   stopRecognition();
   stopVoiceAnalysis();
-  document.getElementById("voice-panel").classList.remove("active");
 
   if (sessionMode === "full" && fullSessionQueue.length > 0) {
     startModule(fullSessionQueue.shift());
@@ -1011,36 +1037,73 @@ function completeModule(mod) {
 // ════════════════════════════════════════════════════════════
 // SPEECH RECOGNITION
 // ════════════════════════════════════════════════════════════
+let micRetryCount = 0;
+const MAX_MIC_RETRIES = 5;
+
+function setMicStatus(state, text) {
+  const el = document.getElementById("mic-status");
+  if (!el) return;
+  el.className = state; // 'listening', 'error', 'retrying', or ''
+  el.textContent = text || '';
+  if (!state) el.style.display = 'none';
+}
+
 function initRecognition(onResult, onEnd) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return null;
+  if (!SR) {
+    setMicStatus('error', 'Micro non supporte sur ce navigateur');
+    return null;
+  }
   recognition = new SR();
   recognition.lang = "fr-FR";
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.maxAlternatives = 3;
+  micRetryCount = 0;
 
-  recognition.onresult = onResult;
+  recognition.onresult = function(e) {
+    setMicStatus('listening', 'Micro actif');
+    micRetryCount = 0;
+    onResult(e);
+  };
   recognition.onerror = function(e) {
-    if (e.error === "no-speech" || e.error === "aborted") return;
+    if (e.error === "aborted") return;
+    if (e.error === "no-speech") {
+      setMicStatus('listening', 'En attente de voix...');
+      return;
+    }
     console.warn("SpeechRecognition error:", e.error);
-    // On network or audio errors, retry after a short delay
-    if (recognizing && (e.error === "network" || e.error === "audio-capture")) {
+    if (e.error === "not-allowed") {
+      setMicStatus('error', 'Micro bloque — autorise dans les parametres');
+      recognizing = false;
+      return;
+    }
+    if (recognizing && micRetryCount < MAX_MIC_RETRIES) {
+      micRetryCount++;
+      setMicStatus('retrying', 'Reconnexion micro (' + micRetryCount + '/' + MAX_MIC_RETRIES + ')...');
       setTimeout(() => {
-        if (recognizing) {
+        if (recognizing && recognition) {
           try { recognition.start(); } catch(ex) {}
         }
-      }, 500);
+      }, 800 * micRetryCount);
+    } else if (micRetryCount >= MAX_MIC_RETRIES) {
+      setMicStatus('error', 'Micro perdu — appuie Arreter puis Ecouter');
     }
   };
   recognition.onend = function() {
-    // Auto-restart (Chrome cuts after ~15s of silence)
     if (recognizing) {
+      // Reset result index since recognition restarts with fresh results
+      readingLastResultIndex = 0;
       setTimeout(() => {
         if (recognizing && recognition) {
-          try { recognition.start(); } catch(e) {}
+          try {
+            recognition.start();
+            setMicStatus('listening', 'Micro actif');
+          } catch(e) {
+            setMicStatus('error', 'Micro perdu — relance l\'ecoute');
+          }
         }
-      }, 100);
+      }, 150);
     }
     if (onEnd) onEnd();
   };
@@ -1050,7 +1113,11 @@ function initRecognition(onResult, onEnd) {
 function startRecognition() {
   if (!recognition) return;
   recognizing = true;
-  try { recognition.start(); } catch(e) {}
+  micRetryCount = 0;
+  setMicStatus('listening', 'Micro actif');
+  try { recognition.start(); } catch(e) {
+    setMicStatus('error', 'Impossible de demarrer le micro');
+  }
 }
 
 function stopRecognition() {
@@ -1059,6 +1126,7 @@ function stopRecognition() {
     try { recognition.stop(); } catch(e) {}
   }
   recognition = null;
+  setMicStatus('', '');
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1075,10 +1143,25 @@ async function initAudioAnalysis() {
     audioDataArray = new Uint8Array(analyser.frequencyBinCount);
     audioFloatArray = new Float32Array(analyser.fftSize);
     document.getElementById("voice-panel").classList.add("active");
+    const ctrl = document.getElementById("exercise-controls");
+    if (ctrl) ctrl.classList.add("voice-active");
     runVoiceAnalysis();
   } catch(e) {
     console.warn("Audio analysis unavailable:", e);
+    showMicError(e);
   }
+}
+
+function showMicError(err) {
+  const msg = err.name === 'NotAllowedError' ? 'Micro bloque. Autorise l\'acces dans les parametres du navigateur.'
+    : err.name === 'NotFoundError' ? 'Aucun micro detecte. Verifie que ton micro est branche.'
+    : 'Micro indisponible: ' + (err.message || err.name);
+  const banner = document.createElement('div');
+  banner.className = 'warning-banner';
+  banner.textContent = msg;
+  banner.style.cssText = 'position:fixed;top:16px;left:16px;right:16px;z-index:50;';
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 8000);
 }
 
 function stopVoiceAnalysis() {
@@ -1093,6 +1176,9 @@ function stopVoiceAnalysis() {
     audioCtx = null;
   }
   analyser = null;
+  const ctrl = document.getElementById("exercise-controls");
+  if (ctrl) ctrl.classList.remove("voice-active");
+  document.getElementById("voice-panel").classList.remove("active");
 }
 
 function runVoiceAnalysis() {
@@ -1504,13 +1590,15 @@ function changeReadingText(idx) {
   readingCorrect = 0;
   readingTotal = 0;
   readingTranscriptWords = [];
+  readingLastResultIndex = 0;
   renderReadingText(selectedTextIndex);
   updatePrecision();
 }
 
 function renderReadingText(idx) {
   const text = READING_TEXTS[idx].text;
-  readingWords = text.split(/\s+/);
+  // Strip punctuation so user doesn't need to "say" punctuation marks
+  readingWords = stripPunctuation(text).split(/\s+/).filter(w => w.length > 0);
   const display = document.getElementById("reading-display");
   display.innerHTML = readingWords.map((w, i) => {
     const cls = i === 0 ? "current" : "pending";
@@ -1537,18 +1625,34 @@ function toggleReading() {
 function normalizeWord(w) {
   return w.toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]/g, "");
+    .replace(/[^a-z0-9àâäéèêëïîôùûüÿçœæ]/g, "")
+    .replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, "");
+}
+
+function stripPunctuation(text) {
+  // Remove punctuation from words but keep the words themselves
+  return text.replace(/[.,!?;:…\-—–«»""''()\[\]{}\/\\]/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function onReadingResult(event) {
-  let fullTranscript = "";
-  for (let i = 0; i < event.results.length; i++) {
-    fullTranscript += event.results[i][0].transcript + " ";
+  // Only process NEW final results to avoid desync on recognition restart
+  let newTranscript = "";
+  for (let i = readingLastResultIndex; i < event.results.length; i++) {
+    if (event.results[i].isFinal) {
+      newTranscript += event.results[i][0].transcript + " ";
+      readingLastResultIndex = i + 1;
+    } else {
+      // Show interim results as visual feedback but don't advance
+      const interim = event.results[i][0].transcript;
+      const el = document.getElementById("rw-" + readingIndex);
+      if (el) el.title = interim; // show what mic hears
+    }
   }
 
-  const spokenWords = fullTranscript.trim().split(/\s+/).filter(w => w.length > 0);
-  const newWords = spokenWords.slice(readingTranscriptWords.length);
-  readingTranscriptWords = spokenWords;
+  if (!newTranscript.trim()) return;
+
+  const newWords = newTranscript.trim().split(/\s+/).filter(w => w.length > 0);
+  readingTranscriptWords = readingTranscriptWords.concat(newWords);
 
   if (newWords.length > 0) {
     trackPace(spokenWords.length);
