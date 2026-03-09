@@ -1,0 +1,272 @@
+[
+  {
+    "name": "Odiki Sushi restaurant sushi à Odysseum",
+    "type": "sushi_restaurant",
+    "address": "Odysseum, Allée Ulysse, 34000 Montpellier, France",
+    "rating": 3.6,
+    "reviews": 1448,
+    "freq": "7.1",
+    "phone": "04 67 82 22 84"
+  },
+  {
+    "name": "Les Buffets du Vieux-Port",
+    "type": "buffet_restaurant",
+    "address": "158 Quai du Port, 13002 Marseille, France",
+    "rating": 4,
+    "reviews": 2312,
+    "freq": "0.5",
+    "phone": "04 65 85 89 70"
+  },
+  {
+    "name": "Bar Le Grillon",
+    "type": "restaurant",
+    "address": "49 Cr Mirabeau, 13100 Aix-en-Provence, France",
+    "rating": 3.7,
+    "reviews": 2664,
+    "freq": "0.8",
+    "phone": "04 42 27 58 81"
+  },
+  {
+    "name": "L'Esquinade",
+    "type": "french_restaurant",
+    "address": "38 Pl. Thiars, 13001 Marseille, France",
+    "rating": 3.6,
+    "reviews": 2158,
+    "freq": "0.7",
+    "phone": "04 91 33 28 82"
+  },
+  {
+    "name": "Restaurant La Gare",
+    "type": "restaurant",
+    "address": "322 Av. de Saint-Tronquet, 84130 Le Pontet, France",
+    "rating": 4.2,
+    "reviews": 1526,
+    "freq": "3.1",
+    "phone": "04 90 31 86 24"
+  },
+  {
+    "name": "Le Pigalle",
+    "type": "restaurant",
+    "address": "8 Pl. de la République, 84100 Orange, France",
+    "rating": 3.8,
+    "reviews": 1302,
+    "freq": "0.7",
+    "phone": "04 32 80 96 83"
+  },
+  {
+    "name": "Grand Hôtel de Nîmes - Hôtel 4 Étoiles",
+    "type": "hotel",
+    "address": "202 Rue Claude Nicolas Ledoux, 30900 Nîmes, France",
+    "rating": 3.5,
+    "reviews": 1006,
+    "freq": "0.8",
+    "phone": "04 66 29 86 87"
+  },
+  {
+    "name": "Le Moutardier du Pape",
+    "type": "restaurant",
+    "address": "15 Pl. du Palais, 84000 Avignon, France",
+    "rating": 3.8,
+    "reviews": 933,
+    "freq": "0.2",
+    "phone": "04 90 85 34 76"
+  },
+  {
+    "name": "Grand Café de la Bourse",
+    "type": "bar",
+    "address": "2 Bd Victor Hugo, 30000 Nîmes, France",
+    "rating": 2.6,
+    "reviews": 889,
+    "freq": "0.2",
+    "phone": "04 30 50 16 74"
+  },
+  {
+    "name": "Le Lisita",
+    "type": "restaurant",
+    "address": "2 Bd des Arènes, 30000 Nîmes, France",
+    "rating": 3.8,
+    "reviews": 826,
+    "freq": "0.1",
+    "phone": "04 66 67 29 15"
+  },
+  {
+    "name": "Restaurant EAT",
+    "type": "french_restaurant",
+    "address": "8 Rue Mazan, 84000 Avignon, France",
+    "rating": 4.7,
+    "reviews": 761,
+    "freq": "0.1",
+    "phone": "04 90 83 46 74"
+  },
+  {
+    "name": "L'Épicerie de Ginette",
+    "type": "restaurant",
+    "address": "25 Pl. des Corps Saints, 84000 Avignon, France",
+    "rating": 4.4,
+    "reviews": 2038,
+    "freq": "0.9",
+    "phone": "04 90 85 58 70"
+  },
+  {
+    "name": "Le Carré du Palais",
+    "type": "restaurant",
+    "address": "1 Pl. du Palais, 84000 Avignon, France",
+    "rating": 4.6,
+    "reviews": 1727,
+    "freq": "3.1",
+    "phone": "04 65 00 01 01"
+  },
+  {
+    "name": "Café de France L'Isle sur la Sorgue",
+    "type": "restaurant",
+    "address": "14 Pl. de la Liberté, 84800 L'Isle-sur-la-Sorgue, France",
+    "rating": 4.2,
+    "reviews": 1309,
+    "freq": "0.7",
+    "phone": "09 62 25 76 28"
+  },
+  {
+    "name": "Restaurant des Etoiles",
+    "type": "restaurant",
+    "address": "260 Rue Paul Eluard, 84000 Avignon, France",
+    "rating": 4.2,
+    "reviews": 1199,
+    "freq": "0.6",
+    "phone": "04 90 25 83 94"
+  },
+  {
+    "name": "Maison des Fondues",
+    "type": "fondue_restaurant",
+    "address": "72 Rue de la Bonneterie, 84000 Avignon, France",
+    "rating": 3.7,
+    "reviews": 492,
+    "freq": "0.1",
+    "phone": "?"
+  },
+  {
+    "name": "Fasthôtel Avignon Nord",
+    "type": "hotel",
+    "address": "ZA de, Avenue de Fontvert, 583 Chem. du Périgord, 84130 Le Pontet, France",
+    "rating": 3.2,
+    "reviews": 426,
+    "freq": "0.6",
+    "phone": "04 90 32 37 38"
+  },
+  {
+    "name": "Crêperie Le Kreisker",
+    "type": "dessert_shop",
+    "address": "3 Pass. Bruyas, 34000 Montpellier, France",
+    "rating": 4.2,
+    "reviews": 2307,
+    "freq": "1.1",
+    "phone": "04 67 60 82 50"
+  },
+  {
+    "name": "Le Bercail Avignon",
+    "type": "french_restaurant",
+    "address": "162 Chem. des Canotiers, 84000 Avignon, France",
+    "rating": 4.3,
+    "reviews": 5672,
+    "freq": "1.0",
+    "phone": "?"
+  },
+  {
+    "name": "L'Agape",
+    "type": "french_restaurant",
+    "address": "21 Pl. des Corps Saints, 84000 Avignon, France",
+    "rating": 4.4,
+    "reviews": 658,
+    "freq": "0.6",
+    "phone": "04 90 85 04 06"
+  },
+  {
+    "name": "Restaurant Fou de Fafa",
+    "type": "french_restaurant",
+    "address": "17 Rue Des Trois Faucons, 84000 Avignon, France",
+    "rating": 4.8,
+    "reviews": 703,
+    "freq": "0.1",
+    "phone": "04 32 76 35 13"
+  },
+  {
+    "name": "Hôtel Le Cloître Saint Louis",
+    "type": "hotel",
+    "address": "20 Rue du Portail Boquier, 84000 Avignon, France",
+    "rating": 4,
+    "reviews": 1682,
+    "freq": "1.5",
+    "phone": "04 90 27 55 55"
+  },
+  {
+    "name": "Avignon Grand Hôtel",
+    "type": "hotel",
+    "address": "34 Bd Saint-Roch, 84000 Avignon, France",
+    "rating": 4,
+    "reviews": 1288,
+    "freq": "1.3",
+    "phone": "04 90 80 98 09"
+  },
+  {
+    "name": "Restaurant Bar à Vin Le 46",
+    "type": "french_restaurant",
+    "address": "46 Rue de la Balance, 84000 Avignon, France",
+    "rating": 4.7,
+    "reviews": 1081,
+    "freq": "0.4",
+    "phone": "04 90 85 24 83"
+  },
+  {
+    "name": "La Fourchette",
+    "type": "french_restaurant",
+    "address": "17 Rue Racine, 84000 Avignon, France",
+    "rating": 4.6,
+    "reviews": 775,
+    "freq": "0.8",
+    "phone": "04 90 85 20 93"
+  },
+  {
+    "name": "Domaine de la petite Isle - Luberon",
+    "type": "hotel",
+    "address": "871 Rte d'Apt RN 100, 84800 L'Isle-sur-la-Sorgue, France",
+    "rating": 3.9,
+    "reviews": 1142,
+    "freq": "1.4",
+    "phone": "04 13 91 00 50"
+  },
+  {
+    "name": "Hôtel Le Bristol Avignon",
+    "type": "hotel",
+    "address": "44 Cr Jean Jaurès, 84000 Avignon, France",
+    "rating": 3.9,
+    "reviews": 856,
+    "freq": "1.5",
+    "phone": "04 90 16 48 48"
+  },
+  {
+    "name": "IBIS BUDGET",
+    "type": "hotel",
+    "address": "175 Av. du Pont, 84300 Cavaillon, France",
+    "rating": 3.8,
+    "reviews": 808,
+    "freq": "2.0",
+    "phone": "0 892 68 07 91"
+  },
+  {
+    "name": "Restaurant Le Lagon",
+    "type": "mediterranean_restaurant",
+    "address": "Plage du Mourillon, 83000 Toulon, France",
+    "rating": 4.3,
+    "reviews": 1064,
+    "freq": "1.0",
+    "phone": "06 25 47 81 19"
+  },
+  {
+    "name": "La Nautique",
+    "type": "mediterranean_restaurant",
+    "address": "pavillon Flottant de la SNM, 20 Quai de Rive Neuve, 13007 Marseille, France",
+    "rating": 4.2,
+    "reviews": 898,
+    "freq": "0.2",
+    "phone": "04 91 33 01 78"
+  }
+]

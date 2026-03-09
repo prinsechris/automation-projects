@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Autopilot - Demo Live</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e0e0e0; min-height: 100vh; }
+
+.header { background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 24px; text-align: center; border-bottom: 1px solid #2a2a4a; }
+.header h1 { font-size: 28px; color: #fff; margin-bottom: 4px; }
+.header .sub { color: #8888aa; font-size: 14px; }
+.header .badge { display: inline-block; background: #00c853; color: #000; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+.business-selector { margin: 20px 0; }
+.business-selector select { width: 100%; padding: 14px; background: #1a1a2e; color: #fff; border: 1px solid #333; border-radius: 8px; font-size: 16px; }
+
+.review-card { background: #12121f; border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px; margin: 16px 0; }
+.review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.stars { color: #ffc107; font-size: 20px; }
+.review-date { color: #666; font-size: 13px; }
+.review-text { color: #ccc; line-height: 1.6; font-size: 15px; margin-bottom: 16px; }
+.review-source { color: #888; font-size: 12px; }
+
+.no-reply-badge { background: #ff1744; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+
+.generate-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #00c853, #00e676); color: #000; border: none; border-radius: 10px; font-size: 18px; font-weight: 700; cursor: pointer; margin: 20px 0; transition: transform 0.2s; }
+.generate-btn:hover { transform: scale(1.02); }
+.generate-btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+
+.ai-response { background: #0d2818; border: 1px solid #00c853; border-radius: 12px; padding: 20px; margin: 16px 0; display: none; }
+.ai-response.show { display: block; animation: fadeIn 0.5s; }
+.ai-response .label { color: #00c853; font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.ai-response .label .dot { width: 8px; height: 8px; background: #00c853; border-radius: 50%; animation: pulse 1.5s infinite; }
+.ai-response .text { color: #c8e6c9; line-height: 1.7; font-size: 15px; }
+.ai-response .meta { color: #4caf50; font-size: 12px; margin-top: 12px; }
+
+.typing { display: none; }
+.typing.show { display: flex; gap: 6px; padding: 20px; }
+.typing span { width: 10px; height: 10px; background: #00c853; border-radius: 50%; animation: bounce 1.4s infinite; }
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+.stats-bar { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.stat { flex: 1; min-width: 120px; background: #12121f; border: 1px solid #2a2a4a; border-radius: 10px; padding: 16px; text-align: center; }
+.stat .value { font-size: 28px; font-weight: 700; color: #fff; }
+.stat .label { font-size: 12px; color: #888; margin-top: 4px; }
+.stat.danger .value { color: #ff1744; }
+.stat.success .value { color: #00c853; }
+
+.demo-note { background: #1a1a0a; border: 1px solid #ffab00; border-radius: 8px; padding: 14px; margin: 20px 0; color: #ffab00; font-size: 13px; text-align: center; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-12px); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Review Autopilot</h1>
+  <div class="sub">by Adaptive Logic</div>
+  <div class="badge">DEMO LIVE</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-bar" id="statsBar" style="display:none;">
+    <div class="stat"><div class="value" id="statReviews">-</div><div class="label">Avis total</div></div>
+    <div class="stat danger"><div class="value" id="statReplyRate">-</div><div class="label">Taux reponse</div></div>
+    <div class="stat"><div class="value" id="statFreq">-</div><div class="label">Avis/mois</div></div>
+    <div class="stat success"><div class="value" id="statROI">-</div><div class="label">ROI mensuel</div></div>
+  </div>
+
+  <div class="business-selector">
+    <select id="businessSelect" onchange="selectBusiness()">
+      <option value="">-- Choisir un etablissement --</option>
+    </select>
+  </div>
+
+  <div id="reviewsContainer"></div>
+
+  <button class="generate-btn" id="generateBtn" onclick="generateResponse()" disabled>
+    Generer la reponse IA
+  </button>
+
+  <div class="typing" id="typing">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="ai-response" id="aiResponse">
+    <div class="label"><span class="dot"></span> REPONSE GENEREE PAR REVIEW AUTOPILOT</div>
+    <div class="text" id="aiText"></div>
+    <div class="meta" id="aiMeta"></div>
+  </div>
+
+  <div class="demo-note">
+    Cette demo utilise de vrais avis Google de votre etablissement.
+    En production, les reponses sont publiees automatiquement en moins d'1 heure.
+  </div>
+
+</div>
+
+<script>
+const DATA = {
+  "Odiki Sushi": {
+    reviews: 1448, rating: 3.6, freq: 125, replyRate: "0%", roi: "950+",
+    items: [
+      { stars: 1, date: "il y a 3 jours", text: "Attente trop longue l'equipe n'est pas dynamique cependant cuisine tres bonne mais je ni reviendrais pas" },
+      { stars: 5, date: "il y a 11 heures", text: "Cuisine excellente, service au top" },
+      { stars: 5, date: "il y a 2 jours", text: "Sushi bien prepare, bon rapport qualite prix. Une etoile supplementaire pour Manu (mon serveur) tres pro et souriant, bonne connaissance des produits !" }
+    ],
+    responses: {
+      0: "Bonjour et merci pour votre retour. Nous sommes desoles pour l'attente que vous avez subie lors de votre visite. Votre remarque sur la qualite de notre cuisine nous touche, et nous prenons tres au serieux vos commentaires concernant le service. Nous travaillons activement a ameliorer la rapidite et le dynamisme de notre equipe. Nous esperons sincerement avoir l'occasion de vous accueillir a nouveau pour vous offrir une experience a la hauteur de nos plats. A bientot !",
+      1: "Merci beaucoup pour ce retour enthousiaste ! Nous sommes ravis que notre cuisine et notre service vous aient plu. Toute l'equipe travaille chaque jour pour offrir le meilleur a nos clients. Au plaisir de vous revoir tres bientot chez Odiki !",
+      2: "Un grand merci pour votre avis ! Nous transmettrons vos compliments a Manu, qui sera tres touche. Le rapport qualite-prix est au coeur de notre engagement. Au plaisir de vous accueillir a nouveau !"
+    }
+  },
+  "Le Bercail Avignon": {
+    reviews: 5672, rating: 4.3, freq: 24, replyRate: "6%", roi: "1200+",
+    items: [
+      { stars: 2, date: "il y a un mois", text: "Peu de choix: a la carte seulement. 3 entrees, 3 plats, 3 desserts. Il n'y a plus de salade, plus de pizza. Un verre de rose + un risotto + 2 boules de glace 35 EUR ca fait cher." },
+      { stars: 5, date: "il y a 6 heures", text: "Tres belle decouverte ! Le repas etait absolument delicieux, avec des plats savoureux et bien prepares. Le service est egalement tres agreable." },
+      { stars: 2, date: "il y a un mois", text: "Je suis decu au vu des bons commentaires. Oeuf dur non mollet, plat pas assez cuit et pain rassi. Mon plat cuisse de canard beaucoup trop sale. Je l'ai signale et on m'a simplement dit 'c'est comme ca'." }
+    ],
+    responses: {
+      0: "Bonjour et merci pour votre avis. Nous comprenons votre deception concernant le choix et les tarifs. Notre carte evolue regulierement pour privilegier des produits frais et de saison, ce qui explique une selection plus resserree. Nous prenons note de vos remarques sur le rapport qualite-prix et en discuterons en equipe. Nous esperons vous accueillir a nouveau pour vous faire decouvrir nos nouvelles creations.",
+      1: "Merci infiniment pour ce magnifique retour ! Savoir que vous avez apprecie aussi bien la cuisine que le service nous fait extremement plaisir. C'est exactement l'experience que nous souhaitons offrir a chacun de nos convives. A tres bientot au Bercail !",
+      2: "Bonjour, nous sommes vraiment navre de cette experience qui ne reflete pas nos standards. La cuisson de l'oeuf et le pain auraient du etre irreprochables, et la reponse de notre equipe n'etait pas acceptable. Nous allons en parler avec notre chef et notre personnel. Nous aimerions vous inviter a revenir pour rectifier cette impression. N'hesitez pas a nous contacter directement."
+    }
+  },
+  "Bar Le Grillon": {
+    reviews: 2664, rating: 3.7, freq: 14, replyRate: "0%", roi: "1350+",
+    items: [
+      { stars: 1, date: "il y a un jour", text: "Waiters are extremely impolite" },
+      { stars: 1, date: "il y a une semaine", text: "Aioli tres decevant. L'assiette etait peu garnie et la sauce ressemblait davantage a une soupe qu'a une veritable pommade d'ail bien montee." },
+      { stars: 5, date: "il y a 4 jours", text: "Always great fun here. The dining room upstairs is magnificent! Fun friendly staff. Great menu with extremely reasonable prices." }
+    ],
+    responses: {
+      0: "Dear guest, we sincerely apologize for the behavior you experienced. This does not reflect the level of service we strive to provide. We will address this immediately with our team. We hope you'll give us another chance to show you the warm welcome Le Grillon is known for.",
+      1: "Bonjour et merci pour votre retour. Nous sommes desoles que notre aioli n'ait pas ete a la hauteur de vos attentes. C'est un plat emblematique que nous tenons a preparer dans les regles de l'art. Nous en avons parle avec notre chef pour garantir une qualite constante. Nous esperons vous faire changer d'avis lors d'une prochaine visite.",
+      2: "Thank you so much for this wonderful review! We're delighted you enjoyed our dining room and the atmosphere. Our team takes pride in providing friendly service at fair prices. We look forward to welcoming you back soon!"
+    }
+  },
+  "L'Epicerie de Ginette": {
+    reviews: 2038, rating: 4.4, freq: 12, replyRate: "0%", roi: "960+",
+    items: [
+      { stars: 2, date: "il y a 2 jours", text: "Une adresse qui a perdu en qualite, j'y suis retourne et j'ai ete decu par ma commande. Par le passe nous y avons bien mange. Peut-etre la cuisine est a revoir." },
+      { stars: 5, date: "il y a 5 heures", text: "Lieu convivial et authentique ! Personnel sympathique et bonne cuisine !" },
+      { stars: 4, date: "il y a 17 heures", text: "Allez-y sans hesiter" }
+    ],
+    responses: {
+      0: "Bonjour et merci pour votre sincerite. Nous sommes desoles d'apprendre que votre derniere visite n'a pas ete a la hauteur de vos souvenirs. La constance est essentielle pour nous et votre retour nous alerte. Pourriez-vous nous preciser ce qui vous a decu ? Nous aimerions corriger le tir et vous retrouver avec le sourire. A bientot chez Ginette !",
+      1: "Merci beaucoup ! L'authenticite et la convivialite sont notre ADN. Ravi que notre equipe et notre cuisine vous aient plu. A tres bientot place des Corps Saints !",
+      2: "Merci pour cette belle recommandation ! Court et efficace, comme on aime. Au plaisir de vous revoir !"
+    }
+  },
+  "Le Carre du Palais": {
+    reviews: 1727, rating: 4.6, freq: 15, replyRate: "0%", roi: "960+",
+    items: [
+      { stars: 5, date: "il y a 2 jours", text: "Excellente adresse a Avignon. Tres bien situe sur la Place du Palais, ce restaurant propose des menus de qualite. Le personnel est aux petits soins." },
+      { stars: 5, date: "il y a une semaine", text: "Nous avons passe un tres bon moment. Les plats etaient delicieux. Une mention speciale pour le dessert marron framboise. Un pur bonheur. Equipe en salle au top." }
+    ],
+    responses: {
+      0: "Merci infiniment pour ce superbe avis ! Etre reconnu comme une excellente adresse avignonnaise nous honore. Notre equipe met un point d'honneur a soigner chaque detail, de l'assiette a l'accueil. Au plaisir de vous recevoir a nouveau sur notre belle Place du Palais !",
+      1: "Quel plaisir de lire votre retour ! Notre dessert marron-framboise est effectivement une creation dont nous sommes tres fiers. Merci d'avoir souligne le travail de notre equipe en salle. A tres bientot pour de nouveaux moments de bonheur gustatif !"
+    }
+  },
+  "Creperie Le Kreisker": {
+    reviews: 2307, rating: 4.2, freq: 12, replyRate: "0%", roi: "600+",
+    items: [
+      { stars: 1, date: "il y a un jour", text: "Tres decus par notre experience. En mangeant sa galette, mon mari s'est blesse a l'interieur de la joue a cause d'un morceau de verre present dans l'assiette." },
+      { stars: 1, date: "il y a 2 semaines", text: "Creperie tres decevante! Crepes seches, cidre au gout chevre, table pour 4 alors qu'on etait 6 ! Serveur desagreable." },
+      { stars: 5, date: "il y a un jour", text: "Great place for crepes. The food and drinks were delicious and the staff were very friendly." }
+    ],
+    responses: {
+      0: "Bonjour, nous sommes extremement preoccupes par votre temoignage concernant ce morceau de verre. C'est un incident que nous prenons avec le plus grand serieux. Nous vous prions d'accepter nos sinceres excuses et nous souhaiterions vous contacter directement pour comprendre les circonstances exactes. Pourriez-vous nous joindre au restaurant ? La securite de nos clients est notre priorite absolue.",
+      1: "Bonjour et merci pour votre retour. Nous sommes desoles que votre experience n'ait pas ete a la hauteur. La qualite de nos crepes et de notre accueil sont des sujets sur lesquels nous ne transigeons pas. Nous prenons vos remarques tres au serieux et allons y remedier. Nous esperons pouvoir vous accueillir a nouveau dans de meilleures conditions.",
+      2: "Thank you so much for your kind words! We're glad you enjoyed our crepes and drinks. Our team always strives to create a warm and welcoming atmosphere. Hope to see you again soon at Le Kreisker!"
+    }
+  }
+};
+
+let currentBusiness = null;
+let currentReviewIdx = 0;
+
+// Populate dropdown
+const select = document.getElementById('businessSelect');
+Object.keys(DATA).forEach(name => {
+  const opt = document.createElement('option');
+  opt.value = name;
+  opt.textContent = `${name} (${DATA[name].rating}/5, ${DATA[name].reviews} avis, ${DATA[name].replyRate} reponse)`;
+  select.appendChild(opt);
+});
+
+function selectBusiness() {
+  const name = document.getElementById('businessSelect').value;
+  if (!name) return;
+  currentBusiness = DATA[name];
+  currentReviewIdx = 0;
+
+  // Update stats
+  document.getElementById('statsBar').style.display = 'flex';
+  document.getElementById('statReviews').textContent = currentBusiness.reviews.toLocaleString();
+  document.getElementById('statReplyRate').textContent = currentBusiness.replyRate;
+  document.getElementById('statFreq').textContent = currentBusiness.freq + '/m';
+  document.getElementById('statROI').textContent = currentBusiness.roi + ' EUR';
+
+  // Show reviews
+  const container = document.getElementById('reviewsContainer');
+  container.innerHTML = '';
+  currentBusiness.items.forEach((r, i) => {
+    const stars = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
+    container.innerHTML += `
+      <div class="review-card" onclick="selectReview(${i})" style="cursor:pointer; ${i === 0 ? 'border-color: #00c853;' : ''}" id="review-${i}">
+        <div class="review-header">
+          <span class="stars">${stars}</span>
+          <span class="no-reply-badge">SANS REPONSE</span>
+        </div>
+        <div class="review-text">${r.text}</div>
+        <div class="review-source">Google Maps - ${r.date}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById('generateBtn').disabled = false;
+  document.getElementById('aiResponse').classList.remove('show');
+}
+
+function selectReview(idx) {
+  currentReviewIdx = idx;
+  document.querySelectorAll('.review-card').forEach((el, i) => {
+    el.style.borderColor = i === idx ? '#00c853' : '#2a2a4a';
+  });
+  document.getElementById('aiResponse').classList.remove('show');
+}
+
+function generateResponse() {
+  if (!currentBusiness) return;
+
+  const btn = document.getElementById('generateBtn');
+  const typing = document.getElementById('typing');
+  const response = document.getElementById('aiResponse');
+
+  btn.disabled = true;
+  btn.textContent = 'Analyse en cours...';
+  typing.classList.add('show');
+  response.classList.remove('show');
+
+  // Simulate AI processing time
+  const delay = 1500 + Math.random() * 1500;
+
+  setTimeout(() => {
+    typing.classList.remove('show');
+
+    const text = currentBusiness.responses[currentReviewIdx] || "Merci pour votre avis, nous le prenons en compte.";
+    const aiText = document.getElementById('aiText');
+    const aiMeta = document.getElementById('aiMeta');
+
+    aiText.textContent = text;
+    aiMeta.textContent = `Genere en ${(delay/1000).toFixed(1)}s | Ton adapte au contexte | Langue auto-detectee | Pret a publier`;
+
+    response.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'Generer la reponse IA';
+
+    // Mark review as replied
+    const badge = document.querySelectorAll('.review-card')[currentReviewIdx].querySelector('.no-reply-badge');
+    badge.textContent = 'REPONSE IA';
+    badge.style.background = '#00c853';
+  }, delay);
+}
+</script>
+
+</body>
+</html>

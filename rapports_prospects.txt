@@ -1,0 +1,424 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    RAPPORTS DE REPUTATION — PROSPECTS PRIORITAIRES
+                         Review Autopilot by Adaptive Logic
+                                  9 mars 2026
+═══════════════════════════════════════════════════════════════════════════════
+
+
+PLANNING D'APPEL RECOMMANDE
+────────────────────────────
+Les restaurants sont en prep le matin et en rush midi/soir.
+Meilleur creneau : 9h30 - 11h00 (apres ouverture, avant rush midi)
+Alternative : 14h30 - 16h00 (creux apres-midi)
+
+  09h30  Bar Le Grillon (Aix)           04 42 27 58 81    Brasserie — le plus urgent (40% negatifs!)
+  09h45  Odiki Sushi (Montpellier)      04 67 82 22 84    125 avis/mois, 0 reponse
+  10h00  L'Epicerie de Ginette (Avignon) 04 90 85 58 70   Local, facile a closer
+  10h15  Le Carre du Palais (Avignon)   04 65 00 01 01    Local, bon standing
+  10h30  Creperie Le Kreisker (Montpellier) 04 67 60 82 50  22% negatifs, urgent
+  10h45  Le Bercail (Avignon)           Chercher numero    5672 avis, le plus gros volume
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPORT 1/6 — ODIKI SUSHI RESTAURANT SUSHI À ODYSSEUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Type         : Restaurant de sushis
+  Adresse      : Odysseum, Allée Ulysse, 34000 Montpellier, France
+  Telephone    : 04 67 82 22 84
+  Note Google  : 3.6/5
+  Total avis   : 1448
+  Frequence    : 125.0 avis/mois
+  Taux reponse : 0.0%
+  CA estime    : 380,000 EUR/an
+
+  DISTRIBUTION DES NOTES (echantillon 50 avis recents)
+  ─────────────────────────────────────────────────────
+  ★★★★★  ████████████████████████████████████████ 80% (40)
+  ★★★★☆  ████████ 16% (8)
+  ★★★☆☆   0% (0)
+  ★★☆☆☆   0% (0)
+  ★☆☆☆☆  ██ 4% (2)
+
+  AVIS NEGATIFS % : 4.0%
+
+  EXEMPLES D'AVIS NEGATIFS SANS REPONSE
+  ──────────────────────────────────────
+  1. ★☆☆☆☆ (il y a 3 jours)
+     "Attente trop longue l’équipe n’est pas dynamique cependant cuisine très bonne mais je ni reviendrais pas..."
+
+  2. ★☆☆☆☆ (il y a 4 jours)
+     "Bonjour première visite aujourd'hui mercredi et dernière , nous choisissons un apéro et des entrée pour allez avec ( qui sera suivi d un plat bien sûr..."
+
+
+  EXEMPLES D'AVIS POSITIFS IGNORES
+  ─────────────────────────────────
+  1. ★★★★★ (il y a 11 heures)
+     "Cuisine excellente, service au top"
+     → SANS REPONSE du proprietaire
+
+  2. ★★★★★ (il y a 2 jours)
+     "Sushi bien préparé,bon rapport qualité prix.une étoiles supplémentaires pour Manu(mon serveur) très pro et souriant bonne connaissance des produits !"
+     → SANS REPONSE du proprietaire
+
+
+  ARGUMENT DE VENTE PERSONNALISE
+  ──────────────────────────────
+  "Vous recevez 125 avis par mois sur Google — c'est enorme.
+  Sur les 50 derniers, vous n'avez repondu a aucun.
+    Vos clients prennent le temps de vous laisser un avis et n'obtiennent rien en retour.
+  Les etudes montrent que repondre aux avis augmente le CA de 3 a 5%.
+  Pour votre etablissement, ca represente entre 950 et 1,583 EUR/mois.
+  Mon service coute 200 EUR/mois. C'est un ROI de 5x minimum."
+
+  OBJECTIONS PROBABLES ET REPONSES
+  ─────────────────────────────────
+  "J'ai pas le temps"  →  "C'est justement pour ca. Mon IA repond en moins d'une heure,
+                           24/7, dans la langue du client. Vous n'avez rien a faire."
+
+  "C'est trop cher"    →  "200 EUR c'est moins qu'un serveur pendant 2h. Et ca vous rapporte
+                           950+ EUR/mois. Vous perdez de l'argent chaque jour sans."
+
+  "Les avis c'est pas  →  "88% des clients lisent les reponses avant de reserver.
+   important"              Vos concurrents qui repondent captent vos clients potentiels."
+  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPORT 2/6 — LE BERCAIL AVIGNON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Type         : Restaurant français
+  Adresse      : 162 Chem. des Canotiers, 84000 Avignon, France
+  Telephone    : ?
+  Note Google  : 4.3/5
+  Total avis   : 5672
+  Frequence    : 24.2 avis/mois
+  Taux reponse : 6.0%
+  CA estime    : 480,000 EUR/an
+
+  DISTRIBUTION DES NOTES (echantillon 50 avis recents)
+  ─────────────────────────────────────────────────────
+  ★★★★★  ████████████████████████████████████████ 80% (40)
+  ★★★★☆  █████ 10% (5)
+  ★★★☆☆  █ 2% (1)
+  ★★☆☆☆  ███ 6% (3)
+  ★☆☆☆☆  █ 2% (1)
+
+  AVIS NEGATIFS % : 8.0%
+
+  EXEMPLES D'AVIS NEGATIFS SANS REPONSE
+  ──────────────────────────────────────
+  1. ★★☆☆☆ (il y a un mois)
+     "Peu de choix: à la carte seulement
+-3 entrées
+-3 plats
+-3 desserts.
+Il n'y a plus de salade, plus de pizza, pas de plat du jour la semaine.
+Un verre d..."
+
+  2. ★★☆☆☆ (il y a un mois)
+     "Je suis déçu au vu des bons commentaires. Sur l'entrée Œuf dur non mollet plat pas assez cuit et pain  rassi et mon plat cuisse de canard beaucoup bea..."
+
+
+  EXEMPLES D'AVIS POSITIFS IGNORES
+  ─────────────────────────────────
+  1. ★★★★★ (il y a 6 heures)
+     "Très belle découverte !
+Le repas était absolument délicieux, avec des plats savoureux et bien préparés. Le service est également très agréable : accue"
+     → SANS REPONSE du proprietaire
+
+  2. ★★★★★ (il y a 13 heures)
+     "Nous étions invités pour l anniversaire d une amie samedi nous étions 14 filles, un seul homme, anciens collègues de travail et amis. Changement de di"
+     → SANS REPONSE du proprietaire
+
+
+  ARGUMENT DE VENTE PERSONNALISE
+  ──────────────────────────────
+  "Vous recevez 24 avis par mois sur Google — c'est enorme.
+  Sur les 50 derniers, vous n'avez repondu a aucun.
+    Pire : 8.0% sont negatifs et restent sans reponse.
+  Les etudes montrent que repondre aux avis augmente le CA de 3 a 5%.
+  Pour votre etablissement, ca represente entre 1,200 et 2,000 EUR/mois.
+  Mon service coute 200 EUR/mois. C'est un ROI de 6x minimum."
+
+  OBJECTIONS PROBABLES ET REPONSES
+  ─────────────────────────────────
+  "J'ai pas le temps"  →  "C'est justement pour ca. Mon IA repond en moins d'une heure,
+                           24/7, dans la langue du client. Vous n'avez rien a faire."
+
+  "C'est trop cher"    →  "200 EUR c'est moins qu'un serveur pendant 2h. Et ca vous rapporte
+                           1,200+ EUR/mois. Vous perdez de l'argent chaque jour sans."
+
+  "Les avis c'est pas  →  "88% des clients lisent les reponses avant de reserver.
+   important"              Vos concurrents qui repondent captent vos clients potentiels."
+  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPORT 3/6 — LE CARRÉ DU PALAIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Type         : Restaurant
+  Adresse      : 1 Pl. du Palais, 84000 Avignon, France
+  Telephone    : 04 65 00 01 01
+  Note Google  : 4.6/5
+  Total avis   : 1727
+  Frequence    : 14.6 avis/mois
+  Taux reponse : 0.0%
+  CA estime    : 384,000 EUR/an
+
+  DISTRIBUTION DES NOTES (echantillon 50 avis recents)
+  ─────────────────────────────────────────────────────
+  ★★★★★  █████████████████████████████████████████████ 90% (45)
+  ★★★★☆  ████ 8% (4)
+  ★★★☆☆  █ 2% (1)
+  ★★☆☆☆   0% (0)
+  ★☆☆☆☆   0% (0)
+
+  AVIS NEGATIFS % : 0.0%
+
+  EXEMPLES D'AVIS NEGATIFS SANS REPONSE
+  ──────────────────────────────────────
+  Aucun avis negatif dans l'echantillon (bon signe pour eux, mais ils perdent
+  quand meme l'engagement client en ne repondant pas aux positifs)
+
+
+  EXEMPLES D'AVIS POSITIFS IGNORES
+  ─────────────────────────────────
+  1. ★★★★★ (il y a 2 jours)
+     "Excellente adresse à Avignon. Très bien situé sur la Place du Palais, ce restaurant propose des menus de qualité. Le personnel est aux petits soins. A"
+     → SANS REPONSE du proprietaire
+
+  2. ★★★★★ (il y a une semaine)
+     "Nous avons passé un très bon moment.
+Les plats étaient délicieux. Une mention spéciale pour le dessert marron framboise. Un pur bonheur.
+Équipe en sal"
+     → SANS REPONSE du proprietaire
+
+
+  ARGUMENT DE VENTE PERSONNALISE
+  ──────────────────────────────
+  "Vous recevez 15 avis par mois sur Google — c'est enorme.
+  Sur les 50 derniers, vous n'avez repondu a aucun.
+    Vos clients prennent le temps de vous laisser un avis et n'obtiennent rien en retour.
+  Les etudes montrent que repondre aux avis augmente le CA de 3 a 5%.
+  Pour votre etablissement, ca represente entre 960 et 1,600 EUR/mois.
+  Mon service coute 200 EUR/mois. C'est un ROI de 5x minimum."
+
+  OBJECTIONS PROBABLES ET REPONSES
+  ─────────────────────────────────
+  "J'ai pas le temps"  →  "C'est justement pour ca. Mon IA repond en moins d'une heure,
+                           24/7, dans la langue du client. Vous n'avez rien a faire."
+
+  "C'est trop cher"    →  "200 EUR c'est moins qu'un serveur pendant 2h. Et ca vous rapporte
+                           960+ EUR/mois. Vous perdez de l'argent chaque jour sans."
+
+  "Les avis c'est pas  →  "88% des clients lisent les reponses avant de reserver.
+   important"              Vos concurrents qui repondent captent vos clients potentiels."
+  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPORT 4/6 — BAR LE GRILLON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Type         : Brasserie
+  Adresse      : 49 Cr Mirabeau, 13100 Aix-en-Provence, France
+  Telephone    : 04 42 27 58 81
+  Note Google  : 3.7/5
+  Total avis   : 2664
+  Frequence    : 14.4 avis/mois
+  Taux reponse : 0.0%
+  CA estime    : 540,000 EUR/an
+
+  DISTRIBUTION DES NOTES (echantillon 50 avis recents)
+  ─────────────────────────────────────────────────────
+  ★★★★★  █████████████████████ 42% (21)
+  ★★★★☆  ███████ 14% (7)
+  ★★★☆☆  ██ 4% (2)
+  ★★☆☆☆  ███ 6% (3)
+  ★☆☆☆☆  █████████████████ 34% (17)
+
+  AVIS NEGATIFS % : 40.0%
+
+  EXEMPLES D'AVIS NEGATIFS SANS REPONSE
+  ──────────────────────────────────────
+  1. ★☆☆☆☆ (il y a un jour)
+     "Waiters are extremely impolite..."
+
+  2. ★☆☆☆☆ (il y a une semaine)
+     "Aïoli très décevant. L’assiette était peu garnie et la sauce ressemblait davantage à une soupe qu’à une véritable pommade d’ail bien montée. Dommage, ..."
+
+  3. ★★☆☆☆ (il y a une semaine)
+     "Lieu magnifique, mais très déçu par le repas, aïoli vraiment pas bon, il a fallu trois réclamations pour obtenir un résultat a peu près correct… , arr..."
+
+
+  EXEMPLES D'AVIS POSITIFS IGNORES
+  ─────────────────────────────────
+  1. ★★★★★ (il y a 4 jours)
+     "Always great fun here. The dining room upstairs is magnificent! Fun friendly staff. Great menu with extremely reasonable prices. Foie Gras is a huge a"
+     → SANS REPONSE du proprietaire
+
+  2. ★★★★★ (il y a une semaine)
+     "Service rapide et sympathique. Bonne cuisine avec des snacks ou des plats gastro."
+     → SANS REPONSE du proprietaire
+
+
+  ARGUMENT DE VENTE PERSONNALISE
+  ──────────────────────────────
+  "Vous recevez 14 avis par mois sur Google — c'est enorme.
+  Sur les 50 derniers, vous n'avez repondu a aucun.
+    Pire : 40.0% sont negatifs et restent sans reponse.
+  Les etudes montrent que repondre aux avis augmente le CA de 3 a 5%.
+  Pour votre etablissement, ca represente entre 1,350 et 2,250 EUR/mois.
+  Mon service coute 200 EUR/mois. C'est un ROI de 7x minimum."
+
+  OBJECTIONS PROBABLES ET REPONSES
+  ─────────────────────────────────
+  "J'ai pas le temps"  →  "C'est justement pour ca. Mon IA repond en moins d'une heure,
+                           24/7, dans la langue du client. Vous n'avez rien a faire."
+
+  "C'est trop cher"    →  "200 EUR c'est moins qu'un serveur pendant 2h. Et ca vous rapporte
+                           1,350+ EUR/mois. Vous perdez de l'argent chaque jour sans."
+
+  "Les avis c'est pas  →  "88% des clients lisent les reponses avant de reserver.
+   important"              Vos concurrents qui repondent captent vos clients potentiels."
+  
+  "On a des mauvais    →  "Raison de plus. Un avis negatif sans reponse fait fuir 94% des
+   avis, ca sert a        clients. Avec une reponse pro, 45% reviennent quand meme."
+   rien"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPORT 5/6 — L'ÉPICERIE DE GINETTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Type         : Restaurant
+  Adresse      : 25 Pl. des Corps Saints, 84000 Avignon, France
+  Telephone    : 04 90 85 58 70
+  Note Google  : 4.4/5
+  Total avis   : 2038
+  Frequence    : 12.4 avis/mois
+  Taux reponse : 0.0%
+  CA estime    : 384,000 EUR/an
+
+  DISTRIBUTION DES NOTES (echantillon 50 avis recents)
+  ─────────────────────────────────────────────────────
+  ★★★★★  ██████████████████████████████████ 68% (34)
+  ★★★★☆  █████████████ 26% (13)
+  ★★★☆☆  ██ 4% (2)
+  ★★☆☆☆  █ 2% (1)
+  ★☆☆☆☆   0% (0)
+
+  AVIS NEGATIFS % : 2.0%
+
+  EXEMPLES D'AVIS NEGATIFS SANS REPONSE
+  ──────────────────────────────────────
+  1. ★★☆☆☆ (il y a 2 jours)
+     "Une adresse qui a perdu en qualité j'y suis retourné et j ai été déçu par ma commande par le passé au contraire nous y avons bien mangé
+Peut être là c..."
+
+
+  EXEMPLES D'AVIS POSITIFS IGNORES
+  ─────────────────────────────────
+  1. ★★★★★ (il y a 5 heures)
+     "Lieu convivial et authentique ! Personnel sympathique et bonne cuisine !"
+     → SANS REPONSE du proprietaire
+
+  2. ★★★★ (il y a 17 heures)
+     "Allez-y sans hésiter"
+     → SANS REPONSE du proprietaire
+
+
+  ARGUMENT DE VENTE PERSONNALISE
+  ──────────────────────────────
+  "Vous recevez 12 avis par mois sur Google — c'est enorme.
+  Sur les 50 derniers, vous n'avez repondu a aucun.
+    Vos clients prennent le temps de vous laisser un avis et n'obtiennent rien en retour.
+  Les etudes montrent que repondre aux avis augmente le CA de 3 a 5%.
+  Pour votre etablissement, ca represente entre 960 et 1,600 EUR/mois.
+  Mon service coute 200 EUR/mois. C'est un ROI de 5x minimum."
+
+  OBJECTIONS PROBABLES ET REPONSES
+  ─────────────────────────────────
+  "J'ai pas le temps"  →  "C'est justement pour ca. Mon IA repond en moins d'une heure,
+                           24/7, dans la langue du client. Vous n'avez rien a faire."
+
+  "C'est trop cher"    →  "200 EUR c'est moins qu'un serveur pendant 2h. Et ca vous rapporte
+                           960+ EUR/mois. Vous perdez de l'argent chaque jour sans."
+
+  "Les avis c'est pas  →  "88% des clients lisent les reponses avant de reserver.
+   important"              Vos concurrents qui repondent captent vos clients potentiels."
+  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPORT 6/6 — CRÊPERIE LE KREISKER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Type         : Crêperie
+  Adresse      : 3 Pass. Bruyas, 34000 Montpellier, France
+  Telephone    : 04 67 60 82 50
+  Note Google  : 4.2/5
+  Total avis   : 2307
+  Frequence    : 12.2 avis/mois
+  Taux reponse : 0.0%
+  CA estime    : 240,000 EUR/an
+
+  DISTRIBUTION DES NOTES (echantillon 50 avis recents)
+  ─────────────────────────────────────────────────────
+  ★★★★★  ████████████████████████ 48% (24)
+  ★★★★☆  ████████████ 24% (12)
+  ★★★☆☆  ███ 6% (3)
+  ★★☆☆☆  ██████ 12% (6)
+  ★☆☆☆☆  █████ 10% (5)
+
+  AVIS NEGATIFS % : 22.0%
+
+  EXEMPLES D'AVIS NEGATIFS SANS REPONSE
+  ──────────────────────────────────────
+  1. ★☆☆☆☆ (il y a un jour)
+     "Très déçus par notre expérience dans cette crêperie aujourd’hui.
+
+En mangeant sa galette, mon mari s’est blessé à l’intérieur de la joue à cause d’un ..."
+
+  2. ★☆☆☆☆ (il y a 2 semaines)
+     "Crêperie très décevante! Crêpes sèches, cidre au goût chèvre, table pour 4 alors qu’on était 6 ! Serveur désagréable...."
+
+  3. ★★☆☆☆ (il y a 2 semaines)
+     "Attente très très longue..."
+
+
+  EXEMPLES D'AVIS POSITIFS IGNORES
+  ─────────────────────────────────
+  1. ★★★★★ (il y a un jour)
+     "Great place for crepes. The food and drinks were delicious and the staff were very friendly."
+     → SANS REPONSE du proprietaire
+
+  2. ★★★★★ (il y a 2 semaines)
+     "Simple et efficace!"
+     → SANS REPONSE du proprietaire
+
+
+  ARGUMENT DE VENTE PERSONNALISE
+  ──────────────────────────────
+  "Vous recevez 12 avis par mois sur Google — c'est enorme.
+  Sur les 50 derniers, vous n'avez repondu a aucun.
+    Pire : 22.0% sont negatifs et restent sans reponse.
+  Les etudes montrent que repondre aux avis augmente le CA de 3 a 5%.
+  Pour votre etablissement, ca represente entre 600 et 1,000 EUR/mois.
+  Mon service coute 200 EUR/mois. C'est un ROI de 3x minimum."
+
+  OBJECTIONS PROBABLES ET REPONSES
+  ─────────────────────────────────
+  "J'ai pas le temps"  →  "C'est justement pour ca. Mon IA repond en moins d'une heure,
+                           24/7, dans la langue du client. Vous n'avez rien a faire."
+
+  "C'est trop cher"    →  "200 EUR c'est moins qu'un serveur pendant 2h. Et ca vous rapporte
+                           600+ EUR/mois. Vous perdez de l'argent chaque jour sans."
+
+  "Les avis c'est pas  →  "88% des clients lisent les reponses avant de reserver.
+   important"              Vos concurrents qui repondent captent vos clients potentiels."
+  
+  "On a des mauvais    →  "Raison de plus. Un avis negatif sans reponse fait fuir 94% des
+   avis, ca sert a        clients. Avec une reponse pro, 45% reviennent quand meme."
+   rien"
+

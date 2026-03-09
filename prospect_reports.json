@@ -1,0 +1,266 @@
+[
+  {
+    "name": "Odiki Sushi restaurant sushi à Odysseum",
+    "category": "Restaurant de sushis",
+    "address": "Odysseum, Allée Ulysse, 34000 Montpellier, France",
+    "phone": "04 67 82 22 84",
+    "rating": 3.6,
+    "total_reviews": 1448,
+    "freq_per_month": 125.0,
+    "reply_rate": 0.0,
+    "star_distribution": {
+      "1": 2,
+      "2": 0,
+      "3": 0,
+      "4": 8,
+      "5": 40
+    },
+    "negative_pct": 4.0,
+    "ca_estime": 380000,
+    "roi_min": 950,
+    "roi_max": 1583,
+    "negative_examples": [
+      {
+        "stars": 1,
+        "text": "Attente trop longue l’équipe n’est pas dynamique cependant cuisine très bonne mais je ni reviendrais pas",
+        "date": "il y a 3 jours"
+      },
+      {
+        "stars": 1,
+        "text": "Bonjour première visite aujourd'hui mercredi et dernière , nous choisissons un apéro et des entrée pour allez avec ( qui sera suivi d un plat bien sûr ) après une très longue attente arrive tout d un ",
+        "date": "il y a 4 jours"
+      }
+    ],
+    "positive_no_reply": [
+      {
+        "stars": 5,
+        "text": "Cuisine excellente, service au top",
+        "date": "il y a 11 heures"
+      },
+      {
+        "stars": 5,
+        "text": "Sushi bien préparé,bon rapport qualité prix.une étoiles supplémentaires pour Manu(mon serveur) très pro et souriant bonne connaissance des produits !",
+        "date": "il y a 2 jours"
+      }
+    ]
+  },
+  {
+    "name": "Le Bercail Avignon",
+    "category": "Restaurant français",
+    "address": "162 Chem. des Canotiers, 84000 Avignon, France",
+    "phone": "?",
+    "rating": 4.3,
+    "total_reviews": 5672,
+    "freq_per_month": 24.2,
+    "reply_rate": 6.0,
+    "star_distribution": {
+      "1": 1,
+      "2": 3,
+      "3": 1,
+      "4": 5,
+      "5": 40
+    },
+    "negative_pct": 8.0,
+    "ca_estime": 480000,
+    "roi_min": 1200,
+    "roi_max": 2000,
+    "negative_examples": [
+      {
+        "stars": 2,
+        "text": "Peu de choix: à la carte seulement\n-3 entrées\n-3 plats\n-3 desserts.\nIl n'y a plus de salade, plus de pizza, pas de plat du jour la semaine.\nUn verre de rosé + un risotto+ 2 boules de glace 35 € ça fai",
+        "date": "il y a un mois"
+      },
+      {
+        "stars": 2,
+        "text": "Je suis déçu au vu des bons commentaires. Sur l'entrée Œuf dur non mollet plat pas assez cuit et pain  rassi et mon plat cuisse de canard beaucoup beaucoup trop salé. Je l'ai signalé et on m'a simplem",
+        "date": "il y a un mois"
+      }
+    ],
+    "positive_no_reply": [
+      {
+        "stars": 5,
+        "text": "Très belle découverte !\nLe repas était absolument délicieux, avec des plats savoureux et bien préparés. Le service est également très agréable : accue",
+        "date": "il y a 6 heures"
+      },
+      {
+        "stars": 5,
+        "text": "Nous étions invités pour l anniversaire d une amie samedi nous étions 14 filles, un seul homme, anciens collègues de travail et amis. Changement de di",
+        "date": "il y a 13 heures"
+      }
+    ]
+  },
+  {
+    "name": "Le Carré du Palais",
+    "category": "Restaurant",
+    "address": "1 Pl. du Palais, 84000 Avignon, France",
+    "phone": "04 65 00 01 01",
+    "rating": 4.6,
+    "total_reviews": 1727,
+    "freq_per_month": 14.6,
+    "reply_rate": 0.0,
+    "star_distribution": {
+      "1": 0,
+      "2": 0,
+      "3": 1,
+      "4": 4,
+      "5": 45
+    },
+    "negative_pct": 0.0,
+    "ca_estime": 384000,
+    "roi_min": 960,
+    "roi_max": 1600,
+    "negative_examples": [],
+    "positive_no_reply": [
+      {
+        "stars": 5,
+        "text": "Excellente adresse à Avignon. Très bien situé sur la Place du Palais, ce restaurant propose des menus de qualité. Le personnel est aux petits soins. A",
+        "date": "il y a 2 jours"
+      },
+      {
+        "stars": 5,
+        "text": "Nous avons passé un très bon moment.\nLes plats étaient délicieux. Une mention spéciale pour le dessert marron framboise. Un pur bonheur.\nÉquipe en sal",
+        "date": "il y a une semaine"
+      }
+    ]
+  },
+  {
+    "name": "Bar Le Grillon",
+    "category": "Brasserie",
+    "address": "49 Cr Mirabeau, 13100 Aix-en-Provence, France",
+    "phone": "04 42 27 58 81",
+    "rating": 3.7,
+    "total_reviews": 2664,
+    "freq_per_month": 14.4,
+    "reply_rate": 0.0,
+    "star_distribution": {
+      "1": 17,
+      "2": 3,
+      "3": 2,
+      "4": 7,
+      "5": 21
+    },
+    "negative_pct": 40.0,
+    "ca_estime": 540000,
+    "roi_min": 1350,
+    "roi_max": 2250,
+    "negative_examples": [
+      {
+        "stars": 1,
+        "text": "Waiters are extremely impolite",
+        "date": "il y a un jour"
+      },
+      {
+        "stars": 1,
+        "text": "Aïoli très décevant. L’assiette était peu garnie et la sauce ressemblait davantage à une soupe qu’à une véritable pommade d’ail bien montée. Dommage, car on s’attend à un plat généreux et savoureux. E",
+        "date": "il y a une semaine"
+      },
+      {
+        "stars": 2,
+        "text": "Lieu magnifique, mais très déçu par le repas, aïoli vraiment pas bon, il a fallu trois réclamations pour obtenir un résultat a peu près correct… , arrivé en fin de repas , personne ne s’est donné la p",
+        "date": "il y a une semaine"
+      }
+    ],
+    "positive_no_reply": [
+      {
+        "stars": 5,
+        "text": "Always great fun here. The dining room upstairs is magnificent! Fun friendly staff. Great menu with extremely reasonable prices. Foie Gras is a huge a",
+        "date": "il y a 4 jours"
+      },
+      {
+        "stars": 5,
+        "text": "Service rapide et sympathique. Bonne cuisine avec des snacks ou des plats gastro.",
+        "date": "il y a une semaine"
+      }
+    ]
+  },
+  {
+    "name": "L'Épicerie de Ginette",
+    "category": "Restaurant",
+    "address": "25 Pl. des Corps Saints, 84000 Avignon, France",
+    "phone": "04 90 85 58 70",
+    "rating": 4.4,
+    "total_reviews": 2038,
+    "freq_per_month": 12.4,
+    "reply_rate": 0.0,
+    "star_distribution": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 13,
+      "5": 34
+    },
+    "negative_pct": 2.0,
+    "ca_estime": 384000,
+    "roi_min": 960,
+    "roi_max": 1600,
+    "negative_examples": [
+      {
+        "stars": 2,
+        "text": "Une adresse qui a perdu en qualité j'y suis retourné et j ai été déçu par ma commande par le passé au contraire nous y avons bien mangé\nPeut être là cuisine est a revoir",
+        "date": "il y a 2 jours"
+      }
+    ],
+    "positive_no_reply": [
+      {
+        "stars": 5,
+        "text": "Lieu convivial et authentique ! Personnel sympathique et bonne cuisine !",
+        "date": "il y a 5 heures"
+      },
+      {
+        "stars": 4,
+        "text": "Allez-y sans hésiter",
+        "date": "il y a 17 heures"
+      }
+    ]
+  },
+  {
+    "name": "Crêperie Le Kreisker",
+    "category": "Crêperie",
+    "address": "3 Pass. Bruyas, 34000 Montpellier, France",
+    "phone": "04 67 60 82 50",
+    "rating": 4.2,
+    "total_reviews": 2307,
+    "freq_per_month": 12.2,
+    "reply_rate": 0.0,
+    "star_distribution": {
+      "1": 5,
+      "2": 6,
+      "3": 3,
+      "4": 12,
+      "5": 24
+    },
+    "negative_pct": 22.0,
+    "ca_estime": 240000,
+    "roi_min": 600,
+    "roi_max": 1000,
+    "negative_examples": [
+      {
+        "stars": 1,
+        "text": "Très déçus par notre expérience dans cette crêperie aujourd’hui.\n\nEn mangeant sa galette, mon mari s’est blessé à l’intérieur de la joue à cause d’un morceau de verre présent dans l’assiette. Nous l’a",
+        "date": "il y a un jour"
+      },
+      {
+        "stars": 1,
+        "text": "Crêperie très décevante! Crêpes sèches, cidre au goût chèvre, table pour 4 alors qu’on était 6 ! Serveur désagréable.",
+        "date": "il y a 2 semaines"
+      },
+      {
+        "stars": 2,
+        "text": "Attente très très longue",
+        "date": "il y a 2 semaines"
+      }
+    ],
+    "positive_no_reply": [
+      {
+        "stars": 5,
+        "text": "Great place for crepes. The food and drinks were delicious and the staff were very friendly.",
+        "date": "il y a un jour"
+      },
+      {
+        "stars": 5,
+        "text": "Simple et efficace!",
+        "date": "il y a 2 semaines"
+      }
+    ]
+  }
+]
