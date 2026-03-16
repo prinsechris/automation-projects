@@ -856,6 +856,21 @@ const BEEMINDER_USER = "prinsechris";
 const BEEMINDER_TOKEN = "28f1_C1a-W6ZPtA1joXN";
 const BEEMINDER_GOAL = "eloquence";
 
+const VT_SYNC_URL = 'https://n8n.srv842982.hstgr.cloud/webhook/voice-training-sync';
+
+async function syncToNotion(type, data) {
+  try {
+    await fetch(VT_SYNC_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, ...data })
+    });
+    console.log('Notion sync OK:', type);
+  } catch(e) {
+    console.warn('Notion sync failed:', e);
+  }
+}
+
 const SPEECH_SUPPORTED = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
 // ════════════════════════════════════════════════════════════
@@ -5156,6 +5171,19 @@ function recordSession(data) {
   saveProgress(prog);
   showXPPopup(xpGained);
   updateStatusBanner();
+  syncToNotion('session', {
+    name: data.module + ' - ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'}),
+    date: new Date().toISOString(),
+    module: data.module,
+    competence: (data.skills && data.skills[0]) || '',
+    score: data.score || 0,
+    xp: data.score || 0,
+    duree: data.duration || 0,
+    wpm: data.wpm || 0,
+    fillerWords: data.fillerWords || 0,
+    fillerPerMin: data.duration > 0 ? Math.round((data.fillerWords || 0) / (data.duration / 60) * 10) / 10 : 0,
+    details: JSON.stringify(data.details || {})
+  });
   return xpGained;
 }
 
@@ -5510,6 +5538,18 @@ function showDiagResults() {
   prog.diagnosticDate = prog.diagnosticDate || new Date().toISOString();
   prog.lastDiagnosticDate = new Date().toISOString();
   prog.diagnosticScores = axes;
+  syncToNotion('diagnostic', {
+    date: new Date().toISOString(),
+    niveau: assignedLevel,
+    scoreGlobal: avg,
+    articulation: axes.articulation,
+    fluidite: axes.fluidite,
+    structure: axes.structure,
+    improvisation: axes.improvisation,
+    application: axes.application,
+    wpm: diagScores.wpm || 0,
+    fillerWords: diagScores.fillerCount || 0
+  });
   // Map to skills
   prog.skills.articulation.score = axes.articulation;
   prog.skills.fluidite.score = axes.fluidite;
