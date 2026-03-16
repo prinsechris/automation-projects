@@ -1,0 +1,26 @@
+services:
+  flashcards:
+    build: .
+    container_name: flashcards-sm2
+    restart: unless-stopped
+    environment:
+      - NOTION_TOKEN_FILE=/run/secrets/notion_token
+      - ANTHROPIC_KEY_FILE=/run/secrets/anthropic_key
+    volumes:
+      - /home/claude-agent/.notion-token:/run/secrets/notion_token:ro
+      - /home/claude-agent/.anthropic-key:/run/secrets/anthropic_key:ro
+    networks:
+      - root_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flashcards.rule=Host(`n8n.srv842982.hstgr.cloud`) && PathPrefix(`/flashcards`)"
+      - "traefik.http.routers.flashcards.entrypoints=websecure"
+      - "traefik.http.routers.flashcards.tls=true"
+      - "traefik.http.routers.flashcards.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.flashcards.middlewares=flashcards-strip"
+      - "traefik.http.middlewares.flashcards-strip.stripprefix.prefixes=/flashcards"
+      - "traefik.http.services.flashcards.loadbalancer.server.port=8765"
+
+networks:
+  root_default:
+    external: true

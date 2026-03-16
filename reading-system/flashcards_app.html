@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Flashcards SM-2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f; color: #e0e0e0;
+    min-height: 100vh; display: flex; flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Header */
+.header {
+    padding: 16px 20px; text-align: center;
+    border-bottom: 1px solid #1a1a2e; background: #0d0d14;
+}
+.header h1 { font-size: 1.3em; color: #7c5cfc; font-weight: 700; }
+.stats-bar {
+    display: flex; gap: 12px; justify-content: center;
+    margin-top: 8px; font-size: 0.8em; flex-wrap: wrap;
+}
+.stat {
+    padding: 3px 10px; border-radius: 10px; font-weight: 600;
+}
+.stat.new { background: #5b9bf515; color: #5b9bf5; }
+.stat.learning { background: #f5c54215; color: #f5c542; }
+.stat.review { background: #4caf5015; color: #4caf50; }
+.stat.mastered { background: #9c27b015; color: #ce93d8; }
+
+.progress-bar {
+    width: 100%; height: 3px; background: #1a1a2e;
+    margin-top: 10px; border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, #7c5cfc, #4caf50);
+    transition: width 0.4s ease;
+}
+
+/* Counter */
+.counter {
+    text-align: center; padding: 8px; font-size: 0.85em; color: #555;
+}
+
+/* Card */
+.card-area {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 16px; min-height: 0;
+}
+
+.question-box {
+    width: 100%; max-width: 520px; min-height: 180px;
+    border-radius: 16px; padding: 28px;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    background: linear-gradient(145deg, #12121f, #1a1a30);
+    border: 1px solid #7c5cfc20;
+    box-shadow: 0 4px 20px rgba(124, 92, 252, 0.05);
+    position: relative;
+}
+
+.card-badge {
+    position: absolute; top: 12px; left: 14px;
+    font-size: 0.7em; padding: 2px 8px; border-radius: 6px;
+    font-weight: 600; letter-spacing: 0.3px;
+}
+.card-badge.Factual { background: #5b9bf518; color: #5b9bf5; }
+.card-badge.Conceptual { background: #ce93d818; color: #ce93d8; }
+.card-badge.Application { background: #4caf5018; color: #4caf50; }
+.card-badge.Cloze { background: #ffa72618; color: #ffa726; }
+
+.card-chapter {
+    position: absolute; top: 12px; right: 14px;
+    font-size: 0.7em; color: #444;
+}
+
+.card-text {
+    font-size: 1.15em; line-height: 1.7; max-width: 440px;
+}
+
+/* Answer input */
+.answer-section {
+    width: 100%; max-width: 520px; margin-top: 16px;
+}
+
+.answer-input {
+    width: 100%; padding: 14px 16px; border-radius: 12px;
+    background: #12121f; border: 1px solid #2a2a40;
+    color: #e0e0e0; font-size: 1em; font-family: inherit;
+    resize: vertical; min-height: 60px;
+    transition: border-color 0.2s;
+}
+.answer-input:focus {
+    outline: none; border-color: #7c5cfc;
+}
+.answer-input::placeholder { color: #3a3a55; }
+.answer-input:disabled {
+    opacity: 0.5; cursor: not-allowed;
+}
+
+.submit-btn {
+    width: 100%; margin-top: 10px; padding: 14px;
+    border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #7c5cfc, #6a4ce0);
+    color: white; font-size: 1em; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+}
+.submit-btn:hover { opacity: 0.9; }
+.submit-btn:active { transform: scale(0.97); }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.skip-btn {
+    width: 100%; margin-top: 8px; padding: 10px;
+    border: 1px solid #2a2a40; border-radius: 12px;
+    background: transparent; color: #555;
+    font-size: 0.85em; cursor: pointer; transition: all 0.15s;
+}
+.skip-btn:hover { border-color: #444; color: #888; }
+
+/* Correction */
+.correction-box {
+    width: 100%; max-width: 520px; margin-top: 16px;
+    border-radius: 16px; padding: 24px;
+    background: linear-gradient(145deg, #121f15, #1a301a);
+    border: 1px solid #4caf5020;
+    display: none;
+}
+
+.correction-label {
+    font-size: 0.75em; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 8px;
+}
+.correction-label.correct { color: #4caf50; }
+.correction-label.wrong { color: #ef5350; }
+.correction-label.partial { color: #ffa726; }
+
+.correct-answer {
+    font-size: 1.1em; line-height: 1.6; color: #81c784;
+    margin-bottom: 12px;
+}
+
+.your-answer {
+    font-size: 0.9em; color: #888; margin-bottom: 12px;
+    padding: 10px 14px; border-radius: 8px; background: #0a0a0f40;
+}
+.your-answer strong { color: #aaa; }
+
+.similarity-bar {
+    height: 4px; border-radius: 2px; background: #1a1a2e;
+    margin-bottom: 16px; overflow: hidden;
+}
+.similarity-fill {
+    height: 100%; border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+/* Rating */
+.rating-area {
+    padding: 12px 0 0; display: none;
+}
+.rating-label {
+    text-align: center; margin-bottom: 10px; font-size: 0.8em; color: #555;
+}
+.rating-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.rate-btn {
+    padding: 12px 6px; border: none; border-radius: 10px;
+    font-size: 0.82em; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; line-height: 1.3;
+    -webkit-tap-highlight-color: transparent;
+}
+.rate-btn:active { transform: scale(0.94); }
+.rate-btn .hint { display: block; font-size: 0.78em; font-weight: 400; margin-top: 3px; opacity: 0.7; }
+
+.rate-btn.q0 { background: #d32f2f15; color: #ef5350; border: 1px solid #d32f2f30; }
+.rate-btn.q1 { background: #e6511515; color: #ff7043; border: 1px solid #e6511530; }
+.rate-btn.q2 { background: #f57c0015; color: #ffa726; border: 1px solid #f57c0030; }
+.rate-btn.q3 { background: #fbc02d15; color: #fff176; border: 1px solid #fbc02d30; }
+.rate-btn.q4 { background: #66bb6a15; color: #66bb6a; border: 1px solid #66bb6a30; }
+.rate-btn.q5 { background: #42a5f515; color: #42a5f5; border: 1px solid #42a5f530; }
+
+/* Next button */
+.next-btn {
+    width: 100%; max-width: 520px; margin-top: 16px; padding: 14px;
+    border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #4caf50, #388e3c);
+    color: white; font-size: 1em; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    display: none;
+}
+.next-btn:hover { opacity: 0.9; }
+.next-btn:active { transform: scale(0.97); }
+
+/* Empty / Loading */
+.state-msg {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 40px; text-align: center;
+}
+.state-msg h2 { font-size: 1.2em; margin-bottom: 8px; }
+.state-msg p { color: #666; font-size: 0.9em; }
+.state-msg .big { font-size: 2.5em; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Flashcards</h1>
+    <div class="stats-bar">
+        <span class="stat new" id="sNew">0 new</span>
+        <span class="stat learning" id="sLearn">0 learning</span>
+        <span class="stat review" id="sReview">0 a revoir</span>
+        <span class="stat mastered" id="sMaster">0 mastered</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+</div>
+
+<div class="counter" id="counter"></div>
+
+<div class="card-area" id="cardArea">
+    <div class="state-msg" id="loading"><p>Chargement...</p></div>
+</div>
+
+<script>
+const basePath = window.location.pathname.replace(/\/+$/, '');
+const API = window.location.origin + basePath + '/api';
+let cards = [], idx = 0, done = 0, total = 0;
+let currentPhase = 'answer'; // 'answer' | 'correction' | 'rated'
+
+// SM-2
+function sm2(q, reps, ef, interval) {
+    q = Math.max(0, Math.min(5, q));
+    let nef = ef + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
+    nef = Math.max(1.3, nef);
+    let ni, nr;
+    if (q < 3) { nr = 0; ni = 1; }
+    else {
+        if (reps === 0) ni = 1;
+        else if (reps === 1) ni = 6;
+        else ni = Math.round(interval * nef);
+        nr = reps + 1;
+    }
+    const d = new Date(); d.setDate(d.getDate() + ni);
+    let st = 'Learning';
+    if (nr > 0 && ni >= 30) st = 'Mastered';
+    else if (nr > 0 && ni >= 6) st = 'Review';
+    return { repetitions: nr, ease_factor: Math.round(nef * 100) / 100,
+             interval_days: ni, next_review: d.toISOString().split('T')[0], status: st };
+}
+
+function fmtInterval(d) {
+    if (d === 1) return '1j';
+    if (d < 30) return d + 'j';
+    if (d < 365) return Math.round(d / 30) + 'mo';
+    return Math.round(d / 365) + 'a';
+}
+
+// AI check via server
+async function checkAnswerAI(question, correct, answer) {
+    try {
+        const resp = await fetch(API + '/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question, correct, answer })
+        });
+        return await resp.json();
+    } catch (e) {
+        return { score: 0, verdict: 'error', feedback: 'Erreur de connexion' };
+    }
+}
+
+function suggestRating(score) {
+    if (score >= 85) return 5;
+    if (score >= 65) return 4;
+    if (score >= 45) return 3;
+    if (score >= 25) return 2;
+    if (score > 0) return 1;
+    return 0;
+}
+
+// Display
+function showCard() {
+    const area = document.getElementById('cardArea');
+    currentPhase = 'answer';
+
+    if (idx >= cards.length) {
+        area.innerHTML = `<div class="state-msg"><div class="big">&#10003;</div><h2>Session terminee</h2><p>${done} carte(s) revisee(s)</p></div>`;
+        return;
+    }
+
+    const c = cards[idx];
+
+    area.innerHTML = `
+    <div class="question-box">
+        <span class="card-badge ${c.type}">${c.type}</span>
+        <span class="card-chapter">${c.chapter ? 'Ch.' + c.chapter : ''}</span>
+        <div class="card-text">${c.front}</div>
+    </div>
+
+    <div class="answer-section">
+        <textarea class="answer-input" id="answerInput"
+            placeholder="Ecris ta reponse ici..." rows="3"></textarea>
+        <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Verifier</button>
+        <button class="skip-btn" onclick="skipAnswer()">Je ne sais pas</button>
+    </div>
+
+    <div class="correction-box" id="correctionBox">
+        <div class="correction-label" id="corrLabel"></div>
+        <div class="similarity-bar"><div class="similarity-fill" id="simFill"></div></div>
+        <div class="your-answer" id="yourAnswer"></div>
+        <div class="correct-answer" id="correctAnswer"></div>
+        <div class="rating-area" id="ratingArea">
+            <div class="rating-label">Evalue ta maitrise :</div>
+            <div class="rating-grid">
+                <button class="rate-btn q0" onclick="rate(0)">Aucune idee<span class="hint" id="h0"></span></button>
+                <button class="rate-btn q1" onclick="rate(1)">Faux<span class="hint" id="h1"></span></button>
+                <button class="rate-btn q2" onclick="rate(2)">Vaguement<span class="hint" id="h2"></span></button>
+                <button class="rate-btn q3" onclick="rate(3)">Difficile<span class="hint" id="h3"></span></button>
+                <button class="rate-btn q4" onclick="rate(4)">Bien<span class="hint" id="h4"></span></button>
+                <button class="rate-btn q5" onclick="rate(5)">Parfait<span class="hint" id="h5"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <button class="next-btn" id="nextBtn" onclick="nextCard()">Carte suivante</button>`;
+
+    document.getElementById('counter').textContent = `${idx + 1} / ${cards.length}`;
+
+    // Preview hints
+    for (let q = 0; q <= 5; q++) {
+        const r = sm2(q, c.repetitions, c.ease_factor, c.interval_days);
+        const el = document.getElementById('h' + q);
+        if (el) el.textContent = fmtInterval(r.interval_days);
+    }
+
+    // Focus input
+    setTimeout(() => {
+        const inp = document.getElementById('answerInput');
+        if (inp) inp.focus();
+    }, 100);
+}
+
+async function submitAnswer() {
+    const c = cards[idx];
+    const input = document.getElementById('answerInput');
+    const userAnswer = input.value.trim();
+
+    if (!userAnswer) {
+        input.style.borderColor = '#ef5350';
+        input.placeholder = 'Ecris quelque chose...';
+        return;
+    }
+
+    // Disable button and show loading
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Analyse en cours...';
+    btn.disabled = true;
+    input.disabled = true;
+
+    const aiResult = await checkAnswerAI(c.front, c.back, userAnswer);
+    showCorrection(userAnswer, c.back, aiResult);
+}
+
+function skipAnswer() {
+    const c = cards[idx];
+    showCorrection('', c.back, { score: 0, verdict: 'wrong', feedback: 'Passe' });
+}
+
+function showCorrection(userAnswer, correctAnswer, aiResult) {
+    currentPhase = 'correction';
+    const score = aiResult.score || 0;
+    const suggested = suggestRating(score);
+
+    // Disable input
+    const input = document.getElementById('answerInput');
+    if (input) input.disabled = true;
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) submitBtn.disabled = true;
+
+    // Show correction
+    const box = document.getElementById('correctionBox');
+    box.style.display = 'block';
+
+    // Label
+    const label = document.getElementById('corrLabel');
+    const verdict = aiResult.verdict || 'wrong';
+    if (verdict === 'correct') {
+        label.textContent = 'Bonne reponse !';
+        label.className = 'correction-label correct';
+    } else if (verdict === 'partial') {
+        label.textContent = 'Partiellement correct';
+        label.className = 'correction-label partial';
+    } else {
+        label.textContent = userAnswer ? 'Incorrect' : 'Passe';
+        label.className = 'correction-label wrong';
+    }
+
+    // Score bar
+    const fill = document.getElementById('simFill');
+    fill.style.width = score + '%';
+    fill.style.background = score >= 65 ? '#4caf50' : score >= 35 ? '#ffa726' : '#ef5350';
+
+    // AI feedback
+    const yourDiv = document.getElementById('yourAnswer');
+    if (userAnswer) {
+        const fb = aiResult.feedback ? `<br><em style="color:#aaa">${aiResult.feedback}</em>` : '';
+        yourDiv.innerHTML = `<strong>Ta reponse :</strong> ${userAnswer}${fb}`;
+        yourDiv.style.display = '';
+    } else {
+        yourDiv.style.display = 'none';
+    }
+
+    document.getElementById('correctAnswer').textContent = correctAnswer;
+
+    // Show rating
+    document.getElementById('ratingArea').style.display = 'block';
+
+    // Highlight suggested rating
+    const sugBtn = document.querySelector(`.rate-btn.q${suggested}`);
+    if (sugBtn) sugBtn.style.boxShadow = '0 0 0 2px ' + getComputedStyle(sugBtn).color;
+
+    // Scroll to correction
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function rate(q) {
+    currentPhase = 'rated';
+    const c = cards[idx];
+    const r = sm2(q, c.repetitions, c.ease_factor, c.interval_days);
+
+    // Update Notion
+    fetch(API + '/review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id: c.id, quality: q,
+            repetitions: r.repetitions, ease_factor: r.ease_factor,
+            interval_days: r.interval_days, next_review: r.next_review,
+            status: r.status
+        })
+    }).catch(() => {});
+
+    // Update card local state
+    c.repetitions = r.repetitions;
+    c.ease_factor = r.ease_factor;
+    c.interval_days = r.interval_days;
+    c.status = r.status;
+
+    done++;
+
+    // Disable rating buttons
+    document.querySelectorAll('.rate-btn').forEach(b => b.disabled = true);
+
+    // Show next button
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.style.display = 'block';
+    nextBtn.focus();
+
+    updateStats();
+}
+
+function nextCard() {
+    idx++;
+    showCard();
+}
+
+function updateStats() {
+    let nw = 0, lr = 0, rv = 0, ms = 0;
+    cards.forEach(c => {
+        if (c.status === 'New') nw++;
+        else if (c.status === 'Learning') lr++;
+        else if (c.status === 'Review') rv++;
+        else if (c.status === 'Mastered') ms++;
+    });
+    document.getElementById('sNew').textContent = nw + ' new';
+    document.getElementById('sLearn').textContent = lr + ' learning';
+    document.getElementById('sReview').textContent = (cards.length - idx) + ' a revoir';
+    document.getElementById('sMaster').textContent = ms + ' mastered';
+    document.getElementById('progress').style.width =
+        cards.length ? ((done / cards.length) * 100) + '%' : '0%';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+    // Enter to submit answer (when in answer phase)
+    if (e.key === 'Enter' && !e.shiftKey && currentPhase === 'answer') {
+        e.preventDefault();
+        submitAnswer();
+    }
+    // Number keys for rating (when in correction phase)
+    if (e.key >= '0' && e.key <= '5' && currentPhase === 'correction') {
+        rate(parseInt(e.key));
+    }
+    // Enter or Space for next card (when rated)
+    if ((e.key === 'Enter' || e.key === ' ') && currentPhase === 'rated') {
+        e.preventDefault();
+        nextCard();
+    }
+});
+
+// Init
+async function init() {
+    try {
+        const resp = await fetch(API + '/due');
+        cards = await resp.json();
+        total = cards.length;
+
+        if (cards.length === 0) {
+            document.getElementById('cardArea').innerHTML =
+                '<div class="state-msg"><div class="big">&#128218;</div><h2>Aucune carte a revoir</h2><p>Toutes tes cartes sont a jour. Reviens demain !</p></div>';
+        } else {
+            showCard();
+        }
+        updateStats();
+    } catch (e) {
+        document.getElementById('cardArea').innerHTML =
+            `<div class="state-msg"><h2>Erreur de connexion</h2><p>${e.message}</p></div>`;
+    }
+}
+
+init();
+</script>
+</body>
+</html>
