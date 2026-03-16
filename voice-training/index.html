@@ -856,7 +856,10 @@ const BEEMINDER_USER = "prinsechris";
 const BEEMINDER_TOKEN = "28f1_C1a-W6ZPtA1joXN";
 const BEEMINDER_GOAL = "eloquence";
 
-const VT_SYNC_URL = 'https://n8n.srv842982.hstgr.cloud/webhook/voice-training-sync';
+// Sync URL: use VPS server if accessible, fallback silent fail on GitHub Pages
+const VT_SYNC_URL = window.location.port === '8766'
+  ? '/'
+  : 'http://n8n.srv842982.hstgr.cloud:8766';
 
 async function syncToNotion(type, data) {
   try {
