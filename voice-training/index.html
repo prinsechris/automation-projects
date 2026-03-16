@@ -5875,9 +5875,66 @@ function showProgression() {
 
     <div style="text-align:center;">
       ${diagBtnHTML}
+      <button class="btn-secondary" onclick="exportToNotion()" style="margin-top:12px;font-size:13px;">Exporter vers Notion</button>
     </div>
   `;
 }
+
+async function exportToNotion() {
+  const prog = loadProgress();
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Export en cours...';
+  let exported = 0;
+
+  // 1. Export diagnostic if exists
+  if (prog.diagnosticDone && prog.diagnosticScores) {
+    const axes = prog.diagnosticScores;
+    const avg = Math.round(Object.values(axes).reduce((a, b) => a + b, 0) / Math.max(1, Object.values(axes).length));
+    const level = getLevelFromXP(prog.totalXP);
+    await syncToNotion('diagnostic', {
+      date: prog.diagnosticDate || new Date().toISOString(),
+      niveau: level,
+      scoreGlobal: avg,
+      articulation: axes.articulation || 0,
+      fluidite: axes.fluidite || 0,
+      structure: axes.structure || 0,
+      improvisation: axes.improvisation || 0,
+      application: axes.application || 0,
+      wpm: 0,
+      fillerWords: 0
+    });
+    exported++;
+  }
+
+  // 2. Export sessions (last 30 days only to avoid duplicates)
+  const cutoff = Date.now() - 30 * 86400000;
+  const recentSessions = prog.sessions.filter(s => new Date(s.date).getTime() > cutoff);
+  for (const s of recentSessions) {
+    const dur = s.duration || 0;
+    await syncToNotion('session', {
+      name: (s.module || 'session') + ' - ' + new Date(s.date).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
+      date: s.date,
+      module: s.module || '',
+      competence: (s.skills && s.skills[0]) || '',
+      score: s.score || 0,
+      xp: s.score || 0,
+      duree: dur,
+      wpm: s.wpm || 0,
+      fillerWords: s.fillerWords || 0,
+      fillerPerMin: dur > 0 ? Math.round((s.fillerWords || 0) / (dur / 60) * 10) / 10 : 0,
+      details: JSON.stringify(s.details || {})
+    });
+    exported++;
+    // Small delay to avoid overwhelming the webhook
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  btn.disabled = false;
+  btn.textContent = exported + ' elements exportes!';
+  setTimeout(() => { btn.textContent = 'Exporter vers Notion'; }, 3000);
+}
+window.exportToNotion = exportToNotion;
 
 function buildWeeklyBars(sessions) {
   const weeks = [];
