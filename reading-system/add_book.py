@@ -26,7 +26,7 @@ def get_schema():
     return {info.get("name", ""): prop_id for prop_id, info in schema.items()}
 
 
-def add_book(title, author="", book_format="Physical", lang="EN", total_pages=0, cover_url="", today=""):
+def add_book(title, author="", book_format="Physical", lang="EN", total_pages=0, cover_url="", today="", genre=None):
     """Create a book page in the Books collection."""
     if not today:
         from datetime import datetime
@@ -84,6 +84,17 @@ def add_book(title, author="", book_format="Physical", lang="EN", total_pages=0,
         ops.append({"pointer": {"table": "block", "id": page_id},
                     "path": ["properties", name_to_id["Cover URL"]], "command": "set", "args": [[cover_url]]})
 
+    if genre and name_to_id.get("Genre"):
+        # multi_select: format is [["tag1"], [","], ["tag2"]]
+        genre_list = genre if isinstance(genre, list) else [genre]
+        genre_args = []
+        for i, g in enumerate(genre_list):
+            if i > 0:
+                genre_args.append([","])
+            genre_args.append([g])
+        ops.append({"pointer": {"table": "block", "id": page_id},
+                    "path": ["properties", name_to_id["Genre"]], "command": "set", "args": genre_args})
+
     if name_to_id.get("Date Started"):
         ops.append({"pointer": {"table": "block", "id": page_id},
                     "path": ["properties", name_to_id["Date Started"]],
@@ -123,5 +134,6 @@ if __name__ == "__main__":
         lang=data.get("lang", "EN"),
         total_pages=data.get("pages", 0),
         cover_url=data.get("cover_url", ""),
+        genre=data.get("genre"),
     )
     print(json.dumps(result, ensure_ascii=False))
