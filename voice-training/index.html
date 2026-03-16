@@ -4466,6 +4466,19 @@ function saveProgress(prog) {
   try { localStorage.setItem(PROG_STORAGE_KEY, JSON.stringify(prog)); } catch(e) {}
 }
 
+function resetDiagnostic() {
+  if (!confirm('Reset le diagnostic ? Tu pourras le refaire immediatement.')) return;
+  const prog = loadProgress();
+  prog.diagnosticDone = false;
+  prog.diagnosticDate = null;
+  prog.lastDiagnosticDate = null;
+  prog.diagnosticScores = {};
+  saveProgress(prog);
+  updateStatusBanner();
+  showProgression();
+}
+window.resetDiagnostic = resetDiagnostic;
+
 function getLevelFromXP(xp) {
   if (xp >= 5000) return 'expert';
   if (xp >= 2000) return 'avance';
@@ -5125,7 +5138,7 @@ function showProgression() {
     if (daysSince >= 14) {
       diagBtnHTML = '<button class="btn-primary" onclick="startDiagnostic()" style="margin-top:12px;">Refaire le diagnostic</button>';
     } else {
-      diagBtnHTML = '<button class="btn-primary" disabled style="margin-top:12px;background:#222;color:#555;">Diagnostic dans ' + (14 - daysSince) + 'j</button>';
+      diagBtnHTML = '<button class="btn-primary" disabled style="margin-top:12px;background:#222;color:#555;">Diagnostic dans ' + (14 - daysSince) + 'j</button> <button class="btn-secondary" onclick="resetDiagnostic()" style="margin-top:12px;font-size:12px;">Reset diagnostic</button>';
     }
   } else {
     diagBtnHTML = '<button class="btn-primary" onclick="startDiagnostic()" style="margin-top:12px;">Faire le diagnostic initial</button>';
