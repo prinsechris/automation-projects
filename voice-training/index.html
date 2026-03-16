@@ -1534,6 +1534,10 @@ async function initAudioAnalysis() {
   try {
     audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Resume AudioContext if suspended (mobile browsers require user gesture)
+    if (audioCtx.state === 'suspended') {
+      await audioCtx.resume();
+    }
     const source = audioCtx.createMediaStreamSource(audioStream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 2048;
@@ -1543,6 +1547,7 @@ async function initAudioAnalysis() {
     document.getElementById("voice-panel").classList.add("active");
     const ctrl = document.getElementById("exercise-controls");
     if (ctrl) ctrl.classList.add("voice-active");
+    console.log("Audio analysis OK — sampleRate:", audioCtx.sampleRate, "state:", audioCtx.state);
     runVoiceAnalysis();
   } catch(e) {
     console.warn("Audio analysis unavailable:", e);
@@ -4805,6 +4810,9 @@ function onDiagResult(event) {
   diagTranscript = transcript.trim();
   const el = document.getElementById('diag-transcript');
   if (el) el.textContent = diagTranscript || '...';
+  // Update pace tracking for debit display
+  const words = diagTranscript.split(/\s+/).filter(w => w.length > 0);
+  if (words.length > 0) trackPace(words.length);
 }
 
 function startDiagListening(step) {
