@@ -1698,9 +1698,17 @@ function runVoiceAnalysis() {
   const paceBar = document.getElementById("vb-pace");
   if (currentPaceWPM > 0) {
     paceEl.textContent = currentPaceWPM + " m/m";
-    // Ideal: 130-160 wpm, bar green zone
+    // Bar: 0 WPM = 0%, 160 WPM (ideal) = 80%, 200+ = 100%
     const paceNorm = Math.min(100, (currentPaceWPM / 200) * 100);
     paceBar.style.width = paceNorm + "%";
+    // Color feedback: green = ideal (120-160), yellow = ok, red = too fast/slow
+    if (currentPaceWPM >= 120 && currentPaceWPM <= 160) {
+      paceBar.style.background = '#00c853';
+    } else if (currentPaceWPM >= 80 && currentPaceWPM <= 200) {
+      paceBar.style.background = '#ffab00';
+    } else {
+      paceBar.style.background = '#ff5252';
+    }
   } else {
     paceEl.textContent = "--";
     paceBar.style.width = "0%";
@@ -4789,6 +4797,7 @@ function startMesScenario() {
   const controls = document.getElementById("exercise-controls");
   controls.innerHTML = `
     <button class="btn-primary" id="btn-mes-start" onclick="startMesTimer()" style="background:${compColor};">C'est parti</button>
+    <button class="btn-success" id="btn-mes-done" onclick="mesDone()" style="display:none;">J'ai fini</button>
     <button class="btn-secondary" onclick="showMesCompSelect()">Autre scenario</button>
     <button class="btn-secondary" onclick="skipModule('miseensituation')">Retour</button>
   `;
@@ -5377,9 +5386,20 @@ function startDiagListening(step) {
   const btn = document.getElementById('diag-start-btn');
   if (btn) btn.disabled = true;
   diagListening = true;
+  diagCurrentStep = step;
   initRecognition(onDiagResult);
   startRecognition();
   initAudioAnalysis();
+
+  // Show "J'ai fini" button
+  const doneBtn = document.createElement('button');
+  doneBtn.className = 'btn-success';
+  doneBtn.textContent = "J'ai fini";
+  doneBtn.id = 'diag-done-btn';
+  doneBtn.style.cssText = 'margin-top:12px;font-size:16px;padding:12px 32px;';
+  doneBtn.onclick = () => finishDiagStep(step);
+  const btnGroup = btn ? btn.parentElement : document.getElementById('diag-content');
+  if (btnGroup) btnGroup.appendChild(doneBtn);
 
   diagTimer = setInterval(() => {
     diagTimeLeft--;
@@ -5395,6 +5415,7 @@ function startDiagListening(step) {
     }
   }, 1000);
 }
+let diagCurrentStep = 1;
 
 function finishDiagStep(step) {
   if (diagTimer) { clearInterval(diagTimer); diagTimer = null; }
