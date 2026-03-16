@@ -1635,7 +1635,7 @@ function detectPitch(buffer, sampleRate) {
   for (let i = 0; i < SIZE; i++) {
     if (Math.abs(buffer[i]) > maxVal) maxVal = Math.abs(buffer[i]);
   }
-  if (maxVal < 0.01) return -1; // too quiet
+  if (maxVal < 0.005) return -1; // too quiet (lowered for mobile mics)
 
   // Trim silence from ends
   let start = 0, end = SIZE - 1;
@@ -1671,7 +1671,7 @@ function detectPitch(buffer, sampleRate) {
     }
   }
 
-  if (peakVal < 0.3 * correlations[0]) return -1;
+  if (peakVal < 0.15 * correlations[0]) return -1; // lowered for better detection
 
   const freq = sampleRate / peak;
   if (freq < 60 || freq > 500) return -1;
@@ -4838,24 +4838,32 @@ function finishDiagStep(step) {
     ) * 100);
     diagScores.articulation = score;
   } else if (step === 2) {
-    // Fluidite scoring: WPM + filler penalty
+    // Fluidite scoring: WPM + filler penalty (strict)
     let score = 0;
-    if (wpm >= 100 && wpm <= 180) score = 80;
-    else if (wpm >= 60) score = 50;
-    else score = Math.min(40, Math.round(wpm / 2));
-    score = Math.max(0, score - fillers.total * 5);
+    if (wpm >= 120 && wpm <= 160) score = 60;
+    else if (wpm >= 100 && wpm <= 180) score = 45;
+    else if (wpm >= 60) score = 25;
+    else score = Math.min(15, Math.round(wpm / 4));
+    score = Math.max(0, score - fillers.total * 8);
+    // Bonus for very low filler count
+    if (fillers.total === 0 && wpm >= 100) score += 20;
     diagScores.fluidite = Math.min(100, Math.max(0, score));
     diagScores.wpm = wpm;
     diagScores.fillerCount = fillers.total;
   } else if (step === 3) {
     // Improv scoring: structure + volume + pertinence
     const improvWord = content.dataset.diagImprovWord || '';
-    const structScore = Math.min(35, Math.round((words.length / 80) * 35));
-    const fillerPenalty = Math.min(25, fillers.total * 4);
-    const fluidScore = Math.max(0, 30 - fillerPenalty);
+    // Improv scoring (strict) — need real structure + volume + pertinence
+    const structScore = Math.min(25, Math.round((words.length / 120) * 25));
+    const fillerPenalty = Math.min(20, fillers.total * 5);
+    const fluidScore = Math.max(0, 25 - fillerPenalty);
+    // Pertinence: mention the word + use transitional words
     const mentions = (diagTranscript.toLowerCase().match(new RegExp('\\b' + improvWord.toLowerCase() + '\\b', 'g')) || []).length;
-    const pertScore = Math.min(35, mentions > 0 ? 20 + Math.min(15, mentions * 5) : 5);
-    diagScores.improvisation = Math.min(100, structScore + fluidScore + pertScore);
+    const hasStructureWords = /\b(premierement|deuxiemement|d'abord|ensuite|enfin|en conclusion|donc|par exemple|de plus)\b/i.test(diagTranscript);
+    const pertScore = Math.min(25, (mentions > 0 ? 10 : 0) + (hasStructureWords ? 10 : 0) + Math.min(5, mentions * 3));
+    // Confidence: WPM in good range
+    const confScore = (wpm >= 100 && wpm <= 180) ? 25 : (wpm >= 60 ? 15 : 5);
+    diagScores.improvisation = Math.min(100, structScore + fluidScore + pertScore + confScore);
     diagScores.structure = structScore + fluidScore; // Normalized later
   } else if (step === 4) {
     // Mise en situation scoring: keywords + fluidity + confidence
@@ -4863,10 +4871,14 @@ function finishDiagStep(step) {
     const lower = diagTranscript.toLowerCase();
     let kwFound = 0;
     for (const kw of keywords) { if (lower.includes(kw.toLowerCase())) kwFound++; }
-    const kwScore = keywords.length > 0 ? Math.round((kwFound / keywords.length) * 40) : 20;
-    const volScore = Math.min(30, Math.round((words.length / 60) * 30));
-    const confScore = Math.max(0, 30 - fillers.total * 4);
-    diagScores.application = Math.min(100, kwScore + volScore + confScore);
+    // Application scoring (strict) — need keywords + volume + confidence
+    const kwScore = keywords.length > 0 ? Math.round((kwFound / keywords.length) * 35) : 10;
+    const volScore = Math.min(25, Math.round((words.length / 80) * 25));
+    const confScore2 = Math.max(0, 20 - fillers.total * 5);
+    // Bonus for structure in response
+    const hasRespStructure = /\b(parce que|car|donc|c'est pourquoi|en effet|par exemple|concretement)\b/i.test(diagTranscript);
+    const structBonus = hasRespStructure ? 20 : 0;
+    diagScores.application = Math.min(100, kwScore + volScore + confScore2 + structBonus);
   }
 
   diagStep++;
@@ -4888,9 +4900,9 @@ function showDiagResults() {
 
   const avg = Math.round(Object.values(axes).reduce((a, b) => a + b, 0) / Object.values(axes).length);
   let assignedLevel = 'expert';
-  if (avg < 30) assignedLevel = 'debutant';
-  else if (avg < 55) assignedLevel = 'intermediaire';
-  else if (avg < 80) assignedLevel = 'avance';
+  if (avg < 40) assignedLevel = 'debutant';
+  else if (avg < 65) assignedLevel = 'intermediaire';
+  else if (avg < 85) assignedLevel = 'avance';
 
   // Save diagnostic
   const prevDiag = prog.diagnosticDone ? { ...prog.diagnosticScores } : null;
