@@ -432,17 +432,184 @@ button:active { opacity: 0.7; }
 .sim-phase-tag.solution { background: rgba(107,70,193,0.2); color: #b794f4; }
 .sim-phase-tag.close { background: rgba(214,158,46,0.2); color: #f6e05e; }
 
+/* ── Mise en Situation module ── */
+.mes-comp-grid {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  width: 100%; max-width: 640px; margin: 0 auto;
+}
+.mes-comp-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 16px; width: 170px; cursor: pointer; transition: border-color 0.2s, transform 0.2s;
+  text-align: left;
+}
+.mes-comp-card:hover { border-color: #00bcd4; transform: translateY(-2px); }
+.mes-comp-card h4 { font-size: 13px; margin-bottom: 4px; line-height: 1.3; }
+.mes-comp-card .mes-desc { font-size: 11px; opacity: 0.5; margin-bottom: 6px; line-height: 1.3; }
+.mes-comp-card .mes-count { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(0,188,212,0.15); color: #00bcd4; display: inline-block; }
+.mes-comp-card.random-card { border-color: #00bcd4; background: #0a1a1e; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.mes-comp-card.random-card h4 { text-align: center; }
+.mes-source-tag { font-size: 10px; opacity: 0.45; font-style: italic; margin-top: 4px; }
+
+.mes-scenario-list {
+  width: 100%; max-width: 420px; margin: 0 auto;
+}
+.mes-scenario-item {
+  background: #111; border: 2px solid #333; border-radius: 10px;
+  padding: 14px 16px; margin: 6px 0; cursor: pointer; transition: border-color 0.2s;
+  text-align: left;
+}
+.mes-scenario-item:hover { border-color: #00bcd4; }
+.mes-scenario-item h4 { font-size: 14px; margin-bottom: 3px; }
+.mes-scenario-item p { font-size: 12px; opacity: 0.6; }
+
+.mes-context-box {
+  background: #0a1a1e; border: 2px solid #1a3a3e; border-radius: 12px;
+  padding: 18px; margin: 12px 0; text-align: left; width: 100%; max-width: 420px;
+}
+.mes-context-box .mes-label { font-size: 11px; font-weight: 600; color: #00bcd4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.mes-context-box .mes-text { font-size: 15px; line-height: 1.6; }
+
+.mes-technique-box {
+  background: #1a0a2e; border: 2px solid #2a1a3e; border-radius: 12px;
+  padding: 16px; margin: 12px 0; text-align: left; width: 100%; max-width: 420px;
+}
+.mes-technique-box .mes-label { font-size: 11px; font-weight: 600; color: #aa00ff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.mes-technique-box .mes-text { font-size: 14px; line-height: 1.5; }
+
+.mes-conseil-box {
+  background: #0a1a0a; border: 2px solid #1a3a1a; border-radius: 12px;
+  padding: 14px; margin: 12px 0; text-align: left; width: 100%; max-width: 420px;
+  font-size: 13px; line-height: 1.5;
+}
+.mes-conseil-box .mes-label { font-size: 11px; font-weight: 600; color: #00c853; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+
+.mes-timer {
+  font-size: 56px; font-weight: 900; text-align: center;
+  color: #00bcd4; text-shadow: 0 0 25px rgba(0,188,212,0.4);
+  margin: 12px 0;
+}
+
+.mes-transcript-box {
+  background: #111; border: 1px solid #333; border-radius: 8px;
+  padding: 14px; margin: 12px 0; min-height: 50px; width: 100%; max-width: 420px; text-align: left;
+}
+.mes-transcript-box .label { font-size: 11px; opacity: 0.5; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.mes-transcript-box .transcript { font-size: 14px; line-height: 1.5; min-height: 24px; }
+
 /* ── Animations ── */
 @keyframes bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
 .bump { animation: bump 0.2s ease; }
+
+/* ── Status Banner ── */
+#status-banner {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+  background: linear-gradient(90deg, #111 0%, #1a1a2e 50%, #111 100%);
+  border-bottom: 1px solid #333; padding: 6px 12px;
+  display: flex; justify-content: center; gap: 16px; font-size: 12px;
+  font-weight: 600; color: #aaa;
+}
+#status-banner .sb-item { display: flex; align-items: center; gap: 4px; }
+#status-banner .sb-label { opacity: 0.5; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+#status-banner .sb-val { color: #fff; }
+#status-banner .sb-val.debutant { color: #666; }
+#status-banner .sb-val.intermediaire { color: #0066ff; }
+#status-banner .sb-val.avance { color: #ff9100; }
+#status-banner .sb-val.expert { color: #ff5252; }
+body.has-banner { padding-top: 32px; }
+body.has-banner .screen { top: 32px; height: calc(100% - 32px); }
+body.has-banner #exercise-area { top: 32px; height: calc(100% - 32px); }
+body.has-banner #mic-status { top: 44px; }
+
+/* ── XP Bar (mini, in banner) ── */
+.xp-bar-mini { width: 60px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 4px; }
+.xp-bar-mini .xp-fill { height: 100%; background: #0066ff; border-radius: 2px; transition: width 0.3s; }
+
+/* ── Diagnostic Banner ── */
+.diag-banner {
+  background: rgba(0,102,255,0.12); border: 1px solid rgba(0,102,255,0.3);
+  border-radius: 8px; padding: 12px 16px; margin: 16px 0; cursor: pointer;
+  font-size: 13px; color: #4d94ff; text-align: center; transition: background 0.2s;
+}
+.diag-banner:hover { background: rgba(0,102,255,0.2); }
+
+/* ── Progression Dashboard ── */
+.prog-dashboard { width: 100%; max-width: 420px; margin: 0 auto; }
+.prog-section { margin: 16px 0; }
+.prog-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5; margin-bottom: 8px; }
+
+.prog-level-box {
+  background: #111; border-radius: 12px; padding: 20px; text-align: center;
+  border: 2px solid #333;
+}
+.prog-level-name { font-size: 24px; font-weight: 800; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 2px; }
+.prog-level-name.debutant { color: #666; }
+.prog-level-name.intermediaire { color: #0066ff; }
+.prog-level-name.avance { color: #ff9100; }
+.prog-level-name.expert { color: #ff5252; }
+.prog-xp-bar { width: 100%; height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+.prog-xp-bar .fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+.prog-xp-text { font-size: 12px; opacity: 0.6; }
+
+.prog-stats-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.prog-stat-card {
+  flex: 1; min-width: 90px; background: #111; border-radius: 10px;
+  padding: 12px; text-align: center; border: 1px solid #222;
+}
+.prog-stat-card .val { font-size: 22px; font-weight: 700; color: #fff; }
+.prog-stat-card .lbl { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+/* ── Radar Chart (SVG) ── */
+.radar-wrap { display: flex; justify-content: center; margin: 16px 0; }
+
+/* ── Weekly bars ── */
+.weekly-bars { display: flex; gap: 6px; align-items: flex-end; height: 80px; }
+.weekly-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.weekly-bar { width: 100%; background: #0066ff; border-radius: 4px 4px 0 0; min-height: 2px; transition: height 0.3s; }
+.weekly-bar-label { font-size: 9px; opacity: 0.5; }
+
+/* ── Diagnostic screen ── */
+.diag-step-box {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; margin: 12px 0; text-align: center; width: 100%; max-width: 420px;
+}
+.diag-step-title { font-size: 14px; font-weight: 700; color: #0066ff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.diag-step-desc { font-size: 14px; opacity: 0.7; line-height: 1.5; }
+.diag-timer { font-size: 56px; font-weight: 900; color: #0066ff; text-shadow: 0 0 20px rgba(0,102,255,0.4); margin: 12px 0; }
+
+/* ── Comparison bars ── */
+.comp-bar-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.comp-bar-label { font-size: 11px; width: 80px; text-align: right; opacity: 0.6; }
+.comp-bar-track { flex: 1; height: 12px; background: #222; border-radius: 6px; overflow: hidden; position: relative; }
+.comp-bar-fill { height: 100%; border-radius: 6px; transition: width 0.5s; position: absolute; top: 0; left: 0; }
+.comp-bar-fill.current { background: #0066ff; z-index: 2; }
+.comp-bar-fill.diag { background: rgba(255,255,255,0.15); z-index: 1; }
+.comp-bar-val { font-size: 11px; width: 30px; font-weight: 600; }
+
+/* ── XP Popup ── */
+@keyframes xpPopup { 0%{opacity:0;transform:translateY(10px)} 20%{opacity:1;transform:translateY(0)} 80%{opacity:1;transform:translateY(-10px)} 100%{opacity:0;transform:translateY(-30px)} }
+.xp-popup {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,102,255,0.9); color: #fff; padding: 8px 20px;
+  border-radius: 20px; font-size: 16px; font-weight: 700; z-index: 200;
+  animation: xpPopup 2s ease forwards; pointer-events: none;
+}
 </style>
 </head>
 <body>
+
+<!-- ═══════════════════ STATUS BANNER ═══════════════════ -->
+<div id="status-banner" style="display:none;">
+  <div class="sb-item"><span class="sb-label">Niveau:</span> <span class="sb-val" id="sb-level">--</span></div>
+  <div class="sb-item"><span class="sb-label">XP:</span> <span class="sb-val" id="sb-xp">0</span> <div class="xp-bar-mini"><div class="xp-fill" id="sb-xp-fill" style="width:0%"></div></div></div>
+  <div class="sb-item"><span class="sb-label">Streak:</span> <span class="sb-val" id="sb-streak">0j</span></div>
+  <div class="sb-item"><span class="sb-label">Parasites:</span> <span class="sb-val" id="sb-fillers">--</span></div>
+</div>
 
 <!-- ═══════════════════ SETUP SCREEN ═══════════════════ -->
 <div id="setup" class="screen active">
   <h1>Voice Training</h1>
   <p class="subtitle">Eloquence. Diction. Souffle.</p>
+  <div id="diag-banner-container"></div>
   <div id="browser-warning" class="warning-banner" style="display:none;">
     Speech Recognition non supporte sur ce navigateur. Seul le module Respiration est disponible.
   </div>
@@ -455,7 +622,24 @@ button:active { opacity: 0.7; }
       <h3>Choisir module</h3>
       <p>Selectionner un exercice</p>
     </div>
+    <div class="mode-card" onclick="showProgression()" style="border-color:#0066ff;">
+      <h3>Ma Progression</h3>
+      <p>Stats, radar, niveaux</p>
+    </div>
   </div>
+</div>
+
+<!-- ═══════════════════ PROGRESSION SCREEN ═══════════════════ -->
+<div id="progression-screen" class="screen">
+  <div id="prog-content" style="width:100%;max-width:460px;padding-bottom:40px;"></div>
+  <div class="btn-group" style="margin-top:16px;">
+    <button class="btn-secondary" onclick="showScreen('setup')">Retour</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ DIAGNOSTIC SCREEN ═══════════════════ -->
+<div id="diagnostic-screen" class="screen">
+  <div id="diag-content" style="width:100%;max-width:460px;"></div>
 </div>
 
 <!-- ═══════════════════ MODULE SELECT ═══════════════════ -->
@@ -494,8 +678,23 @@ button:active { opacity: 0.7; }
   </div>
   <div id="opt-improv" class="module-option" onclick="startModule('improv')" style="border-color:#ff9100;">
     <h3>Improvisation</h3>
-    <p>Un mot au hasard — parle 90 secondes sur le sujet (methode Vinh Giang)</p>
-    <span class="tag no-mic">Pas de micro</span>
+    <p>Un mot au hasard — parle 90 secondes avec analyse du debit et des hesitations</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-frameworks" class="module-option" onclick="startModule('frameworks')" style="border-color:#ff9100;">
+    <h3>Structures d'Impro</h3>
+    <p>Matt Abrahams — What/So What/Now What, Problem/Solution/Benefit, Passe/Present/Futur</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-miseensituation" class="module-option" onclick="startModule('miseensituation')" style="border-color:#00bcd4;">
+    <h3>Mise en Situation</h3>
+    <p>7 competences sociales : Lire les gens, Persuader, Negocier, Seduire, Storytelling...</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-diagnostic" class="module-option" onclick="startDiagnostic()" style="border-color:#0066ff;">
+    <h3>Diagnostic</h3>
+    <p>Evalue ton niveau de depart sur 4 exercices rapides</p>
+    <span class="tag mic">Micro requis</span>
   </div>
   <div class="btn-group">
     <button class="btn-secondary" onclick="showScreen('setup')">Retour</button>
@@ -552,7 +751,7 @@ button:active { opacity: 0.7; }
 // ════════════════════════════════════════════════════════════
 const BEEMINDER_USER = "prinsechris";
 const BEEMINDER_TOKEN = "28f1_C1a-W6ZPtA1joXN";
-const BEEMINDER_GOAL = "habitudes";
+const BEEMINDER_GOAL = "eloquence";
 
 const SPEECH_SUPPORTED = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
@@ -571,21 +770,94 @@ const READING_TEXTS = [
   {
     title: "L'Etranger — Camus",
     text: "Aujourd'hui maman est morte. Ou peut-etre hier, je ne sais pas. J'ai recu un telegramme de l'asile : Mere decedee. Enterrement demain. Sentiments distingues. Cela ne veut rien dire. C'etait peut-etre hier."
+  },
+  {
+    title: "Les Miserables — Victor Hugo",
+    text: "Tant qu'il existera, par le fait des lois et des moeurs, une damnation sociale creant artificiellement, en pleine civilisation, des enfers, et compliquant d'une fatalite humaine la destinee qui est divine ; tant que les trois problemes du siecle, la degradation de l'homme par le proletariat, la decheance de la femme par la faim, l'atrophie de l'enfant par la nuit, ne seront pas resolus ; tant qu'il y aura sur la terre ignorance et misere, des livres de la nature de celui-ci pourront ne pas etre inutiles."
+  },
+  {
+    title: "Discours de Simone Veil — Assemblee nationale 1974",
+    text: "Je voudrais tout d'abord vous faire partager une conviction de femme. Je m'excuse de le faire devant cette Assemblee presque exclusivement composee d'hommes. Aucune femme ne recourt de gaiete de coeur a l'avortement. Il suffit d'ecouter les femmes. C'est toujours un drame et cela restera toujours un drame. C'est pourquoi, si le projet qui vous est presente tient compte de la situation de fait existante, s'il admet la possibilite d'une interruption de grossesse, c'est pour la controler et, autant que possible, en dissuader la femme."
+  },
+  {
+    title: "Article journalistique — Intelligence artificielle",
+    text: "L'intelligence artificielle transforme en profondeur notre rapport au travail, a la creativite et a la connaissance. Les modeles de langage, capables de generer du texte, de traduire, de resumer et d'analyser, redefinissent les frontieres entre ce qui releve de l'humain et ce qui peut etre automatise. Pour les entreprises, la question n'est plus de savoir si elles adopteront ces outils, mais comment elles les integreront sans perdre ce qui fait leur singularite : la vision, l'empathie et le jugement."
+  },
+  {
+    title: "Documentation technique — API REST",
+    text: "Une API REST repose sur un ensemble de contraintes architecturales. Chaque ressource est identifiee par une URL unique. Les operations standard utilisent les methodes HTTP : GET pour la lecture, POST pour la creation, PUT pour la mise a jour complete, PATCH pour la mise a jour partielle, et DELETE pour la suppression. Le serveur ne conserve aucun etat entre les requetes. Chaque appel contient toutes les informations necessaires a son traitement, ce qui garantit la scalabilite du systeme."
+  },
+  {
+    title: "Germinal — Emile Zola",
+    text: "Et, sous ses pieds, les coups profonds, les coups obstines des rivelaines continuaient. Les camarades etaient tous la, il les entendait le suivre a chaque enjambee. N'etait-ce pas la Maheude, sous cette piece de betteraves, l'echine cassee, dont le souffle montait si rauque, accompagne par le ronflement du ventilateur ? A gauche, a droite, plus loin, il croyait en reconnaitre d'autres, sous les bles, les haies vives, les jeunes arbres."
+  },
+  {
+    title: "Discours d'Aimee Cesaire — Assemblee nationale 1950",
+    text: "La colonisation deshumanise l'homme meme le plus civilise. L'action coloniale, l'entreprise coloniale, la conquete coloniale, fondee sur le mepris de l'homme indigene et justifiee par ce mepris, tend inevitablement a modifier celui qui l'entreprend. Le colonisateur qui, pour se donner bonne conscience, s'habitue a voir dans l'autre la bete, s'entraine a le traiter en bete, tend objectivement a se transformer lui-meme en bete."
+  },
+  {
+    title: "Chronique sportive — Finale de Coupe du monde",
+    text: "Les quatre-vingt-dix minutes reglementaires n'ont pas suffi a departager les deux equipes. Apres une premiere mi-temps dominee par la pression haute des attaquants, le match a bascule dans un suspense insoutenable. Deux buts en cinq minutes, un poteau, un arret decisif du gardien, puis les prolongations. Le stade entier retenait son souffle. C'est finalement aux tirs au but que tout s'est joue, dans un silence de cathedrale brise par l'explosion de joie finale."
   }
 ];
 
-const TWISTERS = [
-  "Un chasseur sachant chasser sait chasser sans son chien",
-  "Les chaussettes de l'archiduchesse sont-elles seches ou archi-seches",
-  "Je suis ce que je suis et si je suis ce que je suis qu'est-ce que je suis",
-  "Cinq chiens chassent six chats dans six cent six sachets",
-  "Pauvre petit pecheur prend patience pour pouvoir prendre plusieurs petits poissons",
-  "Tonton ton the t'a-t-il ote ta toux",
-  "Si six scies scient six cypres six cent six scies scient six cent six cypres",
-  "Trois gros rats gris dans trois gros trous ronds rongent trois gros croutes rondes",
-  "Seize jacinthes sechent dans seize sachets secs",
-  "Le mur murant Paris rend Paris murmurant"
+const TWISTERS_POOL = [
+  // Difficulte 1
+  { text: "Tonton ton the t'a-t-il ote ta toux", difficulty: 1 },
+  { text: "Le mur murant Paris rend Paris murmurant", difficulty: 1 },
+  { text: "Fruits frais fruits frits fruits cuits fruits crus", difficulty: 1 },
+  { text: "Cinq chiens chassent six chats", difficulty: 1 },
+  { text: "As-tu vu le tutu de tulle de Lulu", difficulty: 1 },
+  { text: "Poisson sans boisson est poison", difficulty: 1 },
+  { text: "Je veux et j'exige d'exquises excuses", difficulty: 1 },
+  { text: "Natacha n'attacha pas son chat qui s'echappa", difficulty: 1 },
+  // Difficulte 2
+  { text: "Un chasseur sachant chasser sait chasser sans son chien", difficulty: 2 },
+  { text: "Pauvre petit pecheur prend patience pour pouvoir prendre plusieurs petits poissons", difficulty: 2 },
+  { text: "Seize jacinthes sechent dans seize sachets secs", difficulty: 2 },
+  { text: "Les chaussettes de l'archiduchesse sont-elles seches ou archi-seches", difficulty: 2 },
+  { text: "Trois gros rats gris dans trois gros trous ronds rongent trois gros croutes rondes", difficulty: 2 },
+  { text: "Didon dina dit-on du dos d'un dodu dindon", difficulty: 2 },
+  { text: "Papier piano panier piano papier panier", difficulty: 2 },
+  { text: "Combien de sous sont ces six saucissons-ci ces six saucissons-ci sont six sous", difficulty: 2 },
+  // Difficulte 3
+  { text: "Je suis ce que je suis et si je suis ce que je suis qu'est-ce que je suis", difficulty: 3 },
+  { text: "Si six scies scient six cypres six cent six scies scient six cent six cypres", difficulty: 3 },
+  { text: "Un genereux dejeuner regenererait des generaux degeneres", difficulty: 3 },
+  { text: "Suis-je bien chez ce cher Serge", difficulty: 3 },
+  { text: "La pie niche haut le hibou niche bas la pie niche dans l'if le hibou niche dans le houx ou niche l'hibou dans le houx ou niche la pie dans l'if", difficulty: 3 },
+  { text: "Le fisc fixe exces sur chaque taxe fixe excessive", difficulty: 3 },
+  { text: "Ton the t'a-t-il ote ta toux disait la tortue au tatou tetu", difficulty: 3 },
+  { text: "Ces cerises sont si sures qu'on ne sait pas si c'en sont", difficulty: 3 },
+  // Difficulte 4
+  { text: "Cinq chiens chassent six chats dans six cent six sachets secs", difficulty: 4 },
+  { text: "L'abeille coule et la libellule fait une bulle de miel sur la presqu'ile", difficulty: 4 },
+  { text: "Si mon tonton tond ton tonton ton tonton sera tondu par mon tonton", difficulty: 4 },
+  { text: "Un pecheur qui pechait sous un pecher le pecher empechait le pecheur de pecher le pecheur coupa le pecher le pecher ne put plus empecher le pecheur de pecher", difficulty: 4 },
+  { text: "Je veux et j'exige seize chemises fines et six fichus fins", difficulty: 4 },
+  { text: "L'assassin sur son sein suait son sang sans cesse et sessuyait", difficulty: 4 },
+  { text: "Le ver vert va vers le verre vert", difficulty: 4 },
+  { text: "Trois petites truites cuites trois petites truites crues", difficulty: 4 }
 ];
+
+let sessionTwisters = [];
+
+function pickSessionTwisters() {
+  // Filter twisters by player level difficulty range
+  const allowedDiffs = (typeof getTwisterDifficulties === 'function') ? getTwisterDifficulties() : [1, 2, 3, 4];
+  const eligible = TWISTERS_POOL.filter(t => allowedDiffs.includes(t.difficulty));
+
+  // Shuffle eligible
+  const shuffled = [...eligible];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  // Sort by difficulty ascending, pick 10
+  shuffled.sort((a, b) => a.difficulty - b.difficulty);
+  sessionTwisters = shuffled.slice(0, 10);
+  return sessionTwisters;
+}
 
 // ════════════════════════════════════════════════════════════
 // COLD CALL SCENARIOS
@@ -835,7 +1107,6 @@ const VOCAL_EXERCISES = [
     tip: "Plus c'est exagere, mieux c'est. On entraine les muscles, pas l'elegance.",
     duration: 180,
     reps: 1,
-    text: "Les grandes personnes aiment les chiffres. Quand vous leur parlez d'un nouvel ami, elles ne vous questionnent jamais sur l'essentiel. Elles ne vous disent jamais : Quel est le son de sa voix ? Quels sont les jeux qu'il prefere ? Est-ce qu'il collectionne les papillons ?",
     icon: "A"
   },
   {
@@ -868,6 +1139,24 @@ const VOCAL_EXERCISES = [
     ],
     icon: "||"
   }
+];
+
+const ARTICULATION_TEXTS = [
+  "Les grandes personnes aiment les chiffres. Quand vous leur parlez d'un nouvel ami, elles ne vous questionnent jamais sur l'essentiel. Elles ne vous disent jamais : Quel est le son de sa voix ? Quels sont les jeux qu'il prefere ? Est-ce qu'il collectionne les papillons ?",
+  "L'intelligence artificielle transforme notre rapport au travail et a la creativite. Les modeles de langage redefinissent les frontieres entre l'humain et l'automatise. La question n'est plus si les entreprises adopteront ces outils, mais comment les integrer sans perdre leur singularite.",
+  "Chaque matin, le boulanger petrit sa pate avec precision. Ses gestes repetes depuis trente ans produisent des baguettes croustillantes, des pains au levain parfumes et des viennoiseries feuilletees. L'artisanat, c'est la repetition transformee en excellence.",
+  "Pourquoi philosopher ? Parce que la philosophie nous apprend a poser les bonnes questions. Elle ne pretend pas apporter toutes les reponses, mais elle nous oblige a reflechir avant d'agir, a douter avant d'affirmer, a ecouter avant de juger.",
+  "Le vent soufflait avec une force terrible sur les cotes bretonnes. Les vagues se fracassaient contre les rochers, projetant des gerbes d'ecume blanche dans la nuit. Les pecheurs, amarres au port, attendaient la fin de la tempete en scrutant l'horizon.",
+  "Un bon pitch commercial tient en trente secondes. Vous devez capter l'attention, presenter le probleme, proposer la solution et lancer un appel a l'action. Chaque mot compte. Chaque pause aussi. La clarte est votre meilleure arme.",
+  "La biodiversite est un equilibre fragile. Chaque espece joue un role dans son ecosysteme. La disparition d'un insecte pollinisateur peut affecter des centaines de plantes, qui a leur tour nourrissent des animaux, qui eux-memes participent a la fertilisation des sols.",
+  "Trois tortues trottaient sur un trottoir tres etroit. Trente-trois gros crapauds gris, accroupis dans trente-trois gros creux creux, croquaient trente-trois gros vers gras. Quatre quakers en quete de quietude quotidienne.",
+  "Le discours commence avant les mots. Votre posture, votre regard, votre souffle — tout communique. Les grands orateurs le savent : le silence est plus puissant que n'importe quelle phrase. Une pause au bon moment vaut mille mots.",
+  "La gastronomie francaise repose sur des techniques precises. Julienne, brunoise, chiffonnade — chaque decoupe a son nom et sa fonction. Le roux blond epaissit les sauces. Le bain-marie tempere le chocolat. La mirepoix parfume les fonds.",
+  "Aujourd'hui, les reseaux sociaux dictent le rythme de l'information. Une nouvelle peut faire le tour du monde en quelques minutes. Cette acceleration pose des questions fondamentales sur la verification des faits, la responsabilite editoriale et le droit a l'oubli.",
+  "Six cent soixante-six saucisses sechees sur six cent soixante-six souches seches. Si ces six cent soixante-six saucisses sur ces six cent soixante-six souches seches sont a six sous, ces six cent soixante-six saucisses sechees sont sans souci.",
+  "La programmation informatique est un langage de precision. Chaque instruction, chaque variable, chaque condition doit etre definie sans ambiguite. Un point-virgule oublie peut bloquer un programme entier. La rigueur syntaxique est la base de tout developpement.",
+  "Prenez le temps de respirer profondement avant de prendre la parole. Plantez vos pieds, redressez vos epaules, regardez votre public. Les trois premieres secondes determinent si votre audience va vous ecouter ou decrocher.",
+  "La revolution industrielle a transforme la societe en profondeur. Les machines a vapeur ont remplace le travail manuel. Les usines ont attire les populations rurales vers les villes. Les conditions de travail etaient effroyables, mais la productivite a explose."
 ];
 
 const BREATHING_TECHNIQUES = {
@@ -947,6 +1236,55 @@ let improvTimer = null;
 let improvTimeLeft = 0;
 let improvWord = "";
 let improvWordsUsed = [];
+let improvTranscript = "";
+let improvFillerCount = 0;
+let improvWordCount = 0;
+
+// Filler words (transversal)
+const FILLER_WORDS_FR = ["euh", "heu", "hum", "hmm", "bah", "ben", "genre", "du coup", "voila", "voilà", "en fait", "tu vois", "quoi", "bon"];
+let fillerWordCount = 0;
+let fillerWordActive = false;
+
+// Improv frameworks (Matt Abrahams)
+const IMPROV_FRAMEWORKS = [
+  { id: "wsn", name: "What? So What? Now What?", segments: ["What?", "So What?", "Now What?"], segmentDuration: 30 },
+  { id: "psb", name: "Problem / Solution / Benefit", segments: ["Probleme", "Solution", "Benefice"], segmentDuration: 30 },
+  { id: "ppf", name: "Passe / Present / Futur", segments: ["Passe", "Present", "Futur"], segmentDuration: 30 }
+];
+
+const IMPROV_FRAMEWORK_TOPICS = [
+  "Le teletravail est-il l'avenir du travail ?",
+  "Faut-il interdire les smartphones aux moins de 16 ans ?",
+  "L'intelligence artificielle va-t-elle remplacer les employes ?",
+  "Pourquoi les petits commerces disparaissent-ils ?",
+  "Comment reussir sa premiere impression en entretien ?",
+  "Les reseaux sociaux rendent-ils les gens plus seuls ?",
+  "Faut-il toujours dire la verite a ses clients ?",
+  "Comment motiver une equipe qui perd confiance ?",
+  "Le sport est-il essentiel pour la productivite ?",
+  "Pourquoi les gens ont peur de parler en public ?",
+  "L'automatisation est-elle une menace ou une opportunite ?",
+  "Comment gerer un client mecontent ?",
+  "Faut-il se specialiser ou rester generaliste ?",
+  "Quel est le secret d'une bonne negociation ?",
+  "Peut-on concilier ambition et equilibre de vie ?",
+  "Pourquoi echouer est necessaire pour reussir ?",
+  "Comment construire sa marque personnelle ?",
+  "L'argent fait-il le bonheur ?",
+  "Faut-il suivre sa passion ou etre strategique ?",
+  "Comment prendre de meilleures decisions sous pression ?",
+  "L'education traditionnelle est-elle encore adaptee ?",
+  "Comment convaincre quelqu'un qui n'est pas d'accord ?",
+  "Quel role joue la chance dans le succes ?",
+  "Faut-il dire non plus souvent ?",
+  "Comment gerer l'echec apres un projet qui ne marche pas ?",
+  "L'entrepreneuriat est-il fait pour tout le monde ?",
+  "Comment rendre une presentation memorable ?",
+  "Pourquoi la routine est-elle sous-estimee ?",
+  "Faut-il copier les concurrents ou innover ?",
+  "Comment transformer une idee en business en 30 jours ?",
+  "Le perfectionnisme est-il un frein ou un atout ?"
+];
 
 // Pace tracking
 let paceWordTimestamps = [];
@@ -962,10 +1300,16 @@ let currentPaceWPM = 0;
     document.getElementById("opt-twisters").classList.add("disabled");
     document.getElementById("opt-coldcall").classList.add("disabled");
     document.getElementById("opt-simulation").classList.add("disabled");
+    document.getElementById("opt-improv").classList.add("disabled");
+    document.getElementById("opt-frameworks").classList.add("disabled");
     document.getElementById("opt-reading").onclick = null;
     document.getElementById("opt-twisters").onclick = null;
     document.getElementById("opt-coldcall").onclick = null;
     document.getElementById("opt-simulation").onclick = null;
+    document.getElementById("opt-improv").onclick = null;
+    document.getElementById("opt-frameworks").onclick = null;
+    const diagOpt = document.getElementById("opt-diagnostic");
+    if (diagOpt) { diagOpt.classList.add("disabled"); diagOpt.onclick = null; }
   }
 })();
 
@@ -978,6 +1322,8 @@ function showScreen(id) {
   document.getElementById("voice-panel").classList.remove("active");
   const target = document.getElementById(id);
   if (target) target.classList.add("active");
+  if (id === 'setup' && typeof updateDiagBanner === 'function') updateDiagBanner();
+  if (id === 'setup' && typeof updateStatusBanner === 'function') updateStatusBanner();
 }
 
 function showExercise() {
@@ -1005,7 +1351,7 @@ function showModuleSelect() {
 }
 
 function startModule(mod) {
-  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation") && !SPEECH_SUPPORTED) {
+  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation" || mod === "improv" || mod === "frameworks" || mod === "miseensituation") && !SPEECH_SUPPORTED) {
     showMicError({name: 'NotSupported', message: 'Speech Recognition non supporte sur ce navigateur.'});
     return;
   }
@@ -1020,12 +1366,34 @@ function startModule(mod) {
   else if (mod === "coldcall") startColdCall();
   else if (mod === "simulation") startSimulation();
   else if (mod === "improv") startImprov();
+  else if (mod === "frameworks") startFrameworks();
+  else if (mod === "miseensituation") startMiseEnSituation();
 }
 
 function completeModule(mod) {
   modulesCompleted.push(mod);
   stopRecognition();
   stopVoiceAnalysis();
+
+  // Record sessions for modules not tracked individually
+  if (typeof recordSession === 'function') {
+    const elapsed = Math.round((Date.now() - (sessionStartTime || Date.now())) / 1000);
+    if (mod === 'twisters') {
+      const score = sessionTwisters.length > 0 ? Math.round((twistersCompleted / sessionTwisters.length) * 100) : 0;
+      recordSession({ module: 'virelangues', score: score, duration: elapsed, fillerWords: 0, wpm: 0, skills: ['articulation'], details: { completed: twistersCompleted, total: sessionTwisters.length } });
+    } else if (mod === 'reading') {
+      const score = readingTotal > 0 ? Math.round((readingCorrect / readingTotal) * 100) : 0;
+      recordSession({ module: 'lecture', score: score, duration: elapsed, fillerWords: 0, wpm: 0, skills: ['fluidite', 'lecture'], details: { correct: readingCorrect, total: readingTotal } });
+    } else if (mod === 'coldcall') {
+      const avgScore = ccScores && ccScores.length > 0 ? Math.round(ccScores.reduce((a, b) => a + b, 0) / ccScores.length) : 50;
+      recordSession({ module: 'coldcall', score: avgScore, duration: elapsed, fillerWords: 0, wpm: 0, skills: ['persuasion', 'negociation'], details: {} });
+    } else if (mod === 'simulation') {
+      recordSession({ module: 'simulation', score: 60, duration: elapsed, fillerWords: 0, wpm: 0, skills: ['persuasion', 'negociation'], details: {} });
+    } else if (mod === 'warmup' || mod === 'breathing') {
+      recordSession({ module: mod, score: 70, duration: elapsed, fillerWords: 0, wpm: 0, skills: ['articulation'], details: {} });
+    }
+    // impro, structures, mise_en_situation are tracked in their own Done functions
+  }
 
   if (sessionMode === "full" && fullSessionQueue.length > 0) {
     startModule(fullSessionQueue.shift());
@@ -1431,6 +1799,7 @@ function updateWarmupTimerDisplay() {
 
 function runArticulationExercise(ex) {
   warmupTimeLeft = ex.duration;
+  const articulationText = ARTICULATION_TEXTS[Math.floor(Math.random() * ARTICULATION_TEXTS.length)];
 
   const content = document.getElementById("exercise-content");
   content.innerHTML = `
@@ -1439,7 +1808,7 @@ function runArticulationExercise(ex) {
       <div class="instruction">${ex.instruction}</div>
       <div class="tip">${ex.tip}</div>
     </div>
-    <div class="warmup-text-display">${ex.text}</div>
+    <div class="warmup-text-display">${articulationText}</div>
     <div class="warmup-timer" id="warmup-time">${Math.floor(ex.duration / 60)}:00</div>
   `;
 
@@ -1613,20 +1982,68 @@ function toggleReading() {
     initRecognition(onReadingResult);
     startRecognition();
     initAudioAnalysis();
+    showFillerOverlay();
     btn.textContent = "Arreter";
   } else {
     stopRecognition();
     stopVoiceAnalysis();
+    hideFillerOverlay();
     document.getElementById("voice-panel").classList.remove("active");
     btn.textContent = "Reprendre";
   }
 }
 
+function numberToFrenchWord(n) {
+  if (n < 0 || n > 9999 || !Number.isInteger(n)) return String(n);
+  const units = ["zero","un","deux","trois","quatre","cinq","six","sept","huit","neuf",
+    "dix","onze","douze","treize","quatorze","quinze","seize","dix-sept","dix-huit","dix-neuf"];
+  const tens = ["","","vingt","trente","quarante","cinquante","soixante","soixante","quatre-vingt","quatre-vingt"];
+  if (n < 20) return units[n];
+  if (n < 100) {
+    const t = Math.floor(n / 10);
+    const u = n % 10;
+    if (t === 7 || t === 9) {
+      // 70-79 = soixante-dix..., 90-99 = quatre-vingt-dix...
+      const base = t === 7 ? "soixante" : "quatre-vingt";
+      const sub = n - (t === 7 ? 60 : 80);
+      if (sub === 0) return t === 7 ? "soixante-dix" : "quatre-vingt-dix";
+      return base + "-" + units[sub];
+    }
+    if (u === 0) return tens[t] + (t === 8 ? "s" : "");
+    if (u === 1 && t !== 8) return tens[t] + " et un";
+    return tens[t] + "-" + units[u];
+  }
+  if (n < 1000) {
+    const h = Math.floor(n / 100);
+    const rest = n % 100;
+    let prefix = h === 1 ? "cent" : units[h] + " cent";
+    if (rest === 0) return h > 1 ? prefix + "s" : prefix;
+    return prefix + " " + numberToFrenchWord(rest);
+  }
+  // 1000-9999
+  const th = Math.floor(n / 1000);
+  const rest = n % 1000;
+  let prefix = th === 1 ? "mille" : numberToFrenchWord(th) + " mille";
+  if (rest === 0) return prefix;
+  return prefix + " " + numberToFrenchWord(rest);
+}
+
+function normalizeNumbersInText(text) {
+  return text.replace(/\b\d+\b/g, function(match) {
+    const n = parseInt(match, 10);
+    if (n >= 0 && n <= 9999) return numberToFrenchWord(n);
+    return match;
+  });
+}
+
 function normalizeWord(w) {
-  return w.toLowerCase()
+  let normalized = w.toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9àâäéèêëïîôùûüÿçœæ]/g, "")
+    .replace(/[^a-z0-9àâäéèêëïîôùûüÿçœæ\s-]/g, "")
     .replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, "");
+  // Convert any remaining digits to French words
+  normalized = normalizeNumbersInText(normalized);
+  return normalized;
 }
 
 function stripPunctuation(text) {
@@ -1655,7 +2072,7 @@ function onReadingResult(event) {
   readingTranscriptWords = readingTranscriptWords.concat(newWords);
 
   if (newWords.length > 0) {
-    trackPace(spokenWords.length);
+    trackPace(readingTranscriptWords.length);
   }
 
   for (const spoken of newWords) {
@@ -1717,22 +2134,24 @@ function startTwisters() {
   twisterLastResultIndex = 0;
   paceWordTimestamps = [];
   currentPaceWPM = 0;
+  pickSessionTwisters();
   renderTwister();
 }
 
 function renderTwister() {
-  document.getElementById("ex-progress").textContent = `${twisterIndex + 1} / ${TWISTERS.length}`;
+  document.getElementById("ex-progress").textContent = `${twisterIndex + 1} / ${sessionTwisters.length}`;
 
-  const difficulty = Math.ceil(((twisterIndex + 1) / TWISTERS.length) * 5);
-  const dots = Array.from({ length: 5 }, (_, i) =>
+  const twister = sessionTwisters[twisterIndex];
+  const difficulty = twister.difficulty;
+  const dots = Array.from({ length: 4 }, (_, i) =>
     `<span class="dot ${i < difficulty ? "filled" : ""}"></span>`
   ).join("");
 
   const content = document.getElementById("exercise-content");
   content.innerHTML = `
-    <div class="twister-progress">Exercice ${twisterIndex + 1} sur ${TWISTERS.length}</div>
+    <div class="twister-progress">Exercice ${twisterIndex + 1} sur ${sessionTwisters.length}</div>
     <div class="difficulty-dots">${dots}</div>
-    <div class="twister-display" id="twister-text">${TWISTERS[twisterIndex]}</div>
+    <div class="twister-display" id="twister-text">${twister.text}</div>
     <div class="twister-transcript">
       <div class="label">Votre prononciation :</div>
       <div id="twister-heard">--</div>
@@ -1757,6 +2176,7 @@ function toggleTwisterListen() {
     initRecognition(onTwisterResult);
     startRecognition();
     initAudioAnalysis();
+    showFillerOverlay();
     btn.textContent = "Arreter";
     twisterListening = true;
     document.getElementById("twister-heard").textContent = "...";
@@ -1764,6 +2184,7 @@ function toggleTwisterListen() {
   } else {
     stopRecognition();
     stopVoiceAnalysis();
+    hideFillerOverlay();
     document.getElementById("voice-panel").classList.remove("active");
     btn.textContent = "Ecouter";
     twisterListening = false;
@@ -1774,7 +2195,7 @@ function onTwisterResult(event) {
   // Skip if already advancing to next twister (prevent race condition)
   if (twisterAdvancing) return;
 
-  const target = TWISTERS[twisterIndex];
+  const target = sessionTwisters[twisterIndex].text;
   let bestScore = 0;
   let bestTranscript = "";
 
@@ -1785,7 +2206,7 @@ function onTwisterResult(event) {
     for (let a = 0; a < result.length; a++) {
       const transcript = result[a].transcript.trim();
       if (!transcript) continue;
-      const score = fuzzyMatch(normalizeWord(transcript), normalizeWord(target));
+      const score = fuzzyMatch(normalizeWord(normalizeNumbersInText(transcript)), normalizeWord(normalizeNumbersInText(target)));
       if (score > bestScore) {
         bestScore = score;
         bestTranscript = transcript;
@@ -1813,12 +2234,13 @@ function onTwisterResult(event) {
     setTimeout(() => {
       stopRecognition();
       stopVoiceAnalysis();
+      hideFillerOverlay();
       document.getElementById("voice-panel").classList.remove("active");
       twisterListening = false;
       twisterAdvancing = false;
       twisterLastResultIndex = 0;
 
-      if (twisterIndex < TWISTERS.length - 1) {
+      if (twisterIndex < sessionTwisters.length - 1) {
         twisterIndex++;
         renderTwister();
       } else {
@@ -2180,6 +2602,7 @@ function toggleCCSpeak() {
     initRecognition(onCCResult);
     startRecognition();
     initAudioAnalysis();
+    showFillerOverlay();
     ccListening = true;
     btn.textContent = "Stop";
     btn.style.background = "#dc2626";
@@ -2208,6 +2631,7 @@ function toggleCCSpeak() {
     if (ccTimer) { clearInterval(ccTimer); ccTimer = null; }
     stopRecognition();
     stopVoiceAnalysis();
+    hideFillerOverlay();
     document.getElementById("voice-panel").classList.remove("active");
     btn.textContent = "Parler";
     btn.style.background = "#ff6600";
@@ -2226,6 +2650,7 @@ function onCCResult(event) {
   if (words.length > 0) {
     trackPace(words.length);
   }
+  updateFillerOverlay(countFillerWords(transcript));
 }
 
 function evaluateCCStep() {
@@ -2310,7 +2735,7 @@ function completeCCScenario() {
 }
 
 // ════════════════════════════════════════════════════════════
-// IMPROVISATION MODULE (methode Vinh Giang)
+// IMPROVISATION MODULE (methode Vinh Giang — avec analyse)
 // ════════════════════════════════════════════════════════════
 function startImprov() {
   document.getElementById("ex-title").textContent = "Improvisation";
@@ -2319,23 +2744,39 @@ function startImprov() {
 }
 
 function pickNewImprovWord() {
+  stopRecognition();
+  stopVoiceAnalysis();
   // Pick a word not yet used this session
   const available = IMPROV_WORDS.filter(w => !improvWordsUsed.includes(w));
   if (available.length === 0) improvWordsUsed = [];
   const pool = available.length > 0 ? available : IMPROV_WORDS;
   improvWord = pool[Math.floor(Math.random() * pool.length)];
   improvWordsUsed.push(improvWord);
-  improvTimeLeft = IMPROV_DURATION;
+  const _improvDur = (typeof getImprovDuration === 'function') ? getImprovDuration() : IMPROV_DURATION;
+  improvTimeLeft = _improvDur;
+  improvTranscript = "";
+  improvFillerCount = 0;
+  improvWordCount = 0;
+
+  // Expert mode: add emotion constraint
+  const expertConst = (typeof getExpertConstraints === 'function') ? getExpertConstraints() : null;
+  let constraintHTML = '';
+  if (expertConst) {
+    constraintHTML = `<div style="margin:8px 0;padding:8px 16px;background:rgba(255,82,82,0.15);border-radius:8px;color:#ff5252;font-size:14px;font-weight:600;">Contrainte : parle avec un ton ${expertConst.emotion}</div>`;
+  }
 
   const content = document.getElementById("exercise-content");
   content.innerHTML = `
     <div style="text-align:center;">
       <p style="opacity:0.5;font-size:13px;margin-bottom:8px;">Methode Vinh Giang</p>
-      <p style="font-size:16px;margin-bottom:30px;">Parle de ce mot pendant ${IMPROV_DURATION} secondes</p>
+      <p style="font-size:16px;margin-bottom:30px;">Parle de ce mot pendant ${_improvDur} secondes</p>
       <div class="improv-word" id="improv-word-display">${improvWord}</div>
+      ${constraintHTML}
       <div class="improv-timer" id="improv-timer-display">${formatImprovTime(improvTimeLeft)}</div>
+      <div id="improv-transcript-live" style="margin-top:16px;padding:12px;background:#111;border-radius:8px;font-size:13px;min-height:40px;max-height:120px;overflow-y:auto;opacity:0.6;text-align:left;display:none;"></div>
       <p class="improv-hint">Pas de preparation. Parle spontanement. L'objectif est de structurer ta pensee en temps reel, pas d'etre parfait.</p>
     </div>
+    <div id="improv-results-area"></div>
   `;
 
   const controls = document.getElementById("exercise-controls");
@@ -2352,9 +2793,49 @@ function formatImprovTime(s) {
   return m > 0 ? `${m}:${sec.toString().padStart(2, "0")}` : `${sec}`;
 }
 
+function onImprovResult(event) {
+  let transcript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  improvTranscript = transcript.trim();
+  const liveEl = document.getElementById("improv-transcript-live");
+  if (liveEl) {
+    liveEl.textContent = improvTranscript || "...";
+    liveEl.style.display = "block";
+  }
+  // Update filler counter overlay
+  const fillers = countFillerWords(improvTranscript);
+  updateFillerOverlay(fillers);
+}
+
+function countFillerWords(text) {
+  const lower = text.toLowerCase();
+  let count = 0;
+  const details = {};
+  for (const filler of FILLER_WORDS_FR) {
+    const regex = new RegExp("\\b" + filler.replace(/\s+/g, "\\s+") + "\\b", "gi");
+    const matches = lower.match(regex);
+    if (matches) {
+      count += matches.length;
+      details[filler] = matches.length;
+    }
+  }
+  return { total: count, details: details };
+}
+
 function startImprovTimer() {
   const btn = document.getElementById("btn-improv-start");
   if (btn) btn.disabled = true;
+
+  improvTranscript = "";
+  improvFillerCount = 0;
+
+  // Start mic
+  initRecognition(onImprovResult);
+  startRecognition();
+  initAudioAnalysis();
+  showFillerOverlay();
 
   const controls = document.getElementById("exercise-controls");
   controls.innerHTML = `
@@ -2379,11 +2860,90 @@ function startImprovTimer() {
 }
 
 function improvDone() {
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
+
+  const words = improvTranscript.split(/\s+/).filter(w => w.length > 0);
+  improvWordCount = words.length;
+  const _improvDurDone = (typeof getImprovDuration === 'function') ? getImprovDuration() : IMPROV_DURATION;
+  const elapsedSec = _improvDurDone - improvTimeLeft;
+  const wpm = elapsedSec > 0 ? Math.round((improvWordCount / elapsedSec) * 60) : 0;
+  const fillers = countFillerWords(improvTranscript);
+  improvFillerCount = fillers.total;
+
+  // Scoring /100 : Structure(25), Fluidite(25), Pertinence(25), Volume(25)
+  // Structure: based on word count + distribution
+  const structScore = Math.min(25, Math.round((improvWordCount / 120) * 25));
+  // Fluidite: penalize fillers
+  const fillerPenalty = Math.min(25, fillers.total * 3);
+  const fluidScore = Math.max(0, 25 - fillerPenalty);
+  // Pertinence: check if improv word appears in transcript
+  const mentionCount = (improvTranscript.toLowerCase().match(new RegExp("\\b" + improvWord.toLowerCase() + "\\b", "g")) || []).length;
+  const pertScore = Math.min(25, mentionCount > 0 ? 15 + Math.min(10, mentionCount * 5) : 5);
+  // Volume: based on WPM (ideal 120-160)
+  let volScore;
+  if (wpm >= 100 && wpm <= 180) volScore = 25;
+  else if (wpm >= 60 && wpm < 100) volScore = 15;
+  else if (wpm > 180 && wpm <= 220) volScore = 18;
+  else volScore = Math.max(5, Math.round((wpm / 120) * 15));
+
+  const totalScore = structScore + fluidScore + pertScore + volScore;
+
+  // Record session for progression
+  if (typeof recordSession === 'function') {
+    recordSession({ module: 'impro', score: totalScore, duration: elapsedSec, fillerWords: fillers.total, wpm: wpm, skills: ['improvisation', 'structure'], details: { word: improvWord, wordCount: improvWordCount } });
+  }
+
+  // Generate advice
+  const advice = [];
+  if (structScore < 15) advice.push("Essaie de parler plus longtemps. Developpe tes idees avec des exemples concrets.");
+  if (fluidScore < 15) advice.push("Reduis les mots parasites (" + Object.keys(fillers.details).join(", ") + "). Remplace-les par des pauses silencieuses.");
+  if (pertScore < 15) advice.push("Mentionne le mot-sujet davantage pour garder le cap et montrer que tu restes sur le theme.");
+  if (volScore < 15) advice.push(wpm < 100 ? "Parle un peu plus vite pour garder l'attention." : "Ralentis un peu, tu parles trop vite pour etre compris facilement.");
+  if (advice.length === 0) advice.push("Excellent travail. Continue comme ca.");
+
+  const scoreColor = totalScore >= 75 ? "#00c853" : totalScore >= 50 ? "#ffab00" : "#ff5252";
+
   const el = document.getElementById("improv-timer-display");
-  if (el) { el.textContent = "BRAVO"; el.style.color = "#00c853"; }
+  if (el) { el.textContent = totalScore + "/100"; el.style.color = scoreColor; }
 
   const wordEl = document.getElementById("improv-word-display");
-  if (wordEl) wordEl.style.color = "#00c853";
+  if (wordEl) wordEl.style.color = scoreColor;
+
+  const resultsArea = document.getElementById("improv-results-area");
+  if (resultsArea) {
+    resultsArea.innerHTML = `
+      <div style="text-align:left;margin-top:16px;padding:16px;background:#111;border-radius:12px;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">STRUCTURE</div>
+            <div style="font-size:20px;font-weight:700;color:${structScore >= 18 ? '#00c853' : structScore >= 12 ? '#ffab00' : '#ff5252'};">${structScore}/25</div>
+          </div>
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">FLUIDITE</div>
+            <div style="font-size:20px;font-weight:700;color:${fluidScore >= 18 ? '#00c853' : fluidScore >= 12 ? '#ffab00' : '#ff5252'};">${fluidScore}/25</div>
+          </div>
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">PERTINENCE</div>
+            <div style="font-size:20px;font-weight:700;color:${pertScore >= 18 ? '#00c853' : pertScore >= 12 ? '#ffab00' : '#ff5252'};">${pertScore}/25</div>
+          </div>
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">VOLUME</div>
+            <div style="font-size:20px;font-weight:700;color:${volScore >= 18 ? '#00c853' : volScore >= 12 ? '#ffab00' : '#ff5252'};">${volScore}/25</div>
+          </div>
+        </div>
+        <div style="font-size:13px;opacity:0.7;margin-bottom:8px;">
+          Mots : ${improvWordCount} | Debit : ${wpm} mots/min | Hesitations : ${fillers.total}
+          ${Object.keys(fillers.details).length > 0 ? ' (' + Object.entries(fillers.details).map(([k,v]) => k + ':' + v).join(', ') + ')' : ''}
+        </div>
+        <div style="font-size:13px;padding:10px;background:#0a1a0a;border-radius:8px;border:1px solid #1a3a1a;">
+          <div style="font-size:11px;opacity:0.5;margin-bottom:4px;">CONSEILS</div>
+          ${advice.map(a => '<div style="margin:4px 0;line-height:1.4;">- ' + a + '</div>').join("")}
+        </div>
+      </div>
+    `;
+  }
 
   const controls = document.getElementById("exercise-controls");
   controls.innerHTML = `
@@ -2394,7 +2954,279 @@ function improvDone() {
 
 function skipImprovToNext() {
   if (improvTimer) { clearInterval(improvTimer); improvTimer = null; }
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
   pickNewImprovWord();
+}
+
+// ════════════════════════════════════════════════════════════
+// FILLER WORDS OVERLAY (transversal)
+// ════════════════════════════════════════════════════════════
+function showFillerOverlay() {
+  fillerWordCount = 0;
+  fillerWordActive = true;
+  let overlay = document.getElementById("filler-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "filler-overlay";
+    overlay.style.cssText = "position:fixed;top:12px;left:12px;z-index:55;padding:6px 12px;border-radius:8px;background:rgba(255,82,82,0.15);color:#ff5252;font-size:12px;font-weight:600;display:none;pointer-events:none;";
+    document.body.appendChild(overlay);
+  }
+  overlay.textContent = "Parasites : 0";
+  overlay.style.display = "block";
+}
+
+function updateFillerOverlay(fillers) {
+  if (!fillerWordActive) return;
+  const overlay = document.getElementById("filler-overlay");
+  if (overlay) {
+    fillerWordCount = fillers.total;
+    overlay.textContent = "Parasites : " + fillers.total;
+    if (fillers.total > 5) overlay.style.background = "rgba(255,82,82,0.3)";
+    else if (fillers.total > 2) overlay.style.background = "rgba(255,171,0,0.2)";
+    else overlay.style.background = "rgba(255,82,82,0.15)";
+  }
+}
+
+function hideFillerOverlay() {
+  fillerWordActive = false;
+  const overlay = document.getElementById("filler-overlay");
+  if (overlay) overlay.style.display = "none";
+}
+
+// ════════════════════════════════════════════════════════════
+// STRUCTURES D'IMPRO (Matt Abrahams)
+// ════════════════════════════════════════════════════════════
+let frameworkTimer = null;
+let frameworkSegment = 0;
+let frameworkTranscripts = [];
+let frameworkCurrent = null;
+let frameworkTopic = "";
+let frameworkTimeLeft = 0;
+
+function startFrameworks() {
+  document.getElementById("ex-title").textContent = "Structures d'Impro";
+  document.getElementById("ex-progress").textContent = "";
+  showFrameworkMenu();
+}
+
+function showFrameworkMenu() {
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px;">
+      <p style="opacity:0.6;font-size:13px;">Methode Matt Abrahams — Structures de communication</p>
+    </div>
+    ${IMPROV_FRAMEWORKS.map(fw => `
+      <div class="module-option" onclick="selectFramework('${fw.id}')" style="border-color:#ff9100;cursor:pointer;">
+        <h3>${fw.name}</h3>
+        <p>${fw.segments.join(" → ")} (${fw.segments.length}x${fw.segmentDuration}s)</p>
+      </div>
+    `).join("")}
+  `;
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="skipModule('frameworks')">Retour</button>
+  `;
+}
+
+function selectFramework(id) {
+  frameworkCurrent = { ...IMPROV_FRAMEWORKS.find(f => f.id === id) };
+  // Override segment duration based on player level
+  if (typeof getFrameworkSegmentDuration === 'function') {
+    frameworkCurrent.segmentDuration = getFrameworkSegmentDuration();
+  }
+  frameworkSegment = 0;
+  frameworkTranscripts = frameworkCurrent.segments.map(() => "");
+  // Pick random topic
+  frameworkTopic = IMPROV_FRAMEWORK_TOPICS[Math.floor(Math.random() * IMPROV_FRAMEWORK_TOPICS.length)];
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;">
+      <p style="opacity:0.5;font-size:13px;margin-bottom:8px;">${frameworkCurrent.name}</p>
+      <div style="font-size:18px;font-weight:600;color:#ff9100;margin:16px 0;padding:16px;background:#111;border-radius:12px;">${frameworkTopic}</div>
+      <div id="fw-segment-label" style="font-size:24px;font-weight:700;color:#ff9100;margin:12px 0;">${frameworkCurrent.segments[0]}</div>
+      <div id="fw-segments-indicator" style="display:flex;gap:8px;justify-content:center;margin:12px 0;">
+        ${frameworkCurrent.segments.map((s, i) => `<span id="fw-seg-${i}" style="padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;background:${i === 0 ? 'rgba(255,145,0,0.3)' : '#1a1a1a'};color:${i === 0 ? '#ff9100' : '#666'};">${s}</span>`).join("")}
+      </div>
+      <div class="improv-timer" id="fw-timer-display">${frameworkCurrent.segmentDuration}</div>
+      <div id="fw-transcript-live" style="margin-top:12px;padding:12px;background:#111;border-radius:8px;font-size:13px;min-height:40px;max-height:100px;overflow-y:auto;opacity:0.6;text-align:left;display:none;"></div>
+    </div>
+    <div id="fw-results-area"></div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="startFrameworkTimer()" style="background:#ff9100;">C'est parti</button>
+    <button class="btn-secondary" onclick="showFrameworkMenu()">Changer</button>
+    <button class="btn-secondary" onclick="skipModule('frameworks')">Retour</button>
+  `;
+}
+
+function onFrameworkResult(event) {
+  let transcript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  frameworkTranscripts[frameworkSegment] = transcript.trim();
+  const liveEl = document.getElementById("fw-transcript-live");
+  if (liveEl) {
+    liveEl.textContent = transcript.trim() || "...";
+    liveEl.style.display = "block";
+  }
+  const fillers = countFillerWords(transcript);
+  updateFillerOverlay(fillers);
+}
+
+function startFrameworkTimer() {
+  frameworkTimeLeft = frameworkCurrent.segmentDuration;
+  frameworkSegment = 0;
+  frameworkTranscripts = frameworkCurrent.segments.map(() => "");
+
+  // Start mic
+  initRecognition(onFrameworkResult);
+  startRecognition();
+  initAudioAnalysis();
+  showFillerOverlay();
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="stopFrameworkEarly()">Arreter</button>
+  `;
+
+  runFrameworkSegment();
+}
+
+function runFrameworkSegment() {
+  if (frameworkSegment >= frameworkCurrent.segments.length) {
+    frameworkDone();
+    return;
+  }
+
+  frameworkTimeLeft = frameworkCurrent.segmentDuration;
+  const label = document.getElementById("fw-segment-label");
+  if (label) { label.textContent = frameworkCurrent.segments[frameworkSegment]; label.classList.add("bump"); setTimeout(() => label.classList.remove("bump"), 300); }
+
+  // Update segment indicators
+  frameworkCurrent.segments.forEach((s, i) => {
+    const el = document.getElementById("fw-seg-" + i);
+    if (el) {
+      if (i < frameworkSegment) { el.style.background = "rgba(0,200,83,0.2)"; el.style.color = "#00c853"; }
+      else if (i === frameworkSegment) { el.style.background = "rgba(255,145,0,0.3)"; el.style.color = "#ff9100"; }
+      else { el.style.background = "#1a1a1a"; el.style.color = "#666"; }
+    }
+  });
+
+  // Reset live transcript for this segment
+  const liveEl = document.getElementById("fw-transcript-live");
+  if (liveEl) liveEl.textContent = "...";
+
+  // Restart recognition for clean transcript per segment
+  stopRecognition();
+  setTimeout(() => {
+    initRecognition(onFrameworkResult);
+    startRecognition();
+  }, 200);
+
+  if (frameworkTimer) clearInterval(frameworkTimer);
+  frameworkTimer = setInterval(() => {
+    frameworkTimeLeft--;
+    const timerEl = document.getElementById("fw-timer-display");
+    if (timerEl) {
+      timerEl.textContent = frameworkTimeLeft;
+      if (frameworkTimeLeft <= 5) timerEl.style.color = "#ff5252";
+      else if (frameworkTimeLeft <= 10) timerEl.style.color = "#ffab00";
+      else timerEl.style.color = "#ff9100";
+    }
+    if (frameworkTimeLeft <= 0) {
+      clearInterval(frameworkTimer);
+      frameworkTimer = null;
+      frameworkSegment++;
+      if (frameworkSegment < frameworkCurrent.segments.length) {
+        // Flash transition
+        const label = document.getElementById("fw-segment-label");
+        if (label) label.style.color = "#00c853";
+        setTimeout(() => {
+          if (label) label.style.color = "#ff9100";
+          runFrameworkSegment();
+        }, 800);
+      } else {
+        frameworkDone();
+      }
+    }
+  }, 1000);
+}
+
+function stopFrameworkEarly() {
+  if (frameworkTimer) { clearInterval(frameworkTimer); frameworkTimer = null; }
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
+  frameworkDone();
+}
+
+function frameworkDone() {
+  if (frameworkTimer) { clearInterval(frameworkTimer); frameworkTimer = null; }
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
+
+  const segResults = frameworkCurrent.segments.map((seg, i) => {
+    const words = frameworkTranscripts[i].split(/\s+/).filter(w => w.length > 0);
+    return { name: seg, wordCount: words.length, text: frameworkTranscripts[i] };
+  });
+
+  const totalWords = segResults.reduce((sum, s) => sum + s.wordCount, 0);
+  const totalDuration = frameworkCurrent.segments.length * frameworkCurrent.segmentDuration;
+  const wpm = totalDuration > 0 ? Math.round((totalWords / totalDuration) * 60) : 0;
+
+  // Score: distribution evenness + total volume
+  const avgWords = totalWords / segResults.length;
+  const deviation = segResults.reduce((sum, s) => sum + Math.abs(s.wordCount - avgWords), 0) / segResults.length;
+  const balanceScore = Math.max(0, Math.round(50 - deviation * 2));
+  const volumeScore = Math.min(50, Math.round((totalWords / 80) * 50));
+  const totalScore = Math.min(100, balanceScore + volumeScore);
+  const scoreColor = totalScore >= 70 ? "#00c853" : totalScore >= 40 ? "#ffab00" : "#ff5252";
+
+  // Record session for progression
+  if (typeof recordSession === 'function') {
+    recordSession({ module: 'structures', score: totalScore, duration: totalDuration, fillerWords: 0, wpm: wpm, skills: ['structure'], details: { framework: frameworkCurrent.id, totalWords: totalWords } });
+  }
+
+  // Update segment indicators to done
+  frameworkCurrent.segments.forEach((s, i) => {
+    const el = document.getElementById("fw-seg-" + i);
+    if (el) { el.style.background = "rgba(0,200,83,0.2)"; el.style.color = "#00c853"; }
+  });
+
+  const label = document.getElementById("fw-segment-label");
+  if (label) { label.textContent = totalScore + "/100"; label.style.color = scoreColor; }
+
+  const timerEl = document.getElementById("fw-timer-display");
+  if (timerEl) { timerEl.textContent = "FAIT"; timerEl.style.color = "#00c853"; }
+
+  const resultsArea = document.getElementById("fw-results-area");
+  if (resultsArea) {
+    resultsArea.innerHTML = `
+      <div style="margin-top:16px;padding:16px;background:#111;border-radius:12px;">
+        <div style="font-size:13px;opacity:0.7;margin-bottom:12px;">Total : ${totalWords} mots | Debit : ${wpm} mots/min</div>
+        ${segResults.map(s => `
+          <div style="margin:8px 0;padding:10px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:12px;font-weight:600;color:#ff9100;margin-bottom:4px;">${s.name} — ${s.wordCount} mots</div>
+            <div style="font-size:12px;opacity:0.5;line-height:1.4;">${s.text || '(rien dit)'}</div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="selectFramework('${frameworkCurrent.id}')" style="background:#ff9100;">Recommencer</button>
+    <button class="btn-secondary" onclick="showFrameworkMenu()">Autre structure</button>
+    <button class="btn-success" onclick="completeModule('frameworks')">Terminer</button>
+  `;
 }
 
 // ════════════════════════════════════════════════════════════
@@ -2406,8 +3238,11 @@ function skipModule(mod) {
   if (breathingTimeout) clearTimeout(breathingTimeout);
   if (warmupTimer) { clearInterval(warmupTimer); warmupTimer = null; }
   if (improvTimer) { clearInterval(improvTimer); improvTimer = null; }
+  if (frameworkTimer) { clearInterval(frameworkTimer); frameworkTimer = null; }
+  if (mesTimer) { clearInterval(mesTimer); mesTimer = null; }
   stopRecognition();
   stopVoiceAnalysis();
+  hideFillerOverlay();
   document.getElementById("voice-panel").classList.remove("active");
   completeModule(mod);
 }
@@ -2420,11 +3255,24 @@ function showDone() {
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
 
-  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", improv: "Improvisation", coldcall: "Cold Call", simulation: "Simulation Realiste" };
+  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", improv: "Improvisation", frameworks: "Structures d'Impro", coldcall: "Cold Call", simulation: "Simulation Realiste" };
   const modList = modulesCompleted.map(m => moduleNames[m] || m).join(", ");
 
   showScreen("done-screen");
   document.getElementById("done-text").textContent = "Session completee";
+
+  // Progression summary
+  let progSummary = '';
+  if (typeof loadProgress === 'function') {
+    const prog = loadProgress();
+    const levelColors = { debutant: '#666', intermediaire: '#0066ff', avance: '#ff9100', expert: '#ff5252' };
+    progSummary = `
+      <div style="margin-top:12px;padding:12px;background:rgba(0,102,255,0.1);border-radius:8px;">
+        <div style="font-size:12px;opacity:0.7;">Niveau : <span style="color:${levelColors[prog.level]};font-weight:700;">${prog.level.charAt(0).toUpperCase() + prog.level.slice(1)}</span> | XP total : ${prog.totalXP} | Streak : ${prog.currentStreak}j</div>
+      </div>
+    `;
+  }
+
   document.getElementById("done-stats").innerHTML = `
     <div>Modules : ${modList}</div>
     <div>Temps : ${mins}m ${secs}s</div>
@@ -2433,9 +3281,10 @@ function showDone() {
       : ""
     }
     ${modulesCompleted.includes("twisters")
-      ? `<div>Virelangues valides : ${twistersCompleted} / ${TWISTERS.length}</div>`
+      ? `<div>Virelangues valides : ${twistersCompleted} / ${sessionTwisters.length}</div>`
       : ""
     }
+    ${progSummary}
   `;
 
   sendToBeeminder(modList, elapsed);
@@ -2920,6 +3769,7 @@ function toggleSimSpeak() {
     initRecognition(onSimResult);
     startRecognition();
     initAudioAnalysis();
+    showFillerOverlay();
     simListening = true;
     btn.textContent = "Stop";
     btn.style.background = "#dc2626";
@@ -2943,6 +3793,7 @@ function toggleSimSpeak() {
     if (simTimer) { clearInterval(simTimer); simTimer = null; }
     stopRecognition();
     stopVoiceAnalysis();
+    hideFillerOverlay();
     document.getElementById("voice-panel").classList.remove("active");
     btn.textContent = "Parler";
     btn.style.background = "#e63946";
@@ -2958,6 +3809,7 @@ function onSimResult(event) {
   document.getElementById("sim-transcript").textContent = transcript.trim() || "...";
   const words = transcript.trim().split(/\s+/).filter(w => w.length > 0);
   if (words.length > 0) trackPace(words.length);
+  updateFillerOverlay(countFillerWords(transcript));
 }
 
 function evaluateSimStep() {
@@ -3045,6 +3897,1335 @@ function completeSimulation() {
 }
 
 // ════════════════════════════════════════════════════════════
+// MISE EN SITUATION (Scenarios sociaux — 8 livres)
+// ════════════════════════════════════════════════════════════
+let mesTimer = null;
+let mesTimeLeft = 60;
+let mesTranscript = "";
+let mesCurrentComp = null;
+let mesCurrentScenario = null;
+let mesListening = false;
+let mesScenarioIndex = 0;
+const MES_DURATION = 60;
+
+const MES_COMPETENCES = [
+  {
+    id: "lire",
+    title: "Lire les Gens",
+    desc: "Identifier un profil, decoder une emotion, comprendre une motivation cachee",
+    color: "#4fc3f7",
+    scenarios: [
+      { context: "Tu arrives en reunion et tu dois rapidement identifier le profil DISC de ton interlocuteur pour adapter ta communication.", technique: "PROFILS DISC — Identifier le dominant", source: "Surrounded by Idiots — Erikson", conseil: "Observe : parle-t-il vite et direct (Rouge) ? Est-il enthousiaste et bavard (Jaune) ? Calme et a l'ecoute (Vert) ? Precis et analytique (Bleu) ?", keywords: ["rouge","jaune","vert","bleu","profil","direct","enthousiaste","calme","analytique","observe","comportement","type"] },
+      { context: "Un collegue sourit poliment mais tu sens que quelque chose ne va pas. Son langage corporel contredit ses mots.", technique: "DECODER LES MICRO-EXPRESSIONS", source: "Lois de la Nature Humaine — Greene", conseil: "Regarde les pieds (direction), les bras (croises = fermeture), le sourire (atteint-il les yeux ?). Le corps ne ment pas.", keywords: ["remarque","sens","impression","corps","langage","emotion","ressens","observe","signe","yeux","geste","tension"] },
+      { context: "Ton prospect hesite a signer mais ne dit pas pourquoi. Tu dois comprendre sa vraie objection.", technique: "DECODER LA MOTIVATION CACHEE", source: "Lois de la Nature Humaine — Greene", conseil: "La vraie raison est rarement la premiere donnee. Creuse avec 'Qu'est-ce qui vous ferait hesiter ?' plutot que 'Pourquoi vous ne signez pas ?'", keywords: ["vraiment","hesitation","raison","preoccupe","important","inquiete","frein","bloque","concretement","fond"] },
+      { context: "Tu manages une equipe diverse : 1 Rouge, 1 Jaune, 1 Vert, 1 Bleu. Tu dois annoncer un changement.", technique: "COMMUNICATION ADAPTEE AUX 4 PROFILS", source: "Surrounded by Idiots — Erikson", conseil: "Pour le Rouge : impact. Jaune : opportunite. Vert : transition douce. Bleu : plan detaille.", keywords: ["changement","impact","opportunite","transition","plan","concretement","ensemble","etape","benefice","progressif"] },
+      { context: "Tu es en entretien et le candidat te semble trop parfait. Tu suspectes un narcissique.", technique: "IDENTIFIER UN NARCISSIQUE", source: "Lois de la Nature Humaine — Greene", conseil: "Teste l'empathie : parle d'un echec personnel et observe sa reaction. Un narcissique ramene tout a lui, ne valide pas ton emotion.", keywords: ["empathie","ecoute","lui","reaction","echec","ego","ramene","attention","centre","valide","ressenti"] },
+      { context: "Quelqu'un est tres agressif avec toi dans une discussion. Tu dois comprendre d'ou vient cette hostilite.", technique: "LIRE LE STRESS — Fight or Flight", source: "Behave — Sapolsky", conseil: "L'agressivite est souvent une reaction au stress (cortisol). Ne reponds pas a l'agression, reponds au stress sous-jacent.", keywords: ["comprends","stresse","pression","difficile","situation","calme","respire","raison","tension","aide","frustration"] },
+      { context: "Tu recrutes un vendeur. Le candidat est tres JAUNE. Tu dois evaluer ses limites.", technique: "IDENTIFIER LES FAIBLESSES D'UN PROFIL", source: "Surrounded by Idiots — Erikson", conseil: "Pose des questions sur le suivi, les details, les processus. Un Jaune excelle en relation mais peut manquer de rigueur.", keywords: ["suivi","detail","organise","processus","concretement","exemple","regulier","structure","methode","rigoureux"] },
+      { context: "Un ami te dit 'Ca va' mais son ton dit le contraire. Tu veux l'amener a s'ouvrir.", technique: "EMPATHIE TACTIQUE", source: "Never Split the Difference — Voss", conseil: "Utilise le labeling : 'On dirait que quelque chose te pese...' Ne pose pas de question directe. Nomme l'emotion que tu perçois.", keywords: ["dirait","impression","sens","pese","quelque chose","remarque","difficile","normal","espace","ecoute"] },
+      { context: "En negociation, ton interlocuteur fait une offre absurdement basse. Tu dois comprendre si c'est strategique ou sincere.", technique: "BIAIS D'ANCRAGE — Identifier la tactique", source: "Systeme 1 / Systeme 2 — Kahneman", conseil: "L'ancrage est une tactique deliberee. Ignore le chiffre, recentre sur la valeur objective. Ne te laisse pas ancrer.", keywords: ["valeur","objectif","reference","marche","realiste","concretement","base","justifie","comparable","raisonnable"] },
+      { context: "Reunion avec un ROUGE et un VERT. Ils ne s'entendent pas sur la methode.", technique: "MEDIATEUR DISC", source: "Surrounded by Idiots — Erikson", conseil: "Traduis entre les deux : reformule les besoins du Rouge en securite pour le Vert, et vice versa.", keywords: ["comprends","point","objectif","securite","ensemble","methode","resultat","processus","combiner","equilibre"] },
+      { context: "Un prospect te parle avec beaucoup d'enthousiasme mais ne passe jamais a l'action. Tu dois lire entre les lignes.", technique: "LE FAUX OUI vs LE VRAI OUI", source: "Never Split the Difference — Voss", conseil: "Un 'oui' enthousiaste n'est pas un engagement. Cherche le 'C'est exact' ('That's right'). Pousse : 'Comment voyez-vous la suite concretement ?'", keywords: ["concretement","suite","engagement","quand","comment","etape","action","planifier","confirmer","exactement"] }
+    ]
+  },
+  {
+    id: "impression",
+    title: "Premiere Impression",
+    desc: "Premiere rencontre, networking, appel a froid, se presenter avec impact",
+    color: "#66bb6a",
+    scenarios: [
+      { context: "Tu entres dans une piece pleine d'inconnus a un cocktail professionnel.", technique: "THE FLOODING SMILE", source: "Comment parler a tout le monde — Lowndes", conseil: "Marque un temps de pause en regardant la personne, PUIS souris largement. Pas de sourire mecanique.", keywords: ["bonjour","ravi","plaisir","enchante","present","bienvenu","content","impression","accueillir"] },
+      { context: "Tu as 4 secondes pour capter l'attention d'un prospect au telephone.", technique: "LES 4 PREMIERES SECONDES", source: "Way of the Wolf — Belfort", conseil: "En 4 secondes, tu dois projeter 3 choses : enthousiasme, expertise, autorite. Ton ton de voix fait tout.", keywords: ["bonjour","rapidement","concretement","aide","specialise","resultat","justement","appelle","raison","important"] },
+      { context: "Quelqu'un te demande 'Qu'est-ce que tu fais dans la vie ?' a un diner.", technique: "THE NUTSHELL RESUME", source: "Comment parler a tout le monde — Lowndes", conseil: "Ne dis pas juste ton titre. Donne un resume accrocheur en une phrase qui suscite des questions.", keywords: ["aide","entreprise","automatise","simplifie","permet","concretement","resultat","transforme","solution","business"] },
+      { context: "Tu rencontres un inconnu a un evenement networking. Il a l'air ferme.", technique: "INTERET SINCERE", source: "Comment se faire des amis — Carnegie", conseil: "Pose des questions sur LUI, son activite, sa passion. Ne parle pas de toi tout de suite.", keywords: ["vous","votre","activite","comment","pourquoi","passion","parcours","raconte","interesse"] },
+      { context: "Tu veux faire bonne impression a un client VIP que tu rencontres pour la premiere fois.", technique: "BIG-BABY PIVOT + EPOXY EYES", source: "Comment parler a tout le monde — Lowndes", conseil: "Tourne-toi completement vers la personne (Big-Baby Pivot) et maintiens le contact visuel (Epoxy Eyes). Interet total.", keywords: ["absolument","fascinant","continuez","comment","impressionnant","justement","exactement","passionnant","racontez","interessant"] },
+      { context: "Premier appel avec un prospect froid. Tu dois creer un lien rapidement.", technique: "SYMPATHIE — Trouver le commun", source: "Influence et Manipulation — Cialdini", conseil: "Trouve des points communs, complimente sincerement, montre de l'interet pour son activite.", keywords: ["commun","aussi","interessant","bravo","impressionnant","comprends","similaire","passion","parcours"] },
+      { context: "Tu retrouves un ancien camarade de classe que tu n'as pas vu depuis 10 ans.", technique: "SOURIRE + INTERET SINCERE", source: "Comment se faire des amis — Carnegie", conseil: "Sois chaleureux, rappelle un bon souvenir commun, pose des questions sur son parcours.", keywords: ["souviens","epoque","content","devenu","raconte","famille","parcours","retrouver","nostalgique","genial"] },
+      { context: "Tu es a un salon professionnel. Tu veux aborder un speaker apres sa conference.", technique: "TRIADE DU CHARISME — Presence + Puissance + Chaleur", source: "The Charisma Myth — Cabane", conseil: "Sois present (ecoute), montre de la puissance (posture, calme) et de la chaleur (sourire, interet). Les trois ensemble = charisme.", keywords: ["excellent","presentation","justement","question","impressionne","point","pertinent","approfondir","inspire","parcours"] },
+      { context: "Tu arrives en retard a une reunion. Tout le monde est deja installe.", technique: "THE GRAND ENTRANCE", source: "Comment parler a tout le monde — Lowndes", conseil: "Ne te fais pas petit. Entre avec assurance, excuse-toi brievement, et prends ta place sans te justifier 10 fois.", keywords: ["excuse","retard","rattraper","continuer","reprenons","important","present","maintenant","rejoint"] },
+      { context: "Tu es dans un ascenseur avec le DG d'une entreprise que tu prospectes. Tu as 30 secondes.", technique: "ELEVATOR PITCH", source: "Comment parler a tout le monde — Lowndes", conseil: "Sois memorable en une phrase. Pose une question intrigante plutot que de debiter ton CV.", keywords: ["justement","projet","collaboration","resultat","impact","curieux","opportunite","raison","enchaine","concretement"] },
+      { context: "Tu dois meubler 5 minutes avec un inconnu en attendant quelqu'un.", technique: "OBSERVATION + CURIOSITE", source: "Maitrise du Small Talk", conseil: "Regarde l'environnement. Commente. Pose une question ouverte. Ecoute la reponse. Rebondis.", keywords: ["remarque","endroit","souvent","premiere fois","coin","connait","decouvrir","ambiance","habitude","quartier"] }
+    ]
+  },
+  {
+    id: "persuader",
+    title: "Persuader & Closer",
+    desc: "Vente, closing, convaincre, declencher l'action",
+    color: "#ef5350",
+    scenarios: [
+      { context: "Tu es en rendez-vous avec un restaurateur. Il hesite a prendre ton offre d'automatisation.", technique: "RECIPROCITE", source: "Influence et Manipulation — Cialdini", conseil: "Offre-lui quelque chose d'abord : un audit gratuit, un conseil concret, une ressource. Il se sentira redevable.", keywords: ["gratuit","offrir","cadeau","audit","conseil","valeur","d'abord","donner","aider"] },
+      { context: "Un prospect te dit 'Je vais reflechir'. Tu veux qu'il s'engage maintenant.", technique: "ENGAGEMENT et COHERENCE", source: "Influence et Manipulation — Cialdini", conseil: "Fais-le verbaliser un petit engagement d'abord : 'Vous etes d'accord que gagner du temps est important pour vous ?'", keywords: ["accord","important","engagement","etape","commencer","essayer","petit","premier","coherent"] },
+      { context: "Tu presentes ton offre d'automatisation. Le prospect dit 'C'est trop cher'.", technique: "EQUATION DE VALEUR", source: "$100M Offers — Hormozi", conseil: "Le prix n'est jamais le probleme. C'est le ratio Valeur / Prix. Augmente la valeur percue : resultat reve, probabilite, delai, effort minimal.", keywords: ["valeur","resultat","temps","economise","retour","investissement","concretement","gagne","compare","rapporte"] },
+      { context: "Tu fais une presentation devant 5 gerants de commerces locaux.", technique: "PREUVE SOCIALE + AUTORITE", source: "Influence et Manipulation — Cialdini", conseil: "Combine temoignages clients et expertise technique. Montre des resultats chiffres.", keywords: ["client","resultat","pourcentage","augmente","automatise","concretement","exemple","cas","prouve"] },
+      { context: "Tu dois vendre ton service en une conversation. Le prospect est presse.", technique: "HOOK — STORY — OFFER", source: "Expert Secrets — Brunson", conseil: "Hook : capte son attention avec un probleme qu'il reconnait. Story : raconte un cas similaire. Offer : propose la solution.", keywords: ["imagine","exactement","client","situation","resultat","solution","concretement","propose","offre","transforme"] },
+      { context: "Un client potentiel hesite entre toi et un concurrent.", technique: "RARETE + URGENCE", source: "Influence et Manipulation — Cialdini", conseil: "Cree l'urgence : places limitees, tarif special temporaire, disponibilite restreinte.", keywords: ["limite","dernier","maintenant","bientot","special","uniquement","reste","disponible","cette semaine","exceptionnel"] },
+      { context: "Tu presentes ton offre. Le prospect dit 'Envoyez-moi un devis, je verrai.'", technique: "LOOPING — Garder le controle", source: "Way of the Wolf — Belfort", conseil: "Ne laisse pas le prospect prendre le controle. Boucle : 'Avant le devis, laissez-moi comprendre vos priorites pour vous faire la meilleure offre.'", keywords: ["avant","comprendre","priorite","important","besoin","meilleure","exactement","adapte","specifique","ensemble"] },
+      { context: "Tu veux qu'un client te recommande a d'autres commercants.", technique: "RECIPROCITE + ENGAGEMENT", source: "Influence et Manipulation — Cialdini", conseil: "Rappelle ce que tu as fait pour lui, puis demande un petit effort : 'Connaissez-vous quelqu'un qui...'", keywords: ["recommander","connaitre","quelqu'un","satisfait","content","partager","aider","presenter","reseau"] },
+      { context: "Le prospect est convaincu mais hesite a finaliser. Il dit 'Je dois en parler a mon associe'.", technique: "ASSUMPTIVE CLOSE", source: "Secrets of Closing the Sale — Ziglar", conseil: "Agis comme si la vente etait faite : 'Parfait, quand souhaitez-vous qu'on demarre ? Lundi ou mercredi ?'", keywords: ["parfait","commencer","demarre","lundi","planning","premiere","etape","organise","lance","programme"] },
+      { context: "Un prospect dit 'Mon cousin fait la meme chose pour moins cher'.", technique: "CONTRASTE + PRE-SUASION", source: "Pre-Suasion — Cialdini", conseil: "Avant de comparer les prix, recadre l'attention sur la VALEUR et les RISQUES. 'La question n'est pas le prix, c'est le resultat.'", keywords: ["difference","inclus","support","garantie","qualite","complet","professionnel","resultat","contrairement","risque"] },
+      { context: "Tu fais un webinaire pour vendre ta formation. Tu dois creer le declic.", technique: "GRAND SLAM OFFER", source: "$100M Offers — Hormozi", conseil: "Empile la valeur : bonus, garantie, acces exclusif, support. Le prospect doit se sentir stupide de refuser.", keywords: ["bonus","inclus","garantie","exclusif","support","acces","valeur","offre","total","impossible"] }
+    ]
+  },
+  {
+    id: "negocier",
+    title: "Negocier & Objections",
+    desc: "Negociation de prix, gestion d'objections, resolution de conflits",
+    color: "#ffa726",
+    scenarios: [
+      { context: "Un client mecontent t'appelle pour se plaindre. Il est en colere.", technique: "LABELING — Nommer l'emotion", source: "Never Split the Difference — Voss", conseil: "Utilise le labeling : 'On dirait que vous etes frustre par cette situation.' Nommer l'emotion la desactive.", keywords: ["comprends","frustre","impression","situation","dirait","sens","difficile","important","resoudre","ecoute"] },
+      { context: "Tu negocies ton tarif avec un prospect qui trouve ca cher.", technique: "ANCRAGE + REFRAMING", source: "Systeme 1 / Systeme 2 — Kahneman", conseil: "Ancre d'abord sur un prix plus eleve, puis presente ton prix comme une offre. Recadre : 'Ce n'est pas un cout, c'est un investissement.'", keywords: ["investissement","retour","valeur","economise","compare","resultat","rapport","concretement","gagner","perspective"] },
+      { context: "Le prospect dit 'C'est trop cher' et ne veut pas bouger.", technique: "QUESTIONS CALIBREES", source: "Never Split the Difference — Voss", conseil: "Ne baisse pas ton prix. Pose une question calibree : 'Comment voulez-vous que je fasse pour vous offrir ce resultat a un prix inferieur ?'", keywords: ["comment","solution","possible","important","priorite","ensemble","faisable","alternative","proposition","adapte"] },
+      { context: "Tu es en negociation et l'autre partie fait une demande deraisonnable.", technique: "LE NON STRATEGIQUE", source: "Never Split the Difference — Voss", conseil: "Au lieu de dire non directement, utilise : 'Comment suis-je sense faire ca ?' Ca force l'autre a reflechir a sa propre demande.", keywords: ["comment","possible","concretement","faisable","proposition","alternative","imagine","ensemble","realiste","solution"] },
+      { context: "Un rival tente de te diminuer devant les autres en reunion.", technique: "LOI 4 — Toujours en dire moins que necessaire", source: "48 Lois du Pouvoir — Greene", conseil: "Reponds brievement. Ne te justifie pas. Moins tu parles, plus tu as de pouvoir.", keywords: ["simplement","effectivement","voyons","interessant","question","repondre","clairement","precisement","fait","resultat"] },
+      { context: "Tu dois negocier un contrat important et l'autre partie est impatiente.", technique: "MAITRISER LE TIMING", source: "48 Lois du Pouvoir — Greene", conseil: "Ne te precipite pas. Le temps joue pour celui qui garde son calme. Montre que tu n'es pas presse.", keywords: ["temps","reflechir","important","sereinement","correctement","precipiter","qualite","analyser","moment","patience"] },
+      { context: "Le client dit 'Je peux trouver ca gratuit sur internet'.", technique: "MIRRORING + SILENCE", source: "Never Split the Difference — Voss", conseil: "Repete ses derniers mots : 'Gratuit sur internet ?' Puis SILENCE. Laisse-le combler le vide. Il s'expliquera.", keywords: ["gratuit","internet","vraiment","effectivement","comment","concretement","resultat","difference","qualite","comparable"] },
+      { context: "Un fournisseur refuse de baisser son prix. Tu as besoin de lui mais tu veux un meilleur deal.", technique: "GAGNER SANS COMBATTRE", source: "L'Art de la Guerre — Sun Tzu", conseil: "Ne confronte pas. Explore des leviers indirects : volume, duree, exclusivite, paiement anticipe. Cree un deal ou les deux gagnent.", keywords: ["partenariat","volume","exclusivite","duree","ensemble","gagnant","long terme","engagement","contrepartie","avantage"] },
+      { context: "Un prospect annule un rendez-vous au dernier moment pour la 2eme fois.", technique: "ENGAGEMENT + AUDACE", source: "48 Lois du Pouvoir — Greene", conseil: "Sois direct avec respect : 'Je comprends que vous etes occupe. Est-ce que ce projet est toujours une priorite pour vous ?'", keywords: ["priorite","important","confirmer","engagement","concretement","disponible","planifier","decision","avancer","serieux"] },
+      { context: "En negociation salariale, ton employeur te dit 'C'est le maximum qu'on peut faire'.", technique: "AVERSION A LA PERTE", source: "Systeme 1 / Systeme 2 — Kahneman", conseil: "Les gens reagissent plus a la perte qu'au gain. Montre ce que l'entreprise PERD en ne te valorisant pas : turnover, recrutement, productivite.", keywords: ["perdre","cout","recrutement","valeur","investissement","productivite","impact","formation","experience","remplacer"] },
+      { context: "Tu dois refuser une demande d'un superieur sans creer de conflit.", technique: "DIVERSION — Proposer une alternative", source: "L'Art de la Guerre — Sun Tzu", conseil: "Ne dis pas non frontalement. Propose une alternative qui sert tes interets tout en paraissant cooperatif.", keywords: ["alternative","proposition","plutot","suggestion","possible","faisable","autrement","solution","adapte","cooperer"] }
+    ]
+  },
+  {
+    id: "seduire",
+    title: "Seduire & Charisme",
+    desc: "Seduction, presence magnetique, polarite, connexion sociale",
+    color: "#ec407a",
+    scenarios: [
+      { context: "Tu es a une soiree. Tu vois quelqu'un qui t'attire mais tu hesites a l'aborder.", technique: "VULNERABILITE COURAGEUSE", source: "The Way of the Superior Man — Deida", conseil: "Approche avec authenticite. Dis ce que tu ressens reellement. La vulnerabilite attire.", keywords: ["bonjour","remarque","envie","parler","attire","sincere","franc","honnete","approche","vrai"] },
+      { context: "Tu es dans un cafe. Tu veux engager la conversation avec la personne a cote.", technique: "OBSERVATION + OUVERTURE NATURELLE", source: "Comment draguer facilement — Massias", conseil: "Commente quelque chose dans l'environnement : son livre, la musique, le cafe. Sois naturel, pas force.", keywords: ["remarque","interessant","aussi","cafe","ambiance","curieux","question","aime","premier","decouvrir"] },
+      { context: "La conversation tourne en cercle apres les banalites. Tu dois creer du mystere.", technique: "L'AMANT IDEAL — Creer le mystere", source: "Art de la Seduction — Greene", conseil: "Ne revele pas tout. Laisse des blancs intrigants. Pose des questions profondes au lieu de parler de toi.", keywords: ["mystere","curieux","decouvrir","secret","histoire","profond","reveler","imagine","intriguant","deviner"] },
+      { context: "Tu es en groupe et tu veux te demarquer sans en faire trop.", technique: "CHARISME VISIONNAIRE", source: "The Charisma Myth — Cabane", conseil: "Parle moins mais parle mieux. Utilise les pauses. Regarde dans les yeux. Sois celui qui ecoute et apporte de la profondeur.", keywords: ["ecoute","justement","point","interet","ajouter","important","complement","remarque","d'accord","profondeur"] },
+      { context: "Quelqu'un te plait mais tu sens que tu es trop dans ta tete, pas naturel.", technique: "NON-NEEDINESS — L'absence de besoin", source: "Models — Manson", conseil: "Arrete d'essayer d'impressionner. Concentre-toi sur l'AUTRE. La non-neediness est le fondement de l'attractivite.", keywords: ["toi","raconte","curieux","ecoute","sens","reagir","moment","present","spontane","naturel"] },
+      { context: "L'autre personne te teste avec un commentaire piquant ou du sarcasme.", technique: "HUMOUR et CONFIANCE", source: "Comment draguer facilement — Massias", conseil: "Ne te defend pas. Joue avec. Amplifie avec humour. Montre que tu n'es pas destabilise.", keywords: ["effectivement","absolument","avoue","pire","meilleur","evidemment","totalement","assume","fierement","aucun doute"] },
+      { context: "Ta partenaire te teste en te provoquant emotionnellement. Elle critique tes choix.", technique: "PRESENCE MASCULINE et ANCRAGE", source: "The Way of the Superior Man — Deida", conseil: "Ne reagis pas defensivement. Reste ancre. Ecoute sans te justifier. Ta stabilite EST la reponse.", keywords: ["comprends","ecoute","sens","present","ancre","calme","stabilite","respire","accepte","ici"] },
+      { context: "Un rendez-vous se passe bien. Tu veux creer une connexion emotionnelle forte.", technique: "VULNERABILITE STRATEGIQUE", source: "Models — Manson", conseil: "Partage quelque chose de personnel et authentique. La vulnerabilite calibree cree une connexion profonde.", keywords: ["honnete","avoue","personnel","moment","partage","confiance","important","sincere","touche","raconte"] },
+      { context: "Tu veux proposer de se revoir sans paraitre desespere.", technique: "COQUETTERIE — Souffler le chaud et le froid", source: "Art de la Seduction — Greene", conseil: "Montre de l'interet puis recule. 'J'adorerais continuer cette conversation... si tu arrives a trouver un creneau.' Laisse l'autre venir a toi.", keywords: ["justement","plaisir","occasion","decouvrir","peut-etre","envie","bientot","voir","libre","quand"] },
+      { context: "Tu es a un evenement ou tu ne connais personne. Tu dois projeter du charisme.", technique: "4 STYLES DE CHARISME — Focus + Visionnaire + Bienveillance + Autorite", source: "The Charisma Myth — Cabane", conseil: "Choisis ton style selon le contexte. En soiree : Bienveillance (chaleur). En business : Autorite (competence). L'important : Presence totale.", keywords: ["bonjour","ambiance","genial","presente","plaisir","decouvrir","impression","content","interesse","energie"] },
+      { context: "L'autre personne te donne des reponses courtes et fermees. La conversation meurt.", technique: "RELANCE par le JEU + HONNETETE RADICALE", source: "Comment draguer facilement — Massias / Models — Manson", conseil: "Soit tu injectes du jeu ('Je parie que tu es le genre de personne qui...'), soit tu es direct : 'J'ai l'impression que je te derange, dis-moi.'", keywords: ["impression","parie","sens","type","honnete","direct","derange","genre","certainement","amusant"] }
+    ]
+  },
+  {
+    id: "storytelling",
+    title: "Storytelling",
+    desc: "Raconter des histoires convaincantes, pitcher, captiver un auditoire",
+    color: "#ab47bc",
+    scenarios: [
+      { context: "Tu dois pitcher ton service d'automatisation a un prospect en 2 minutes.", technique: "EPIPHANY BRIDGE", source: "Expert Secrets — Brunson", conseil: "Raconte l'histoire de ta propre prise de conscience : le probleme que tu avais → le declic → la solution. Emmene le prospect dans ton voyage.", keywords: ["realise","moment","decouvert","avant","apres","transforme","exactement","situation","comprends","declic"] },
+      { context: "Quelqu'un te lance un defi : 'Parle-moi de n'importe quoi pendant 1 minute.'", technique: "STORYTELLING SPONTANE — Situation, Complication, Resolution", source: "Penser vite parler juste — Abrahams", conseil: "Commence par 'Ca me fait penser a...' et raconte une histoire personnelle. Structure : situation, complication, resolution.", keywords: ["histoire","penser","jour","souviens","arrive","situation","alors","finalement","resultat","morale"] },
+      { context: "Tu es en reunion et on te demande ton avis sur un sujet inattendu. Tu dois repondre immediatement.", technique: "WHAT / SO WHAT / NOW WHAT", source: "Penser vite parler juste — Abrahams", conseil: "Structure ta reponse : What (le fait), So What (pourquoi c'est important), Now What (l'action a prendre).", keywords: ["concretement","important","signifie","action","donc","consequence","propose","prochaine","implique","resultat"] },
+      { context: "Tu dois convaincre un investisseur avec une histoire, pas des chiffres.", technique: "PERSONNAGE ATTRACTIF", source: "Expert Secrets — Brunson", conseil: "Presente-toi comme un guide, pas un hero. Montre ton parcours imparfait, tes echecs, ta transformation. L'authenticite > la perfection.", keywords: ["parcours","appris","erreur","debut","difficulte","transforme","comprends","vecu","experience","authentique"] },
+      { context: "Tu racontes un echec professionnel a un prospect pour montrer ta croissance.", technique: "LE MOMENT 5 SECONDES", source: "Storyworthy — Dicks", conseil: "Toute bonne histoire a un moment de transformation de 5 secondes. L'echec n'est pas l'histoire, c'est la REALISATION qui en decoule.", keywords: ["moment","realise","compris","change","desormais","lecon","instant","decide","transforme","pivote"] },
+      { context: "Tu dois expliquer un concept technique complexe a un non-technicien.", technique: "PROBLEME / SOLUTION / BENEFICE", source: "Penser vite parler juste — Abrahams", conseil: "Structure : voici le PROBLEME (reconnaissable), voici la SOLUTION (simple), voici le BENEFICE (concret pour lui).", keywords: ["probleme","solution","resultat","concretement","simplement","benefice","imagine","permet","evite","gagne"] },
+      { context: "Tu es a un diner et quelqu'un parle d'un sujet que tu maitrises. Tu veux apporter ton expertise sans etre pedant.", technique: "L'ANECDOTE — Raconter plutot qu'expliquer", source: "Comment se faire des amis — Carnegie / Lowndes", conseil: "Au lieu d'expliquer, raconte une anecdote. 'Ca me rappelle une fois ou...' L'histoire est plus memorable que le fait.", keywords: ["rappelle","fois","anecdote","histoire","arrive","justement","experience","situation","concretement","exemple"] },
+      { context: "Tu dois faire un toast surprise a un mariage. Tu n'as rien prepare.", technique: "PASSE / PRESENT / FUTUR", source: "Penser vite parler juste — Abrahams", conseil: "Structure simple : un souvenir du PASSE, ce qu'on celebre au PRESENT, ce qu'on souhaite pour le FUTUR.", keywords: ["souviens","aujourd'hui","avenir","ensemble","moment","bonheur","chemin","futur","toujours","souhaite"] },
+      { context: "La conversation est plate. Le sujet : la meteo. Tu dois la rendre interessante.", technique: "4 ELEMENTS DU STORYTELLING — Enjeu, Action, Detail, Dialogue", source: "Storyworthy — Dicks", conseil: "Transforme le banal en histoire. Ajoute un enjeu ('une fois j'etais bloque dans une tempete'), un detail specifique et un dialogue.", keywords: ["rappelle","fois","imagine","histoire","moment","incroyable","soudain","alors","finalement","vecu"] },
+      { context: "Tu fais un pitch et l'audience decroche. Tu dois les re-captiver.", technique: "HOOK — Reaccrocher l'attention", source: "Expert Secrets — Brunson", conseil: "Utilise un hook : question provocante, statistique choc, ou 'Imaginez...' Les gens reviennent quand on les implique.", keywords: ["imaginez","saviez","question","surprenant","incroyable","concretement","chiffre","realite","changement","important"] },
+      { context: "On te pose une question embarrassante en public. Tu dois repondre avec elegance.", technique: "RECADRAGE + STRUCTURE", source: "Penser vite parler juste — Abrahams", conseil: "Recadre la question : 'La vraie question est...' puis structure ta reponse avec What/So What/Now What.", keywords: ["question","important","vraiement","perspective","concretement","signifie","reponds","fond","essentiel","action"] }
+    ]
+  },
+  {
+    id: "leadership",
+    title: "Leadership & Pouvoir",
+    desc: "Reunion, hierarchie, gestion d'equipe, prise de parole en public",
+    color: "#7e57c2",
+    scenarios: [
+      { context: "Tu es en reunion et un rival tente de te diminuer devant les autres.", technique: "LOI 1 — Ne jamais eclipser le maitre + Repondre par les faits", source: "48 Lois du Pouvoir — Greene", conseil: "Reste calme. Reponds par les faits. Ne montre ni emotion ni colere. Ta maitrise EST le pouvoir.", keywords: ["fait","resultat","concretement","calmement","effectivement","voyons","clairement","precisement","donnees","interessant"] },
+      { context: "Tu dois convaincre un investisseur. Tu as 5 minutes.", technique: "LOI 13 — En appelant a l'interet des gens", source: "48 Lois du Pouvoir — Greene", conseil: "Ne parle pas de ce que TU veux. Montre ce que LUI va gagner. ROI, croissance, opportunite.", keywords: ["retour","investissement","croissance","opportunite","marche","benefice","rentabilite","gagner","rendement","potentiel"] },
+      { context: "Tu dois motiver une equipe qui a le moral en berne apres un echec.", technique: "ENCOURAGER — Rendre la faute facile a corriger", source: "Comment se faire des amis — Carnegie", conseil: "Minimise l'erreur, montre que c'est surmontable, donne confiance en leurs capacites.", keywords: ["capable","confiance","normal","arrive","prochaine fois","ensemble","fort","equipe","apprendre","rebondir"] },
+      { context: "Tu viens d'arriver dans un nouveau cercle social. Tu veux etablir ta reputation.", technique: "LOI 5 — Proteger sa reputation", source: "48 Lois du Pouvoir — Greene", conseil: "Premiere impression forte : sois memorable mais pas arrogant. Montre de la valeur immediatement.", keywords: ["reputation","valeur","contribution","expertise","concretement","apporter","experience","competence","resultats","impact"] },
+      { context: "Un collaborateur tente de s'attribuer le merite de ton travail.", technique: "LOI 7 — Garder le credit", source: "48 Lois du Pouvoir — Greene", conseil: "Reaffirme factuellement ta contribution. Documentation, preuves, temoins.", keywords: ["contribution","initiative","realise","documente","projet","travail","equipe","credit","resultat","concretement"] },
+      { context: "Tu dois prendre la parole devant un groupe hostile a ton projet.", technique: "HAIL — Honesty, Authenticity, Integrity, Love", source: "How to Speak So People Listen — Treasure", conseil: "Base ta parole sur la verite (Honesty), sois toi-meme (Authenticity), tiens tes promesses (Integrity), et montre que tu veux leur bien (Love).", keywords: ["honnetement","sincere","engage","ensemble","verite","crois","important","promets","conviction","confiance"] },
+      { context: "Tu dois annoncer une mauvaise nouvelle a ton equipe sans perdre leur confiance.", technique: "CRAINT MAIS PAS HAI", source: "Le Prince — Machiavel", conseil: "Sois direct sur la mauvaise nouvelle mais montre que tu as un plan. Les gens respectent la transparence ET la competence.", keywords: ["transparence","situation","plan","ensemble","solution","confiance","traverser","concretement","etape","engagement"] },
+      { context: "Tu fais une presentation importante. Tu veux que ta voix projette de l'autorite.", technique: "BOITE A OUTILS VOCALE — Registre, timbre, prosodie, tempo, silence, volume", source: "How to Speak So People Listen — Treasure", conseil: "Parle du registre grave. Ralentis sur les points importants. Utilise le SILENCE comme outil de pouvoir. Varie le volume.", keywords: ["concretement","important","ecoutez","point","essentiel","cle","attention","fondamental","critique","precision"] },
+      { context: "Quelqu'un essaie de te pieger en public avec une question embarrassante.", technique: "LOI 28 — AUDACE", source: "48 Lois du Pouvoir — Greene", conseil: "L'audace impressionne. Ne fuis pas la question. Reponds avec aplomb : 'Excellente question. Voici ma position...'", keywords: ["excellente","position","clairement","directement","assume","franchement","reponds","verite","simplement","affirme"] },
+      { context: "Tu dois gerer un conflit entre deux membres de ton equipe.", technique: "RENARD et LION", source: "Le Prince — Machiavel", conseil: "Sois Renard (diplomatie, comprendre les deux camps) puis Lion (trancher avec fermete). Ecoute d'abord, decide ensuite.", keywords: ["comprends","deux","perspective","point","decision","ensemble","avancer","tranche","solution","respect"] },
+      { context: "Tu presentes un projet a un manager qui veut des resultats, pas des details.", technique: "PRESENCE MASCULINE — Direction claire", source: "The Way of the Superior Man — Deida", conseil: "Donne ta direction avec certitude. Pas 'peut-etre' ni 'je pense'. Dis 'Voici ce que je propose et pourquoi.'", keywords: ["propose","direction","objectif","resultat","concretement","plan","raison","conviction","impact","avance"] }
+    ]
+  }
+];
+
+function startMiseEnSituation() {
+  document.getElementById("ex-title").textContent = "Mise en Situation";
+  document.getElementById("ex-progress").textContent = "";
+  showMesCompSelect();
+}
+
+function showMesCompSelect() {
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px;">
+      <p style="opacity:0.6;font-size:13px;">Choisis une competence a travailler</p>
+    </div>
+    <div class="mes-comp-grid">
+      <div class="mes-comp-card random-card" onclick="selectMesComp('random')">
+        <h4>Aleatoire</h4>
+        <p class="mes-desc">Mix de toutes les competences</p>
+        <span class="mes-count">All-in</span>
+      </div>
+      ${MES_COMPETENCES.map(c => `
+        <div class="mes-comp-card" style="border-color:${c.color};" onclick="selectMesComp('${c.id}')">
+          <h4>${c.title}</h4>
+          <p class="mes-desc">${c.desc}</p>
+          <span class="mes-count" style="background:${c.color}22;color:${c.color};">${c.scenarios.length} scenarios</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `<button class="btn-secondary" onclick="skipModule('miseensituation')">Retour</button>`;
+}
+
+function selectMesComp(compId) {
+  if (compId === "random") {
+    mesCurrentComp = null;
+    const allScenarios = [];
+    MES_COMPETENCES.forEach(c => c.scenarios.forEach(s => allScenarios.push({ ...s, compTitle: c.title, compColor: c.color, compId: c.id })));
+    const idx = Math.floor(Math.random() * allScenarios.length);
+    mesCurrentScenario = allScenarios[idx];
+    startMesScenario();
+    return;
+  }
+
+  mesCurrentComp = MES_COMPETENCES.find(c => c.id === compId);
+  if (!mesCurrentComp) return;
+  showMesScenarioSelect();
+}
+
+function getMesDifficulty(i, total) {
+  // Assign difficulty 1-3 based on position in scenario list
+  const ratio = total > 1 ? i / (total - 1) : 0;
+  if (ratio < 0.34) return 1;
+  if (ratio < 0.67) return 2;
+  return 3;
+}
+
+function getMesAllowedDifficulties() {
+  const level = (typeof getPlayerLevel === 'function') ? getPlayerLevel() : 'intermediaire';
+  if (level === 'debutant') return [1];
+  if (level === 'intermediaire') return [1, 2];
+  if (level === 'avance') return [2, 3];
+  return [3]; // expert
+}
+
+function showMesScenarioSelect() {
+  const c = mesCurrentComp;
+  const allowed = getMesAllowedDifficulties();
+  const diffLabels = { 1: 'Facile', 2: 'Moyen', 3: 'Difficile' };
+  const diffColors = { 1: '#00c853', 2: '#ffab00', 3: '#ff5252' };
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;margin-bottom:12px;">
+      <h2 style="font-size:18px;color:${c.color};">${c.title}</h2>
+      <p style="opacity:0.5;font-size:12px;">${c.desc}</p>
+    </div>
+    <div class="mes-scenario-list">
+      ${c.scenarios.map((s, i) => {
+        const diff = getMesDifficulty(i, c.scenarios.length);
+        const isLocked = !allowed.includes(diff);
+        return `
+        <div class="mes-scenario-item" style="border-color:${c.color}33;${isLocked ? 'opacity:0.35;pointer-events:none;' : ''}" onclick="selectMesScenario(${i})">
+          <h4>${s.technique}</h4>
+          <p>${s.context.substring(0, 80)}...</p>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
+            <div class="mes-source-tag">${s.source}</div>
+            <span style="font-size:9px;padding:2px 6px;border-radius:4px;background:${diffColors[diff]}22;color:${diffColors[diff]};font-weight:600;">${diffLabels[diff]}</span>
+            ${isLocked ? '<span style="font-size:9px;opacity:0.5;">Verrouille</span>' : ''}
+          </div>
+        </div>`;
+      }).join("")}
+      <div class="mes-scenario-item" style="border-color:${c.color};background:${c.color}11;text-align:center;" onclick="selectMesScenario(-1)">
+        <h4>Scenario aleatoire</h4>
+        <p>Laisse le hasard choisir</p>
+      </div>
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `<button class="btn-secondary" onclick="showMesCompSelect()">Retour aux competences</button>`;
+}
+
+function selectMesScenario(idx) {
+  const c = mesCurrentComp;
+  if (idx === -1) {
+    idx = Math.floor(Math.random() * c.scenarios.length);
+  }
+  mesCurrentScenario = { ...c.scenarios[idx], compTitle: c.title, compColor: c.color, compId: c.id };
+  startMesScenario();
+}
+
+function startMesScenario() {
+  const s = mesCurrentScenario;
+  const compColor = s.compColor || "#00bcd4";
+
+  mesTimeLeft = MES_DURATION;
+  mesTranscript = "";
+  mesListening = false;
+
+  document.getElementById("ex-title").textContent = "Mise en Situation";
+  document.getElementById("ex-progress").textContent = s.compTitle || "";
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div class="mes-context-box" style="border-color:${compColor}33;">
+      <div class="mes-label" style="color:${compColor};">Contexte</div>
+      <div class="mes-text">${s.context}</div>
+    </div>
+
+    <div class="mes-technique-box">
+      <div class="mes-label">Technique a utiliser</div>
+      <div class="mes-text" style="color:#cc66ff;font-weight:600;">${s.technique}</div>
+      <div class="mes-source-tag" style="margin-top:6px;">${s.source || ""}</div>
+    </div>
+
+    <div class="mes-conseil-box">
+      <div class="mes-label">Conseil</div>
+      <div>${s.conseil}</div>
+    </div>
+
+    <div class="mes-timer" id="mes-timer-display" style="color:${compColor};">${MES_DURATION}</div>
+
+    <div class="mes-transcript-box" id="mes-transcript-box" style="display:none;">
+      <div class="label">Ta reponse</div>
+      <div class="transcript" id="mes-transcript-live">...</div>
+    </div>
+
+    <div id="mes-results-area"></div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" id="btn-mes-start" onclick="startMesTimer()" style="background:${compColor};">C'est parti</button>
+    <button class="btn-secondary" onclick="showMesCompSelect()">Autre scenario</button>
+    <button class="btn-secondary" onclick="skipModule('miseensituation')">Retour</button>
+  `;
+}
+
+function onMesResult(event) {
+  let transcript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  mesTranscript = transcript.trim();
+  const liveEl = document.getElementById("mes-transcript-live");
+  if (liveEl) {
+    liveEl.textContent = mesTranscript || "...";
+  }
+  // Update filler counter
+  const fillers = countFillerWords(mesTranscript);
+  updateFillerOverlay(fillers);
+}
+
+function startMesTimer() {
+  const btn = document.getElementById("btn-mes-start");
+  if (btn) btn.disabled = true;
+
+  mesTranscript = "";
+  mesListening = true;
+
+  const transcriptBox = document.getElementById("mes-transcript-box");
+  if (transcriptBox) transcriptBox.style.display = "block";
+
+  initRecognition(onMesResult);
+  startRecognition();
+  initAudioAnalysis();
+  showFillerOverlay();
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-secondary" onclick="finishMesEarly()">Terminer</button>
+    <button class="btn-secondary" onclick="skipModule('miseensituation')">Quitter</button>
+  `;
+
+  if (mesTimer) clearInterval(mesTimer);
+  mesTimer = setInterval(() => {
+    mesTimeLeft--;
+    const el = document.getElementById("mes-timer-display");
+    if (el) {
+      el.textContent = mesTimeLeft;
+      if (mesTimeLeft <= 10) el.style.color = "#ff5252";
+    }
+    if (mesTimeLeft <= 0) {
+      clearInterval(mesTimer);
+      mesTimer = null;
+      mesDone();
+    }
+  }, 1000);
+}
+
+function finishMesEarly() {
+  if (mesTimer) { clearInterval(mesTimer); mesTimer = null; }
+  mesDone();
+}
+
+function mesDone() {
+  mesListening = false;
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
+  document.getElementById("voice-panel").classList.remove("active");
+
+  const s = mesCurrentScenario;
+  const compColor = s.compColor || "#00bcd4";
+
+  const words = mesTranscript.split(/\s+/).filter(w => w.length > 0);
+  const wordCount = words.length;
+  const elapsedSec = MES_DURATION - mesTimeLeft;
+  const wpm = elapsedSec > 0 ? Math.round((wordCount / elapsedSec) * 60) : 0;
+  const fillers = countFillerWords(mesTranscript);
+  const lowerTranscript = mesTranscript.toLowerCase();
+
+  // Scoring /100 : Fluidite 25, Structure 25, Pertinence 25, Confiance 25
+
+  // Fluidite (25) : penalize fillers, reward good WPM
+  const fillerPenalty = Math.min(20, fillers.total * 3);
+  const wpmBonus = (wpm >= 100 && wpm <= 180) ? 5 : (wpm >= 60 ? 2 : 0);
+  const fluidScore = Math.max(0, Math.min(25, 20 - fillerPenalty + wpmBonus));
+
+  // Structure (25) : word count + sentence-like patterns
+  const structScore = Math.min(25, Math.round((wordCount / 80) * 20) + (wordCount > 20 ? 5 : 0));
+
+  // Pertinence (25) : keyword matching
+  const keywords = s.keywords || [];
+  let keywordsFound = 0;
+  for (const kw of keywords) {
+    if (lowerTranscript.includes(kw.toLowerCase())) keywordsFound++;
+  }
+  const keywordRatio = keywords.length > 0 ? keywordsFound / keywords.length : 0;
+  const pertScore = Math.min(25, Math.round(keywordRatio * 25));
+
+  // Confiance (25) : based on word count + WPM + low fillers
+  let confScore = 0;
+  if (wordCount >= 40) confScore += 8;
+  else if (wordCount >= 20) confScore += 4;
+  if (wpm >= 100 && wpm <= 180) confScore += 8;
+  else if (wpm >= 60) confScore += 4;
+  if (fillers.total <= 2) confScore += 9;
+  else if (fillers.total <= 5) confScore += 5;
+  else confScore += 1;
+  confScore = Math.min(25, confScore);
+
+  const totalScore = fluidScore + structScore + pertScore + confScore;
+  const scoreColor = totalScore >= 75 ? "#00c853" : totalScore >= 50 ? "#ffab00" : "#ff5252";
+
+  // Record session for progression
+  if (typeof recordSession === 'function') {
+    // Map MES competence to skill
+    const mesSkillMap = { lire: 'leadership', impression: 'persuasion', persuader: 'persuasion', negocier: 'negociation', seduire: 'seduction', storytelling: 'storytelling', leadership: 'leadership', manipulation: 'persuasion' };
+    const compId = s.compId || '';
+    const mappedSkill = mesSkillMap[compId] || 'improvisation';
+    recordSession({ module: 'mise_en_situation', score: totalScore, duration: elapsedSec, fillerWords: fillers.total, wpm: wpm, skills: [mappedSkill], details: { comp: compId, technique: s.technique } });
+  }
+
+  // Generate advice
+  const advice = [];
+  if (fluidScore < 15) advice.push(fillers.total > 3 ? "Trop de mots parasites (" + Object.keys(fillers.details).join(", ") + "). Remplace-les par des silences." : "Parle plus regulierement, sans trop d'hesitations.");
+  if (structScore < 15) advice.push("Reponse trop courte. Developpe avec des exemples concrets et des details.");
+  if (pertScore < 15) advice.push("Utilise davantage les concepts lies a la technique : " + keywords.slice(0, 4).join(", ") + "...");
+  if (confScore < 15) advice.push("Projette plus d'assurance : parle avec conviction, un debit stable et sans hesiter.");
+  if (advice.length === 0) advice.push("Excellent ! Tu maitrises cette technique. Essaie un autre scenario.");
+
+  const timerEl = document.getElementById("mes-timer-display");
+  if (timerEl) { timerEl.textContent = totalScore + "/100"; timerEl.style.color = scoreColor; }
+
+  const resultsArea = document.getElementById("mes-results-area");
+  if (resultsArea) {
+    resultsArea.innerHTML = `
+      <div style="text-align:left;margin-top:16px;padding:16px;background:#111;border-radius:12px;max-width:420px;margin-left:auto;margin-right:auto;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+          <div style="text-align:center;padding:8px 14px;background:#1a1a1a;border-radius:8px;flex:1;min-width:70px;">
+            <div style="font-size:10px;opacity:0.5;">FLUIDITE</div>
+            <div style="font-size:18px;font-weight:700;color:${fluidScore >= 18 ? '#00c853' : fluidScore >= 12 ? '#ffab00' : '#ff5252'};">${fluidScore}/25</div>
+          </div>
+          <div style="text-align:center;padding:8px 14px;background:#1a1a1a;border-radius:8px;flex:1;min-width:70px;">
+            <div style="font-size:10px;opacity:0.5;">STRUCTURE</div>
+            <div style="font-size:18px;font-weight:700;color:${structScore >= 18 ? '#00c853' : structScore >= 12 ? '#ffab00' : '#ff5252'};">${structScore}/25</div>
+          </div>
+          <div style="text-align:center;padding:8px 14px;background:#1a1a1a;border-radius:8px;flex:1;min-width:70px;">
+            <div style="font-size:10px;opacity:0.5;">PERTINENCE</div>
+            <div style="font-size:18px;font-weight:700;color:${pertScore >= 18 ? '#00c853' : pertScore >= 12 ? '#ffab00' : '#ff5252'};">${pertScore}/25</div>
+          </div>
+          <div style="text-align:center;padding:8px 14px;background:#1a1a1a;border-radius:8px;flex:1;min-width:70px;">
+            <div style="font-size:10px;opacity:0.5;">CONFIANCE</div>
+            <div style="font-size:18px;font-weight:700;color:${confScore >= 18 ? '#00c853' : confScore >= 12 ? '#ffab00' : '#ff5252'};">${confScore}/25</div>
+          </div>
+        </div>
+        <div style="font-size:13px;opacity:0.7;margin-bottom:8px;">
+          Mots : ${wordCount} | Debit : ${wpm} mots/min | Parasites : ${fillers.total}
+          ${keywordsFound > 0 ? ` | Mots-cles : ${keywordsFound}/${keywords.length}` : ""}
+        </div>
+        <div style="font-size:13px;line-height:1.5;">
+          ${advice.map(a => `<p style="margin:6px 0;padding:8px;background:#1a1a1a;border-radius:6px;border-left:3px solid ${scoreColor};">${a}</p>`).join("")}
+        </div>
+        ${mesTranscript ? `<div style="margin-top:12px;padding:10px;background:#0a0a0a;border-radius:8px;font-size:12px;opacity:0.5;max-height:100px;overflow-y:auto;">"${mesTranscript}"</div>` : ""}
+      </div>
+    `;
+  }
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="startMesScenario()" style="background:${compColor};">Recommencer</button>
+    <button class="btn-secondary" onclick="${mesCurrentComp ? 'showMesScenarioSelect()' : 'showMesCompSelect()'}">Autre scenario</button>
+    <button class="btn-secondary" onclick="showMesCompSelect()">Changer de competence</button>
+    <button class="btn-success" onclick="completeModule('miseensituation')">Terminer</button>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════
+// PROGRESSION SYSTEM
+// ════════════════════════════════════════════════════════════
+
+const PROG_STORAGE_KEY = 'voiceTrainingProgress';
+const PROG_LEVEL_THRESHOLDS = { debutant: 0, intermediaire: 500, avance: 2000, expert: 5000 };
+const PROG_LEVEL_ORDER = ['debutant', 'intermediaire', 'avance', 'expert'];
+const PROG_SKILL_NAMES = {
+  articulation: 'Articulation', fluidite: 'Fluidite', structure: 'Structure',
+  improvisation: 'Improvisation', persuasion: 'Persuasion', negociation: 'Negociation',
+  seduction: 'Seduction', storytelling: 'Storytelling', leadership: 'Leadership', lecture: 'Lecture'
+};
+const PROG_SKILL_COLORS = {
+  articulation: '#ff5252', fluidite: '#00c853', structure: '#ff9100',
+  improvisation: '#ffab00', persuasion: '#ef5350', negociation: '#4fc3f7',
+  seduction: '#e040fb', storytelling: '#66bb6a', leadership: '#ffd740', lecture: '#0066ff'
+};
+
+function getDefaultProgress() {
+  return {
+    level: 'debutant', totalSessions: 0, totalXP: 0,
+    skills: {
+      articulation: { score: 0, sessions: 0, history: [] },
+      fluidite: { score: 0, sessions: 0, history: [] },
+      structure: { score: 0, sessions: 0, history: [] },
+      improvisation: { score: 0, sessions: 0, history: [] },
+      persuasion: { score: 0, sessions: 0, history: [] },
+      negociation: { score: 0, sessions: 0, history: [] },
+      seduction: { score: 0, sessions: 0, history: [] },
+      storytelling: { score: 0, sessions: 0, history: [] },
+      leadership: { score: 0, sessions: 0, history: [] },
+      lecture: { score: 0, sessions: 0, history: [] }
+    },
+    sessions: [],
+    diagnosticDone: false, diagnosticDate: null, diagnosticScores: {},
+    lastDiagnosticDate: null,
+    currentStreak: 0, bestStreak: 0, lastSessionDate: null,
+    totalFillerWords: 0, fillerWordsHistory: []
+  };
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(PROG_STORAGE_KEY);
+    if (!raw) return getDefaultProgress();
+    const data = JSON.parse(raw);
+    const def = getDefaultProgress();
+    // Merge missing keys
+    for (const k of Object.keys(def)) {
+      if (data[k] === undefined) data[k] = def[k];
+    }
+    for (const sk of Object.keys(def.skills)) {
+      if (!data.skills[sk]) data.skills[sk] = { score: 0, sessions: 0, history: [] };
+    }
+    // Prune sessions older than 90 days
+    const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+    data.sessions = (data.sessions || []).filter(s => new Date(s.date).getTime() > cutoff);
+    return data;
+  } catch(e) { return getDefaultProgress(); }
+}
+
+function saveProgress(prog) {
+  try { localStorage.setItem(PROG_STORAGE_KEY, JSON.stringify(prog)); } catch(e) {}
+}
+
+function getLevelFromXP(xp) {
+  if (xp >= 5000) return 'expert';
+  if (xp >= 2000) return 'avance';
+  if (xp >= 500) return 'intermediaire';
+  return 'debutant';
+}
+
+function getNextLevelXP(level) {
+  const idx = PROG_LEVEL_ORDER.indexOf(level);
+  if (idx >= PROG_LEVEL_ORDER.length - 1) return null;
+  return PROG_LEVEL_THRESHOLDS[PROG_LEVEL_ORDER[idx + 1]];
+}
+
+function getCurrentLevelXP(level) {
+  return PROG_LEVEL_THRESHOLDS[level] || 0;
+}
+
+function getPlayerLevel() {
+  return loadProgress().level;
+}
+
+// Update streak based on today
+function updateStreak(prog) {
+  const today = new Date().toISOString().split('T')[0];
+  if (prog.lastSessionDate === today) return; // Already trained today
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  if (prog.lastSessionDate === yesterday) {
+    prog.currentStreak++;
+  } else {
+    prog.currentStreak = 1;
+  }
+  if (prog.currentStreak > prog.bestStreak) prog.bestStreak = prog.currentStreak;
+  prog.lastSessionDate = today;
+}
+
+// Calculate weighted skill score from history
+function calcSkillScore(history) {
+  if (!history || history.length === 0) return 0;
+  const now = Date.now();
+  let weightSum = 0, scoreSum = 0;
+  for (const entry of history) {
+    const ageDays = Math.max(1, (now - new Date(entry.date).getTime()) / 86400000);
+    const w = 1 / ageDays;
+    weightSum += w;
+    scoreSum += entry.score * w;
+  }
+  return weightSum > 0 ? Math.round(scoreSum / weightSum) : 0;
+}
+
+// Record a session and update everything
+function recordSession(data) {
+  // data: { module, score, duration, fillerWords, wpm, details, skills: ['articulation', ...] }
+  const prog = loadProgress();
+
+  // Update streak
+  updateStreak(prog);
+
+  // Add session
+  const session = {
+    date: new Date().toISOString(),
+    module: data.module,
+    score: data.score || 0,
+    duration: data.duration || 0,
+    fillerWords: data.fillerWords || 0,
+    wpm: data.wpm || 0,
+    details: data.details || {}
+  };
+  prog.sessions.push(session);
+  prog.totalSessions++;
+
+  // XP calculation
+  let xpGained = Math.round(data.score || 0);
+  if (prog.currentStreak >= 7) xpGained += 25;
+  else if (prog.currentStreak >= 3) xpGained += 10;
+  prog.totalXP += xpGained;
+
+  // Update level
+  prog.level = getLevelFromXP(prog.totalXP);
+
+  // Update skills
+  const skillsToUpdate = data.skills || [];
+  for (const sk of skillsToUpdate) {
+    if (prog.skills[sk]) {
+      prog.skills[sk].sessions++;
+      prog.skills[sk].history.push({ date: session.date, score: data.score || 0 });
+      // Keep last 50 entries per skill
+      if (prog.skills[sk].history.length > 50) prog.skills[sk].history = prog.skills[sk].history.slice(-50);
+      prog.skills[sk].score = calcSkillScore(prog.skills[sk].history);
+    }
+  }
+
+  // Filler words tracking
+  if (data.fillerWords > 0 && data.duration > 0) {
+    prog.totalFillerWords += data.fillerWords;
+    prog.fillerWordsHistory.push({
+      date: session.date,
+      count: data.fillerWords,
+      perMinute: Math.round((data.fillerWords / (data.duration / 60)) * 10) / 10
+    });
+    if (prog.fillerWordsHistory.length > 100) prog.fillerWordsHistory = prog.fillerWordsHistory.slice(-100);
+  }
+
+  saveProgress(prog);
+  showXPPopup(xpGained);
+  updateStatusBanner();
+  return xpGained;
+}
+
+// Show XP popup
+function showXPPopup(xp) {
+  if (xp <= 0) return;
+  const popup = document.createElement('div');
+  popup.className = 'xp-popup';
+  popup.textContent = '+' + xp + ' XP';
+  document.body.appendChild(popup);
+  setTimeout(() => { if (popup.parentNode) popup.parentNode.removeChild(popup); }, 2200);
+}
+
+// Status banner
+function updateStatusBanner() {
+  const prog = loadProgress();
+  const banner = document.getElementById('status-banner');
+  if (!banner) return;
+  banner.style.display = 'flex';
+  document.body.classList.add('has-banner');
+
+  document.getElementById('sb-level').textContent = prog.level.charAt(0).toUpperCase() + prog.level.slice(1);
+  document.getElementById('sb-level').className = 'sb-val ' + prog.level;
+
+  const nextXP = getNextLevelXP(prog.level);
+  const curXP = getCurrentLevelXP(prog.level);
+  if (nextXP) {
+    const pct = Math.min(100, Math.round(((prog.totalXP - curXP) / (nextXP - curXP)) * 100));
+    document.getElementById('sb-xp').textContent = prog.totalXP + '/' + nextXP;
+    document.getElementById('sb-xp-fill').style.width = pct + '%';
+  } else {
+    document.getElementById('sb-xp').textContent = prog.totalXP + ' (MAX)';
+    document.getElementById('sb-xp-fill').style.width = '100%';
+  }
+
+  document.getElementById('sb-streak').textContent = prog.currentStreak + 'j';
+
+  // Average filler words per minute (last 10 sessions)
+  const recent = prog.fillerWordsHistory.slice(-10);
+  if (recent.length > 0) {
+    const avg = recent.reduce((s, e) => s + e.perMinute, 0) / recent.length;
+    document.getElementById('sb-fillers').textContent = avg.toFixed(1) + '/min';
+  } else {
+    document.getElementById('sb-fillers').textContent = '--';
+  }
+}
+
+// Diagnostic banner
+function updateDiagBanner() {
+  const prog = loadProgress();
+  const container = document.getElementById('diag-banner-container');
+  if (!container) return;
+  if (!prog.diagnosticDone) {
+    container.innerHTML = '<div class="diag-banner" onclick="startDiagnostic()">Fais ton diagnostic pour connaitre ton niveau de depart</div>';
+  } else {
+    const lastDate = new Date(prog.lastDiagnosticDate);
+    const daysSince = Math.floor((Date.now() - lastDate.getTime()) / 86400000);
+    if (daysSince >= 14) {
+      container.innerHTML = '<div class="diag-banner" onclick="startDiagnostic()">Refais ton diagnostic pour mesurer ta progression (dernier il y a ' + daysSince + 'j)</div>';
+    } else {
+      container.innerHTML = '';
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// DIAGNOSTIC MODULE
+// ════════════════════════════════════════════════════════════
+let diagStep = 0;
+let diagScores = {};
+let diagTimer = null;
+let diagTimeLeft = 0;
+let diagTranscript = '';
+let diagStartTime = 0;
+let diagListening = false;
+
+const DIAG_TWISTERS = [
+  'Si six scies scient six cypres six cent six scies scient six cent six cypres',
+  'Un genereux dejeuner regenererait des generaux degeneres',
+  'La pie niche haut le hibou niche bas la pie niche dans l\'if le hibou niche dans le houx'
+];
+
+const DIAG_READING_TEXT = "L'intelligence artificielle transforme en profondeur notre rapport au travail, a la creativite et a la connaissance. Les modeles de langage, capables de generer du texte, de traduire, de resumer et d'analyser, redefinissent les frontieres entre ce qui releve de l'humain et ce qui peut etre automatise.";
+
+const DIAG_IMPROV_WORDS = ['ambition', 'resilience', 'changement', 'curiosite', 'equilibre'];
+
+const DIAG_SCENARIOS = [
+  { context: "Tu es en reunion client. Il te dit 'C'est trop cher'. Convaincs-le.", keywords: ['valeur','retour','investissement','resultat','concretement','compare','economise'] },
+  { context: "Tu arrives a un evenement networking. Presente-toi a un inconnu avec impact.", keywords: ['aide','entreprise','automatise','resultat','enchante','passion','specialise'] },
+  { context: "Un collegue a fait une erreur grave. Recadre-le avec fermete mais empathie.", keywords: ['comprends','erreur','solution','ensemble','ameliorer','confiance','apprendre'] }
+];
+
+function startDiagnostic() {
+  if (!SPEECH_SUPPORTED) {
+    alert("Speech Recognition requis pour le diagnostic.");
+    return;
+  }
+  const prog = loadProgress();
+  if (prog.lastDiagnosticDate) {
+    const daysSince = Math.floor((Date.now() - new Date(prog.lastDiagnosticDate).getTime()) / 86400000);
+    if (daysSince < 14) {
+      alert('Diagnostic disponible dans ' + (14 - daysSince) + ' jours.');
+      return;
+    }
+  }
+  diagStep = 0;
+  diagScores = {};
+  showScreen('diagnostic-screen');
+  runDiagStep();
+}
+
+function runDiagStep() {
+  const content = document.getElementById('diag-content');
+  if (diagStep === 0) {
+    // Intro
+    content.innerHTML = `
+      <h1 style="font-size:24px;margin-bottom:8px;">Diagnostic Vocal</h1>
+      <p class="subtitle">4 exercices courts pour evaluer ton niveau</p>
+      <div class="diag-step-box">
+        <div class="diag-step-title">Programme</div>
+        <div style="text-align:left;font-size:13px;line-height:2;padding:8px;">
+          <div>1. Articulation — Virelangue (30s)</div>
+          <div>2. Fluidite — Lecture a voix haute (60s)</div>
+          <div>3. Improvisation — Mot aleatoire (60s)</div>
+          <div>4. Mise en situation — Scenario (60s)</div>
+        </div>
+      </div>
+      <div class="btn-group" style="margin-top:20px;">
+        <button class="btn-primary" onclick="diagStep=1;runDiagStep();">C'est parti</button>
+        <button class="btn-secondary" onclick="showScreen('setup')">Annuler</button>
+      </div>
+    `;
+  } else if (diagStep === 1) {
+    // Articulation - virelangue
+    const twister = DIAG_TWISTERS[Math.floor(Math.random() * DIAG_TWISTERS.length)];
+    diagTranscript = '';
+    diagTimeLeft = 30;
+    diagStartTime = Date.now();
+    content.innerHTML = `
+      <div class="diag-step-box">
+        <div class="diag-step-title">1/4 — Articulation</div>
+        <div class="diag-step-desc">Lis ce virelangue le plus clairement possible</div>
+      </div>
+      <div class="twister-display" id="diag-twister-text">${twister}</div>
+      <div class="diag-timer" id="diag-timer">${diagTimeLeft}</div>
+      <div id="diag-transcript" style="padding:12px;background:#111;border-radius:8px;font-size:13px;min-height:40px;opacity:0.6;">...</div>
+      <div class="btn-group" style="margin-top:12px;">
+        <button class="btn-primary" id="diag-start-btn" onclick="startDiagListening(1)">Commencer</button>
+      </div>
+    `;
+    // Store twister for comparison
+    content.dataset.diagTarget = twister;
+  } else if (diagStep === 2) {
+    // Fluidite - lecture
+    diagTranscript = '';
+    diagTimeLeft = 60;
+    diagStartTime = Date.now();
+    content.innerHTML = `
+      <div class="diag-step-box">
+        <div class="diag-step-title">2/4 — Fluidite</div>
+        <div class="diag-step-desc">Lis ce texte a voix haute, naturellement</div>
+      </div>
+      <div style="font-size:16px;line-height:1.8;padding:16px;background:#111;border-radius:12px;text-align:left;margin:12px 0;">${DIAG_READING_TEXT}</div>
+      <div class="diag-timer" id="diag-timer">${diagTimeLeft}</div>
+      <div class="btn-group" style="margin-top:12px;">
+        <button class="btn-primary" id="diag-start-btn" onclick="startDiagListening(2)">Commencer</button>
+      </div>
+    `;
+  } else if (diagStep === 3) {
+    // Improvisation
+    const word = DIAG_IMPROV_WORDS[Math.floor(Math.random() * DIAG_IMPROV_WORDS.length)];
+    diagTranscript = '';
+    diagTimeLeft = 60;
+    diagStartTime = Date.now();
+    content.innerHTML = `
+      <div class="diag-step-box">
+        <div class="diag-step-title">3/4 — Improvisation</div>
+        <div class="diag-step-desc">Parle de ce mot pendant 60 secondes</div>
+      </div>
+      <div class="improv-word" style="color:#0066ff;">${word.toUpperCase()}</div>
+      <div class="diag-timer" id="diag-timer">${diagTimeLeft}</div>
+      <div class="btn-group" style="margin-top:12px;">
+        <button class="btn-primary" id="diag-start-btn" onclick="startDiagListening(3)">Commencer</button>
+      </div>
+    `;
+    content.dataset.diagImprovWord = word;
+  } else if (diagStep === 4) {
+    // Mise en situation
+    const scenario = DIAG_SCENARIOS[Math.floor(Math.random() * DIAG_SCENARIOS.length)];
+    diagTranscript = '';
+    diagTimeLeft = 60;
+    diagStartTime = Date.now();
+    content.innerHTML = `
+      <div class="diag-step-box">
+        <div class="diag-step-title">4/4 — Mise en Situation</div>
+        <div class="diag-step-desc">Reponds a cette situation</div>
+      </div>
+      <div class="mes-context-box" style="margin:12px auto;">
+        <div class="mes-label" style="color:#0066ff;">Contexte</div>
+        <div class="mes-text">${scenario.context}</div>
+      </div>
+      <div class="diag-timer" id="diag-timer">${diagTimeLeft}</div>
+      <div class="btn-group" style="margin-top:12px;">
+        <button class="btn-primary" id="diag-start-btn" onclick="startDiagListening(4)">Commencer</button>
+      </div>
+    `;
+    content.dataset.diagKeywords = JSON.stringify(scenario.keywords);
+  } else if (diagStep === 5) {
+    // Results
+    showDiagResults();
+  }
+}
+
+function onDiagResult(event) {
+  let transcript = '';
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + ' ';
+  }
+  diagTranscript = transcript.trim();
+  const el = document.getElementById('diag-transcript');
+  if (el) el.textContent = diagTranscript || '...';
+}
+
+function startDiagListening(step) {
+  const btn = document.getElementById('diag-start-btn');
+  if (btn) btn.disabled = true;
+  diagListening = true;
+  initRecognition(onDiagResult);
+  startRecognition();
+  initAudioAnalysis();
+
+  diagTimer = setInterval(() => {
+    diagTimeLeft--;
+    const el = document.getElementById('diag-timer');
+    if (el) {
+      el.textContent = diagTimeLeft;
+      if (diagTimeLeft <= 5) el.style.color = '#ff5252';
+    }
+    if (diagTimeLeft <= 0) {
+      clearInterval(diagTimer);
+      diagTimer = null;
+      finishDiagStep(step);
+    }
+  }, 1000);
+}
+
+function finishDiagStep(step) {
+  if (diagTimer) { clearInterval(diagTimer); diagTimer = null; }
+  stopRecognition();
+  stopVoiceAnalysis();
+  diagListening = false;
+
+  const content = document.getElementById('diag-content');
+  const elapsedSec = Math.round((Date.now() - diagStartTime) / 1000);
+  const words = diagTranscript.split(/\s+/).filter(w => w.length > 0);
+  const wpm = elapsedSec > 0 ? Math.round((words.length / elapsedSec) * 60) : 0;
+  const fillers = countFillerWords(diagTranscript);
+
+  if (step === 1) {
+    // Articulation scoring: fuzzy match with target
+    const target = content.dataset.diagTarget || '';
+    const score = Math.round(fuzzyMatch(
+      normalizeWord(normalizeNumbersInText(diagTranscript)),
+      normalizeWord(normalizeNumbersInText(target))
+    ) * 100);
+    diagScores.articulation = score;
+  } else if (step === 2) {
+    // Fluidite scoring: WPM + filler penalty
+    let score = 0;
+    if (wpm >= 100 && wpm <= 180) score = 80;
+    else if (wpm >= 60) score = 50;
+    else score = Math.min(40, Math.round(wpm / 2));
+    score = Math.max(0, score - fillers.total * 5);
+    diagScores.fluidite = Math.min(100, Math.max(0, score));
+    diagScores.wpm = wpm;
+    diagScores.fillerCount = fillers.total;
+  } else if (step === 3) {
+    // Improv scoring: structure + volume + pertinence
+    const improvWord = content.dataset.diagImprovWord || '';
+    const structScore = Math.min(35, Math.round((words.length / 80) * 35));
+    const fillerPenalty = Math.min(25, fillers.total * 4);
+    const fluidScore = Math.max(0, 30 - fillerPenalty);
+    const mentions = (diagTranscript.toLowerCase().match(new RegExp('\\b' + improvWord.toLowerCase() + '\\b', 'g')) || []).length;
+    const pertScore = Math.min(35, mentions > 0 ? 20 + Math.min(15, mentions * 5) : 5);
+    diagScores.improvisation = Math.min(100, structScore + fluidScore + pertScore);
+    diagScores.structure = structScore + fluidScore; // Normalized later
+  } else if (step === 4) {
+    // Mise en situation scoring: keywords + fluidity + confidence
+    const keywords = JSON.parse(content.dataset.diagKeywords || '[]');
+    const lower = diagTranscript.toLowerCase();
+    let kwFound = 0;
+    for (const kw of keywords) { if (lower.includes(kw.toLowerCase())) kwFound++; }
+    const kwScore = keywords.length > 0 ? Math.round((kwFound / keywords.length) * 40) : 20;
+    const volScore = Math.min(30, Math.round((words.length / 60) * 30));
+    const confScore = Math.max(0, 30 - fillers.total * 4);
+    diagScores.application = Math.min(100, kwScore + volScore + confScore);
+  }
+
+  diagStep++;
+  runDiagStep();
+}
+
+function showDiagResults() {
+  const content = document.getElementById('diag-content');
+  const prog = loadProgress();
+
+  // Calculate 5 axis scores
+  const axes = {
+    articulation: diagScores.articulation || 0,
+    fluidite: diagScores.fluidite || 0,
+    structure: Math.min(100, Math.round((diagScores.structure || 0) * 1.5)),
+    improvisation: diagScores.improvisation || 0,
+    application: diagScores.application || 0
+  };
+
+  const avg = Math.round(Object.values(axes).reduce((a, b) => a + b, 0) / Object.values(axes).length);
+  let assignedLevel = 'expert';
+  if (avg < 30) assignedLevel = 'debutant';
+  else if (avg < 55) assignedLevel = 'intermediaire';
+  else if (avg < 80) assignedLevel = 'avance';
+
+  // Save diagnostic
+  const prevDiag = prog.diagnosticDone ? { ...prog.diagnosticScores } : null;
+  prog.diagnosticDone = true;
+  prog.diagnosticDate = prog.diagnosticDate || new Date().toISOString();
+  prog.lastDiagnosticDate = new Date().toISOString();
+  prog.diagnosticScores = axes;
+  // Map to skills
+  prog.skills.articulation.score = axes.articulation;
+  prog.skills.fluidite.score = axes.fluidite;
+  prog.skills.structure.score = axes.structure;
+  prog.skills.improvisation.score = axes.improvisation;
+  saveProgress(prog);
+  updateStatusBanner();
+
+  // Radar chart SVG
+  const radarSVG = buildRadarSVG(axes, prevDiag);
+
+  // Comparison if previous exists
+  let compHTML = '';
+  if (prevDiag) {
+    compHTML = '<div class="prog-section"><div class="prog-section-title">Comparaison avec le diagnostic precedent</div>';
+    for (const [key, label] of Object.entries({ articulation: 'Articulation', fluidite: 'Fluidite', structure: 'Structure', improvisation: 'Improvisation', application: 'Application' })) {
+      const prev = prevDiag[key] || 0;
+      const curr = axes[key] || 0;
+      const diff = curr - prev;
+      const diffStr = diff > 0 ? '+' + diff : '' + diff;
+      const diffColor = diff > 0 ? '#00c853' : diff < 0 ? '#ff5252' : '#666';
+      compHTML += `<div class="comp-bar-row">
+        <div class="comp-bar-label">${label}</div>
+        <div class="comp-bar-track">
+          <div class="comp-bar-fill diag" style="width:${prev}%"></div>
+          <div class="comp-bar-fill current" style="width:${curr}%"></div>
+        </div>
+        <div class="comp-bar-val" style="color:${diffColor};">${diffStr}</div>
+      </div>`;
+    }
+    compHTML += '</div>';
+  }
+
+  const levelColors = { debutant: '#666', intermediaire: '#0066ff', avance: '#ff9100', expert: '#ff5252' };
+
+  content.innerHTML = `
+    <h1 style="font-size:24px;margin-bottom:8px;">Resultats du Diagnostic</h1>
+    <p class="subtitle">Moyenne : ${avg}/100</p>
+    <div class="prog-level-box" style="margin:16px 0;border-color:${levelColors[assignedLevel]};">
+      <div class="prog-level-name ${assignedLevel}">${assignedLevel}</div>
+      <div style="font-size:12px;opacity:0.6;margin-top:4px;">Niveau attribue</div>
+    </div>
+    <div class="radar-wrap">${radarSVG}</div>
+    <div style="margin:12px 0;">
+      ${Object.entries(axes).map(([k, v]) => `
+        <div class="comp-bar-row">
+          <div class="comp-bar-label">${k.charAt(0).toUpperCase() + k.slice(1)}</div>
+          <div class="comp-bar-track"><div class="comp-bar-fill current" style="width:${v}%"></div></div>
+          <div class="comp-bar-val">${v}</div>
+        </div>
+      `).join('')}
+    </div>
+    ${compHTML}
+    <div class="btn-group" style="margin-top:20px;">
+      <button class="btn-primary" onclick="showScreen('setup')">Retour au menu</button>
+    </div>
+  `;
+}
+
+// SVG Radar Chart (5 axes)
+function buildRadarSVG(scores, prevScores) {
+  const labels = Object.keys(scores);
+  const n = labels.length;
+  const cx = 140, cy = 130, r = 100;
+  const angleOff = -Math.PI / 2;
+
+  function pointAt(i, val) {
+    const angle = (2 * Math.PI * i / n) + angleOff;
+    const dist = (val / 100) * r;
+    return [cx + dist * Math.cos(angle), cy + dist * Math.sin(angle)];
+  }
+
+  // Grid circles
+  let gridLines = '';
+  for (let lv = 25; lv <= 100; lv += 25) {
+    let pts = [];
+    for (let i = 0; i < n; i++) pts.push(pointAt(i, lv).join(','));
+    gridLines += `<polygon points="${pts.join(' ')}" fill="none" stroke="#333" stroke-width="1"/>`;
+  }
+  // Axes
+  for (let i = 0; i < n; i++) {
+    const [x, y] = pointAt(i, 100);
+    gridLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#333" stroke-width="1"/>`;
+  }
+  // Labels
+  let labelSVG = '';
+  for (let i = 0; i < n; i++) {
+    const angle = (2 * Math.PI * i / n) + angleOff;
+    const lx = cx + (r + 20) * Math.cos(angle);
+    const ly = cy + (r + 20) * Math.sin(angle);
+    const anchor = Math.abs(Math.cos(angle)) < 0.1 ? 'middle' : Math.cos(angle) > 0 ? 'start' : 'end';
+    labelSVG += `<text x="${lx}" y="${ly}" fill="#aaa" font-size="10" text-anchor="${anchor}" dominant-baseline="middle">${labels[i].charAt(0).toUpperCase() + labels[i].slice(1)}</text>`;
+  }
+  // Previous diagnostic polygon
+  let prevPoly = '';
+  if (prevScores) {
+    let pts = [];
+    for (let i = 0; i < n; i++) pts.push(pointAt(i, prevScores[labels[i]] || 0).join(','));
+    prevPoly = `<polygon points="${pts.join(' ')}" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4,4"/>`;
+  }
+  // Current polygon
+  let pts = [];
+  for (let i = 0; i < n; i++) pts.push(pointAt(i, scores[labels[i]] || 0).join(','));
+  const currentPoly = `<polygon points="${pts.join(' ')}" fill="rgba(0,102,255,0.2)" stroke="#0066ff" stroke-width="2"/>`;
+  // Dots
+  let dots = '';
+  for (let i = 0; i < n; i++) {
+    const [x, y] = pointAt(i, scores[labels[i]] || 0);
+    dots += `<circle cx="${x}" cy="${y}" r="4" fill="#0066ff"/>`;
+  }
+
+  return `<svg viewBox="0 0 280 260" width="280" height="260">${gridLines}${prevPoly}${currentPoly}${dots}${labelSVG}</svg>`;
+}
+
+// 10-axis radar for progression dashboard
+function buildRadarSVG10(skills) {
+  const names = Object.keys(skills);
+  const n = names.length;
+  const cx = 160, cy = 155, r = 110;
+  const angleOff = -Math.PI / 2;
+
+  function pointAt(i, val) {
+    const angle = (2 * Math.PI * i / n) + angleOff;
+    const dist = (val / 100) * r;
+    return [cx + dist * Math.cos(angle), cy + dist * Math.sin(angle)];
+  }
+
+  let gridLines = '';
+  for (let lv = 25; lv <= 100; lv += 25) {
+    let pts = [];
+    for (let i = 0; i < n; i++) pts.push(pointAt(i, lv).join(','));
+    gridLines += `<polygon points="${pts.join(' ')}" fill="none" stroke="#333" stroke-width="1"/>`;
+  }
+  for (let i = 0; i < n; i++) {
+    const [x, y] = pointAt(i, 100);
+    gridLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#333" stroke-width="1"/>`;
+  }
+  let labelSVG = '';
+  for (let i = 0; i < n; i++) {
+    const angle = (2 * Math.PI * i / n) + angleOff;
+    const lx = cx + (r + 22) * Math.cos(angle);
+    const ly = cy + (r + 22) * Math.sin(angle);
+    const anchor = Math.abs(Math.cos(angle)) < 0.1 ? 'middle' : Math.cos(angle) > 0 ? 'start' : 'end';
+    const color = PROG_SKILL_COLORS[names[i]] || '#aaa';
+    labelSVG += `<text x="${lx}" y="${ly}" fill="${color}" font-size="9" font-weight="600" text-anchor="${anchor}" dominant-baseline="middle">${PROG_SKILL_NAMES[names[i]] || names[i]}</text>`;
+  }
+  let pts = [];
+  for (let i = 0; i < n; i++) pts.push(pointAt(i, skills[names[i]].score || 0).join(','));
+  const poly = `<polygon points="${pts.join(' ')}" fill="rgba(0,102,255,0.15)" stroke="#0066ff" stroke-width="2"/>`;
+  let dots = '';
+  for (let i = 0; i < n; i++) {
+    const [x, y] = pointAt(i, skills[names[i]].score || 0);
+    const color = PROG_SKILL_COLORS[names[i]] || '#0066ff';
+    dots += `<circle cx="${x}" cy="${y}" r="4" fill="${color}"/>`;
+  }
+  return `<svg viewBox="0 0 320 310" width="320" height="310">${gridLines}${poly}${dots}${labelSVG}</svg>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// PROGRESSION DASHBOARD
+// ════════════════════════════════════════════════════════════
+function showProgression() {
+  const prog = loadProgress();
+  showScreen('progression-screen');
+
+  const levelColors = { debutant: '#666', intermediaire: '#0066ff', avance: '#ff9100', expert: '#ff5252' };
+  const nextXP = getNextLevelXP(prog.level);
+  const curXP = getCurrentLevelXP(prog.level);
+  const xpPct = nextXP ? Math.min(100, Math.round(((prog.totalXP - curXP) / (nextXP - curXP)) * 100)) : 100;
+  const xpLabel = nextXP ? (prog.totalXP + ' / ' + nextXP + ' XP') : (prog.totalXP + ' XP (MAX)');
+
+  // Total time
+  const totalSeconds = prog.sessions.reduce((s, e) => s + (e.duration || 0), 0);
+  const totalMins = Math.round(totalSeconds / 60);
+
+  // Average filler/min
+  const recentFillers = prog.fillerWordsHistory.slice(-10);
+  const avgFillers = recentFillers.length > 0 ? (recentFillers.reduce((s, e) => s + e.perMinute, 0) / recentFillers.length).toFixed(1) : '--';
+
+  // Radar chart
+  const radarSVG = buildRadarSVG10(prog.skills);
+
+  // Weekly scores (last 4 weeks)
+  const weeklyBars = buildWeeklyBars(prog.sessions);
+
+  // Diagnostic comparison
+  let diagCompHTML = '';
+  if (prog.diagnosticDone) {
+    diagCompHTML = '<div class="prog-section"><div class="prog-section-title">Scores actuels vs Point Zero</div>';
+    const diagAxes = { articulation: 'Articulation', fluidite: 'Fluidite', structure: 'Structure', improvisation: 'Improvisation' };
+    for (const [key, label] of Object.entries(diagAxes)) {
+      const diagVal = prog.diagnosticScores[key] || 0;
+      const curVal = prog.skills[key] ? prog.skills[key].score : 0;
+      const diff = curVal - diagVal;
+      const diffStr = diff > 0 ? '+' + diff : '' + diff;
+      const diffColor = diff > 0 ? '#00c853' : diff < 0 ? '#ff5252' : '#666';
+      diagCompHTML += `<div class="comp-bar-row">
+        <div class="comp-bar-label">${label}</div>
+        <div class="comp-bar-track">
+          <div class="comp-bar-fill diag" style="width:${diagVal}%"></div>
+          <div class="comp-bar-fill current" style="width:${curVal}%"></div>
+        </div>
+        <div class="comp-bar-val" style="color:${diffColor};">${diffStr}</div>
+      </div>`;
+    }
+    diagCompHTML += '</div>';
+  }
+
+  // Refaire diagnostic button
+  let diagBtnHTML = '';
+  if (prog.lastDiagnosticDate) {
+    const daysSince = Math.floor((Date.now() - new Date(prog.lastDiagnosticDate).getTime()) / 86400000);
+    if (daysSince >= 14) {
+      diagBtnHTML = '<button class="btn-primary" onclick="startDiagnostic()" style="margin-top:12px;">Refaire le diagnostic</button>';
+    } else {
+      diagBtnHTML = '<button class="btn-primary" disabled style="margin-top:12px;background:#222;color:#555;">Diagnostic dans ' + (14 - daysSince) + 'j</button>';
+    }
+  } else {
+    diagBtnHTML = '<button class="btn-primary" onclick="startDiagnostic()" style="margin-top:12px;">Faire le diagnostic initial</button>';
+  }
+
+  document.getElementById('prog-content').innerHTML = `
+    <h1 style="font-size:22px;margin-bottom:16px;text-align:center;">Ma Progression</h1>
+
+    <div class="prog-section">
+      <div class="prog-level-box" style="border-color:${levelColors[prog.level]};">
+        <div class="prog-level-name ${prog.level}">${prog.level}</div>
+        <div class="prog-xp-bar"><div class="fill" style="width:${xpPct}%;background:${levelColors[prog.level]};"></div></div>
+        <div class="prog-xp-text">${xpLabel}</div>
+      </div>
+    </div>
+
+    <div class="prog-section">
+      <div class="prog-stats-row">
+        <div class="prog-stat-card">
+          <div class="val">${prog.totalSessions}</div>
+          <div class="lbl">Sessions</div>
+        </div>
+        <div class="prog-stat-card">
+          <div class="val">${totalMins}m</div>
+          <div class="lbl">Temps total</div>
+        </div>
+        <div class="prog-stat-card">
+          <div class="val" style="color:${prog.currentStreak >= 7 ? '#00c853' : prog.currentStreak >= 3 ? '#ffab00' : '#fff'};">${prog.currentStreak}j</div>
+          <div class="lbl">Streak (best: ${prog.bestStreak}j)</div>
+        </div>
+        <div class="prog-stat-card">
+          <div class="val">${avgFillers}</div>
+          <div class="lbl">Parasites/min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-section">
+      <div class="prog-section-title">Competences (10 axes)</div>
+      <div class="radar-wrap">${radarSVG}</div>
+    </div>
+
+    <div class="prog-section">
+      <div class="prog-section-title">Score moyen par semaine</div>
+      ${weeklyBars}
+    </div>
+
+    ${diagCompHTML}
+
+    <div style="text-align:center;">
+      ${diagBtnHTML}
+    </div>
+  `;
+}
+
+function buildWeeklyBars(sessions) {
+  const weeks = [];
+  const now = Date.now();
+  for (let w = 3; w >= 0; w--) {
+    const weekStart = now - (w + 1) * 7 * 86400000;
+    const weekEnd = now - w * 7 * 86400000;
+    const weekSessions = sessions.filter(s => {
+      const t = new Date(s.date).getTime();
+      return t >= weekStart && t < weekEnd;
+    });
+    const avg = weekSessions.length > 0 ? Math.round(weekSessions.reduce((s, e) => s + (e.score || 0), 0) / weekSessions.length) : 0;
+    weeks.push({ label: 'S-' + (w === 0 ? 'act' : w), avg, count: weekSessions.length });
+  }
+  const maxVal = Math.max(1, ...weeks.map(w => w.avg));
+
+  return `<div class="weekly-bars" style="padding:0 20px;">
+    ${weeks.map(w => {
+      const h = Math.max(2, Math.round((w.avg / maxVal) * 70));
+      return `<div class="weekly-bar-col">
+        <div style="font-size:11px;font-weight:600;color:#0066ff;">${w.avg || '-'}</div>
+        <div class="weekly-bar" style="height:${h}px;"></div>
+        <div class="weekly-bar-label">${w.label}</div>
+        <div style="font-size:9px;opacity:0.3;">${w.count}s</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// DIFFICULTY ADAPTATION
+// ════════════════════════════════════════════════════════════
+function getImprovDuration() {
+  const level = getPlayerLevel();
+  if (level === 'debutant') return 45;
+  if (level === 'intermediaire') return 60;
+  if (level === 'avance') return 90;
+  return 120; // expert
+}
+
+function getExpertConstraints() {
+  const level = getPlayerLevel();
+  if (level !== 'expert') return null;
+  const emotions = ['joyeux', 'en colere', 'triste', 'passionne', 'sarcastique', 'solennel'];
+  return { emotion: emotions[Math.floor(Math.random() * emotions.length)] };
+}
+
+function getFrameworkSegmentDuration() {
+  const level = getPlayerLevel();
+  if (level === 'debutant') return 40;
+  if (level === 'intermediaire') return 30;
+  if (level === 'avance') return 20;
+  return 15; // expert
+}
+
+function getTwisterDifficulties() {
+  const level = getPlayerLevel();
+  if (level === 'debutant') return [1, 2];
+  if (level === 'intermediaire') return [1, 2, 3];
+  if (level === 'avance') return [2, 3, 4];
+  return [3, 4]; // expert
+}
+
+function getMesDuration() {
+  // Not level-dependent per spec, but we could extend for expert
+  return 60;
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT PROGRESSION ON PAGE LOAD
+// ════════════════════════════════════════════════════════════
+(function initProgression() {
+  updateStatusBanner();
+  updateDiagBanner();
+  // Check streak reset (if last session was > 1 day ago)
+  const prog = loadProgress();
+  if (prog.lastSessionDate) {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0];
+    if (prog.lastSessionDate !== today && prog.lastSessionDate !== yesterday) {
+      prog.currentStreak = 0;
+      saveProgress(prog);
+      updateStatusBanner();
+    }
+  }
+})();
+
+// ════════════════════════════════════════════════════════════
 // EXPOSE FUNCTIONS TO GLOBAL SCOPE
 // ════════════════════════════════════════════════════════════
 window.startFullSession = startFullSession;
@@ -3073,6 +5254,22 @@ window.startImprov = startImprov;
 window.startImprovTimer = startImprovTimer;
 window.pickNewImprovWord = pickNewImprovWord;
 window.skipImprovToNext = skipImprovToNext;
+window.startFrameworks = startFrameworks;
+window.showFrameworkMenu = showFrameworkMenu;
+window.selectFramework = selectFramework;
+window.startFrameworkTimer = startFrameworkTimer;
+window.stopFrameworkEarly = stopFrameworkEarly;
+window.startMiseEnSituation = startMiseEnSituation;
+window.showMesCompSelect = showMesCompSelect;
+window.selectMesComp = selectMesComp;
+window.showMesScenarioSelect = showMesScenarioSelect;
+window.selectMesScenario = selectMesScenario;
+window.startMesScenario = startMesScenario;
+window.startMesTimer = startMesTimer;
+window.finishMesEarly = finishMesEarly;
+window.mesDone = mesDone;
+window.showProgression = showProgression;
+window.startDiagnostic = startDiagnostic;
 </script>
 </body>
 </html>
