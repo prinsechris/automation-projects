@@ -593,6 +593,36 @@ body.has-banner #mic-status { top: 44px; }
   border-radius: 20px; font-size: 16px; font-weight: 700; z-index: 200;
   animation: xpPopup 2s ease forwards; pointer-events: none;
 }
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 480px) {
+  body { padding: 10px 5px; }
+  #breath-circle { width: 160px; height: 160px; }
+  #breath-text { font-size: 48px; }
+  .improv-word, .framework-word { font-size: 36px !important; }
+  .diag-timer { font-size: 40px; }
+  #ex-score { font-size: 48px !important; }
+  .mes-scenario-context, .mes-scenario-technique, .mes-scenario-conseil { font-size: 13px; padding: 10px 12px; }
+  .mes-comp-card { padding: 10px 12px; min-height: auto; }
+  .prog-stat-card { min-width: 70px; padding: 8px; }
+  .prog-stat-card div:first-child { font-size: 18px; }
+  #status-bar { font-size: 11px; padding: 6px 10px; flex-wrap: wrap; gap: 6px; }
+  #status-bar .sb-xp-bar { width: 40px; }
+  h1 { font-size: 28px !important; }
+  h2 { font-size: 20px !important; }
+  .module-option { padding: 12px; margin: 8px 0; }
+  .module-option h3 { font-size: 15px; }
+  .module-option p { font-size: 12px; }
+  button { font-size: 14px; padding: 10px 18px; }
+  #filler-overlay { font-size: 11px; padding: 4px 8px; }
+}
+
+@media (max-width: 360px) {
+  .improv-word, .framework-word { font-size: 28px !important; }
+  #breath-circle { width: 130px; height: 130px; }
+  #breath-text { font-size: 36px; }
+  .mes-comp-card { font-size: 13px; }
+}
 </style>
 </head>
 <body>
