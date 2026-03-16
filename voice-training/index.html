@@ -496,6 +496,74 @@ button:active { opacity: 0.7; }
 .mes-transcript-box .label { font-size: 11px; opacity: 0.5; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
 .mes-transcript-box .transcript { font-size: 14px; line-height: 1.5; min-height: 24px; }
 
+/* ── Impro Guidee module ── */
+.ig-exercise-card {
+  background: #111; border: 2px solid #333; border-radius: 12px;
+  padding: 20px; margin: 8px 0; text-align: left; width: 100%; max-width: 400px;
+}
+.ig-exercise-card.active { border-color: #e040fb; }
+.ig-exercise-card.done { border-color: #00c853; opacity: 0.7; }
+.ig-exercise-card h4 { font-size: 16px; margin-bottom: 4px; }
+.ig-exercise-card p { font-size: 12px; opacity: 0.6; }
+.ig-exercise-card .ig-tag {
+  display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 4px; background: rgba(224,64,251,0.2); color: #e040fb; margin-top: 6px;
+}
+
+.ig-word-display {
+  font-size: 48px; font-weight: 800; color: #e040fb;
+  margin: 24px 0 8px; letter-spacing: 2px; text-transform: uppercase;
+  text-align: center;
+}
+.ig-timer {
+  font-size: 64px; font-weight: 900; color: #e040fb;
+  text-shadow: 0 0 25px rgba(224,64,251,0.4);
+  font-variant-numeric: tabular-nums; margin: 16px 0; text-align: center;
+}
+.ig-instruction {
+  font-size: 15px; opacity: 0.7; line-height: 1.5; margin: 12px 0;
+  padding: 14px; background: #111; border-radius: 10px; text-align: left;
+}
+.ig-counter {
+  font-size: 28px; font-weight: 700; color: #e040fb; margin: 8px 0;
+  text-align: center;
+}
+.ig-situation {
+  font-size: 18px; line-height: 1.6; text-align: center;
+  padding: 20px; background: #1a0a2e; border: 2px solid #2a1a3e;
+  border-radius: 12px; margin: 12px 0; color: #e0b0ff;
+}
+.ig-constraints {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 8px 0;
+}
+.ig-constraint-word {
+  padding: 6px 14px; background: rgba(224,64,251,0.15); border: 1px solid rgba(224,64,251,0.3);
+  border-radius: 8px; font-size: 16px; font-weight: 600; color: #e040fb;
+}
+
+/* ── Diagnostic Plan d'entrainement ── */
+.diag-plan {
+  background: #111; border: 2px solid #222; border-radius: 12px;
+  padding: 20px; margin: 16px 0; text-align: left; width: 100%;
+}
+.diag-plan-title {
+  font-size: 14px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: #0066ff; margin-bottom: 12px;
+}
+.diag-reco {
+  padding: 10px 14px; margin: 8px 0; border-radius: 8px;
+  border-left: 3px solid #ff5252; background: rgba(255,82,82,0.08);
+  font-size: 13px; line-height: 1.5;
+}
+.diag-reco .reco-axis { font-weight: 700; color: #ff5252; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.diag-reco .reco-text { opacity: 0.85; }
+.diag-weekly-plan {
+  padding: 14px; margin: 12px 0 0; border-radius: 8px;
+  background: rgba(0,102,255,0.08); border: 1px solid rgba(0,102,255,0.2);
+  font-size: 13px; line-height: 1.6;
+}
+.diag-weekly-plan .plan-title { font-weight: 700; color: #0066ff; margin-bottom: 6px; }
+
 /* ── Animations ── */
 @keyframes bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
 .bump { animation: bump 0.2s ease; }
@@ -709,6 +777,11 @@ body.has-banner #mic-status { top: 44px; }
   <div id="opt-improv" class="module-option" onclick="startModule('improv')" style="border-color:#ff9100;">
     <h3>Improvisation</h3>
     <p>Un mot au hasard — parle 90 secondes avec analyse du debit et des hesitations</p>
+    <span class="tag mic">Micro requis</span>
+  </div>
+  <div id="opt-improguidee" class="module-option" onclick="startModule('improguidee')" style="border-color:#e040fb;">
+    <h3>Impro Guidee</h3>
+    <p>5 exercices progressifs : association, phrases, "oui et...", pitch, storytelling</p>
     <span class="tag mic">Micro requis</span>
   </div>
   <div id="opt-frameworks" class="module-option" onclick="startModule('frameworks')" style="border-color:#ff9100;">
@@ -1331,12 +1404,14 @@ let currentPaceWPM = 0;
     document.getElementById("opt-coldcall").classList.add("disabled");
     document.getElementById("opt-simulation").classList.add("disabled");
     document.getElementById("opt-improv").classList.add("disabled");
+    document.getElementById("opt-improguidee").classList.add("disabled");
     document.getElementById("opt-frameworks").classList.add("disabled");
     document.getElementById("opt-reading").onclick = null;
     document.getElementById("opt-twisters").onclick = null;
     document.getElementById("opt-coldcall").onclick = null;
     document.getElementById("opt-simulation").onclick = null;
     document.getElementById("opt-improv").onclick = null;
+    document.getElementById("opt-improguidee").onclick = null;
     document.getElementById("opt-frameworks").onclick = null;
     const diagOpt = document.getElementById("opt-diagnostic");
     if (diagOpt) { diagOpt.classList.add("disabled"); diagOpt.onclick = null; }
@@ -1381,7 +1456,7 @@ function showModuleSelect() {
 }
 
 function startModule(mod) {
-  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation" || mod === "improv" || mod === "frameworks" || mod === "miseensituation") && !SPEECH_SUPPORTED) {
+  if ((mod === "reading" || mod === "twisters" || mod === "coldcall" || mod === "simulation" || mod === "improv" || mod === "improguidee" || mod === "frameworks" || mod === "miseensituation") && !SPEECH_SUPPORTED) {
     showMicError({name: 'NotSupported', message: 'Speech Recognition non supporte sur ce navigateur.'});
     return;
   }
@@ -1396,6 +1471,7 @@ function startModule(mod) {
   else if (mod === "coldcall") startColdCall();
   else if (mod === "simulation") startSimulation();
   else if (mod === "improv") startImprov();
+  else if (mod === "improguidee") startImproGuidee();
   else if (mod === "frameworks") startFrameworks();
   else if (mod === "miseensituation") startMiseEnSituation();
 }
@@ -1422,7 +1498,7 @@ function completeModule(mod) {
     } else if (mod === 'warmup' || mod === 'breathing') {
       recordSession({ module: mod, score: 70, duration: elapsed, fillerWords: 0, wpm: 0, skills: ['articulation'], details: {} });
     }
-    // impro, structures, mise_en_situation are tracked in their own Done functions
+    // impro, improguidee, structures, mise_en_situation are tracked in their own Done functions
   }
 
   if (sessionMode === "full" && fullSessionQueue.length > 0) {
@@ -2996,6 +3072,454 @@ function skipImprovToNext() {
 }
 
 // ════════════════════════════════════════════════════════════
+// IMPRO GUIDEE MODULE
+// ════════════════════════════════════════════════════════════
+
+const IG_WORDS_POOL = [
+  "courage", "liberte", "succes", "echec", "voyage", "silence", "passion", "risque",
+  "confiance", "ambition", "discipline", "curiosite", "patience", "pouvoir", "energie",
+  "decision", "gratitude", "influence", "equilibre", "frontiere", "ombre", "flamme",
+  "miroir", "horizon", "racine", "graine", "ancre", "pont", "tempete", "lumiere",
+  "colere", "joie", "vitesse", "secret", "masque", "defi", "victoire", "solitude",
+  "chemin", "source", "reve", "force", "peur", "espoir", "choix"
+];
+
+const IG_SITUATIONS = [
+  "Tu es sur une ile deserte",
+  "Tu viens de gagner au loto",
+  "Tu es le dernier humain sur Terre",
+  "Tu es invite a diner chez le President",
+  "Tu decouvres que tu peux voler",
+  "Tu es bloque dans un ascenseur avec ton idole",
+  "Tu dois convaincre un alien de ne pas detruire la Terre",
+  "Tu te reveilles 100 ans dans le futur",
+  "Tu es devenu invisible pour 24 heures",
+  "Tu dois improviser un discours de mariage",
+  "Tu es le nouveau prof dans une classe de rebelles",
+  "Tu decouvres un passage secret dans ta maison",
+  "Tu dois negocier la paix entre deux pays",
+  "Tu es perdu en foret la nuit",
+  "Tu inventes un nouveau sport et tu dois l'expliquer",
+  "Tu es le capitaine d'un vaisseau spatial en panne"
+];
+
+const IG_ABSURD_PRODUCTS = [
+  "Un parapluie pour chats", "Des chaussettes chauffantes a l'energie solaire",
+  "Un reveil qui te fait des compliments", "Une fourchette connectee en Bluetooth",
+  "Un casque qui traduit les pensees de ton chien", "Une cravate qui change de couleur selon ton humeur",
+  "Un robot qui fait tes excuses a ta place", "Un oreiller qui enregistre tes reves",
+  "Une application qui note tes blagues sur 10", "Un miroir qui te montre dans 10 ans",
+  "Des lunettes qui voient les mensonges", "Un parfum qui sent la motivation",
+  "Une tasse qui refroidit le cafe a la temperature parfaite", "Un stylo qui corrige ta grammaire en temps reel",
+  "Une veste qui te masse les epaules", "Un drone livreur de croissants",
+  "Une bague qui compte tes soupirs", "Un fauteuil qui te berce pour t'endormir en reunion",
+  "Une lampe qui s'allume quand tu as une bonne idee", "Un chapeau avec ventilateur integre"
+];
+
+const IG_EXERCISES = [
+  { id: 'association', name: 'Association de mots', desc: '10 mots associes le plus vite possible', baseDuration: 30, icon: '1' },
+  { id: 'unephrase', name: 'Une phrase, un mot', desc: 'Fais une phrase complete avec chaque mot', baseDuration: 45, icon: '2' },
+  { id: 'ouiet', name: '"Oui, et..."', desc: 'Developpe une situation en enchainant les "oui, et..."', baseDuration: 60, icon: '3' },
+  { id: 'pitch', name: 'Pitch eclair', desc: 'Pitch convaincant d\'un produit absurde', baseDuration: 30, icon: '4' },
+  { id: 'histoire', name: 'Histoire a contraintes', desc: 'Raconte une histoire avec 3 mots imposes', baseDuration: 90, icon: '5' }
+];
+
+let igCurrentExercise = 0;
+let igTimer = null;
+let igTimeLeft = 0;
+let igTranscript = "";
+let igWordCount = 0;
+let igScores = [];
+let igCurrentWord = "";
+let igCurrentSituation = "";
+let igCurrentProduct = "";
+let igConstraintWords = [];
+let igWordsUsed = [];
+let igStartTime = null;
+
+function getIGDuration(baseDuration) {
+  const level = getPlayerLevel();
+  if (level === 'debutant') return Math.round(baseDuration * 1.5);
+  if (level === 'intermediaire') return baseDuration;
+  if (level === 'avance') return Math.round(baseDuration * 0.8);
+  return Math.round(baseDuration * 0.6); // expert
+}
+
+function startImproGuidee() {
+  document.getElementById("ex-title").textContent = "Impro Guidee";
+  document.getElementById("ex-progress").textContent = "Exercice 1/5";
+  igCurrentExercise = 0;
+  igScores = [];
+  igWordsUsed = [];
+  igStartTime = Date.now();
+  showIGExercise();
+}
+
+function showIGExercise() {
+  if (igCurrentExercise >= IG_EXERCISES.length) {
+    igAllDone();
+    return;
+  }
+  const ex = IG_EXERCISES[igCurrentExercise];
+  document.getElementById("ex-progress").textContent = `Exercice ${igCurrentExercise + 1}/5`;
+  const duration = getIGDuration(ex.baseDuration);
+
+  const content = document.getElementById("exercise-content");
+  const controls = document.getElementById("exercise-controls");
+
+  if (ex.id === 'association') {
+    igCurrentWord = pickIGWord();
+    content.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:12px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Exercice 1 — Association de mots</div>
+        <div class="ig-instruction">Un mot s'affiche. Dis 10 mots associes le plus vite possible. Pas de repetition.</div>
+        <div class="ig-word-display" id="ig-word">${igCurrentWord}</div>
+        <div class="ig-timer" id="ig-timer">${duration}s</div>
+        <div class="ig-counter" id="ig-counter">Mots detectes : 0</div>
+        <div id="ig-transcript-box" style="background:#111;border-radius:8px;padding:12px;margin:12px 0;min-height:40px;font-size:14px;opacity:0.7;">...</div>
+        <div id="ig-results"></div>
+      </div>
+    `;
+    controls.innerHTML = `<button class="btn-primary" id="ig-start-btn" onclick="startIGTimer()" style="background:#e040fb;">Commencer</button>`;
+
+  } else if (ex.id === 'unephrase') {
+    igCurrentWord = pickIGWord();
+    content.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:12px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Exercice 2 — Une phrase, un mot</div>
+        <div class="ig-instruction">Fais UNE phrase complete avec le mot affiche. Quand c'est fait, un nouveau mot apparait.</div>
+        <div class="ig-word-display" id="ig-word">${igCurrentWord}</div>
+        <div class="ig-timer" id="ig-timer">${duration}s</div>
+        <div class="ig-counter" id="ig-counter">Phrases : 0</div>
+        <div id="ig-transcript-box" style="background:#111;border-radius:8px;padding:12px;margin:12px 0;min-height:40px;font-size:14px;opacity:0.7;">...</div>
+        <div id="ig-results"></div>
+      </div>
+    `;
+    controls.innerHTML = `<button class="btn-primary" id="ig-start-btn" onclick="startIGTimer()" style="background:#e040fb;">Commencer</button>`;
+
+  } else if (ex.id === 'ouiet') {
+    igCurrentSituation = IG_SITUATIONS[Math.floor(Math.random() * IG_SITUATIONS.length)];
+    content.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:12px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Exercice 3 — "Oui, et..."</div>
+        <div class="ig-instruction">Developpe la situation. Commence CHAQUE nouvelle idee par "oui, et...". Ne bloque jamais, ajoute toujours.</div>
+        <div class="ig-situation">${igCurrentSituation}</div>
+        <div class="ig-timer" id="ig-timer">${duration}s</div>
+        <div class="ig-counter" id="ig-counter">"Oui, et..." detectes : 0</div>
+        <div id="ig-transcript-box" style="background:#111;border-radius:8px;padding:12px;margin:12px 0;min-height:40px;font-size:14px;opacity:0.7;">...</div>
+        <div id="ig-results"></div>
+      </div>
+    `;
+    controls.innerHTML = `<button class="btn-primary" id="ig-start-btn" onclick="startIGTimer()" style="background:#e040fb;">Commencer</button>`;
+
+  } else if (ex.id === 'pitch') {
+    igCurrentProduct = IG_ABSURD_PRODUCTS[Math.floor(Math.random() * IG_ABSURD_PRODUCTS.length)];
+    content.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:12px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Exercice 4 — Pitch eclair</div>
+        <div class="ig-instruction">Fais un pitch convaincant de ce produit en ${duration} secondes. Structure : intro, argument, conclusion.</div>
+        <div class="ig-situation">${igCurrentProduct}</div>
+        <div class="ig-timer" id="ig-timer">${duration}s</div>
+        <div id="ig-transcript-box" style="background:#111;border-radius:8px;padding:12px;margin:12px 0;min-height:40px;font-size:14px;opacity:0.7;">...</div>
+        <div id="ig-results"></div>
+      </div>
+    `;
+    controls.innerHTML = `<button class="btn-primary" id="ig-start-btn" onclick="startIGTimer()" style="background:#e040fb;">Commencer</button>`;
+
+  } else if (ex.id === 'histoire') {
+    igConstraintWords = [];
+    while (igConstraintWords.length < 3) {
+      const w = IG_WORDS_POOL[Math.floor(Math.random() * IG_WORDS_POOL.length)];
+      if (!igConstraintWords.includes(w)) igConstraintWords.push(w);
+    }
+    content.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:12px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Exercice 5 — Histoire a contraintes</div>
+        <div class="ig-instruction">Raconte une histoire qui contient ces 3 mots. Structure : debut, milieu, fin.</div>
+        <div class="ig-constraints">
+          ${igConstraintWords.map(w => `<div class="ig-constraint-word">${w}</div>`).join('')}
+        </div>
+        <div class="ig-timer" id="ig-timer">${duration}s</div>
+        <div class="ig-counter" id="ig-counter">Mots places : 0/3</div>
+        <div id="ig-transcript-box" style="background:#111;border-radius:8px;padding:12px;margin:12px 0;min-height:40px;font-size:14px;opacity:0.7;">...</div>
+        <div id="ig-results"></div>
+      </div>
+    `;
+    controls.innerHTML = `<button class="btn-primary" id="ig-start-btn" onclick="startIGTimer()" style="background:#e040fb;">Commencer</button>`;
+  }
+}
+
+function pickIGWord() {
+  const available = IG_WORDS_POOL.filter(w => !igWordsUsed.includes(w));
+  const pool = available.length > 0 ? available : IG_WORDS_POOL;
+  const w = pool[Math.floor(Math.random() * pool.length)];
+  igWordsUsed.push(w);
+  return w;
+}
+
+function startIGTimer() {
+  const ex = IG_EXERCISES[igCurrentExercise];
+  const duration = getIGDuration(ex.baseDuration);
+  igTimeLeft = duration;
+  igTranscript = "";
+  igWordCount = 0;
+
+  const btn = document.getElementById("ig-start-btn");
+  if (btn) btn.disabled = true;
+
+  initRecognition(onIGResult);
+  startRecognition();
+  initAudioAnalysis();
+  showFillerOverlay();
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `<button class="btn-secondary" onclick="finishIGEarly()">Terminer l'exercice</button>`;
+
+  if (igTimer) clearInterval(igTimer);
+  igTimer = setInterval(() => {
+    igTimeLeft--;
+    const el = document.getElementById("ig-timer");
+    if (el) {
+      el.textContent = igTimeLeft + 's';
+      if (igTimeLeft <= 5) el.style.color = '#ff5252';
+      else el.style.color = '#e040fb';
+    }
+    if (igTimeLeft <= 0) {
+      clearInterval(igTimer);
+      igTimer = null;
+      igExerciseDone();
+    }
+  }, 1000);
+}
+
+function onIGResult(event) {
+  let transcript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  igTranscript = transcript.trim();
+
+  const box = document.getElementById("ig-transcript-box");
+  if (box) box.textContent = igTranscript || "...";
+
+  const fillers = countFillerWords(igTranscript);
+  updateFillerOverlay(fillers);
+
+  const ex = IG_EXERCISES[igCurrentExercise];
+  const counter = document.getElementById("ig-counter");
+
+  if (ex.id === 'association') {
+    const words = igTranscript.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    const unique = [...new Set(words)];
+    igWordCount = unique.length;
+    if (counter) counter.textContent = 'Mots detectes : ' + igWordCount;
+
+  } else if (ex.id === 'unephrase') {
+    // Count sentences (ending with period-like pauses detected by speech)
+    const sentences = igTranscript.split(/[.!?]+/).filter(s => s.trim().length > 3);
+    igWordCount = sentences.length;
+    if (counter) counter.textContent = 'Phrases : ' + igWordCount;
+    // Auto-advance word after each sentence-like pause
+    if (igWordCount > 0 && igWordCount % 1 === 0) {
+      const newWord = pickIGWord();
+      igCurrentWord = newWord;
+      const wordEl = document.getElementById("ig-word");
+      if (wordEl) wordEl.textContent = newWord;
+    }
+
+  } else if (ex.id === 'ouiet') {
+    const ouiEtCount = (igTranscript.toLowerCase().match(/oui\s*,?\s*et/g) || []).length;
+    igWordCount = ouiEtCount;
+    if (counter) counter.textContent = '"Oui, et..." detectes : ' + ouiEtCount;
+
+  } else if (ex.id === 'histoire') {
+    const lower = igTranscript.toLowerCase();
+    const found = igConstraintWords.filter(w => lower.includes(w.toLowerCase()));
+    igWordCount = found.length;
+    if (counter) counter.textContent = 'Mots places : ' + found.length + '/3';
+    // Highlight found words
+    document.querySelectorAll('.ig-constraint-word').forEach(el => {
+      if (found.includes(el.textContent.toLowerCase())) {
+        el.style.background = 'rgba(0,200,83,0.3)';
+        el.style.borderColor = '#00c853';
+        el.style.color = '#00c853';
+      }
+    });
+  }
+}
+
+function finishIGEarly() {
+  if (igTimer) { clearInterval(igTimer); igTimer = null; }
+  igExerciseDone();
+}
+
+function igExerciseDone() {
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
+
+  const ex = IG_EXERCISES[igCurrentExercise];
+  const duration = getIGDuration(ex.baseDuration);
+  const elapsed = duration - igTimeLeft;
+  const words = igTranscript.split(/\s+/).filter(w => w.length > 0);
+  const totalWords = words.length;
+  const wpm = elapsed > 0 ? Math.round((totalWords / elapsed) * 60) : 0;
+  const fillers = countFillerWords(igTranscript);
+
+  let score = 0;
+  let details = {};
+  let advice = '';
+
+  if (ex.id === 'association') {
+    // Score: unique words out of 10 target
+    const uniqueWords = [...new Set(igTranscript.toLowerCase().split(/\s+/).filter(w => w.length > 2))];
+    const count = uniqueWords.length;
+    score = Math.min(100, Math.round((count / 10) * 80) + (count >= 10 ? 20 : 0));
+    details = { uniqueWords: count };
+    if (count < 5) advice = 'Essaie de lacher les mots sans reflechir. Ne cherche pas le mot parfait, dis le premier qui vient.';
+    else if (count < 10) advice = 'Bon debut. Pour aller plus vite, pense par categories : couleurs, lieux, emotions, actions...';
+    else advice = 'Excellent. Ton cerveau est rapide et fluide.';
+
+  } else if (ex.id === 'unephrase') {
+    const sentences = igTranscript.split(/[.!?]+/).filter(s => s.trim().length > 3);
+    score = Math.min(100, Math.round((sentences.length / 6) * 70) + Math.min(30, Math.round((wpm / 120) * 30)));
+    details = { phrases: sentences.length };
+    if (sentences.length < 3) advice = 'Parle plus vite. Chaque phrase doit etre simple et directe, pas besoin de reflechir longtemps.';
+    else if (sentences.length < 6) advice = 'Bonne fluidite. Essaie d\'allonger tes phrases pour ajouter du detail.';
+    else advice = 'Tres reactif. Tes phrases sortent naturellement.';
+
+  } else if (ex.id === 'ouiet') {
+    const ouiEtCount = (igTranscript.toLowerCase().match(/oui\s*,?\s*et/g) || []).length;
+    const fluidPenalty = Math.min(20, fillers.total * 3);
+    score = Math.min(100, Math.round((ouiEtCount / 5) * 50) + Math.max(0, 30 - fluidPenalty) + Math.min(20, Math.round((totalWords / 80) * 20)));
+    details = { ouiEt: ouiEtCount };
+    if (ouiEtCount < 2) advice = 'N\'oublie pas de commencer chaque nouvelle idee par "oui, et...". C\'est la regle du jeu.';
+    else if (ouiEtCount < 5) advice = 'Bien. Enchaine encore plus vite, ne reflechis pas trop entre chaque "oui, et...".';
+    else advice = 'Parfait. Tu ne bloques plus, tu construis naturellement.';
+
+  } else if (ex.id === 'pitch') {
+    const hasIntro = /\b(imaginez|bonjour|saviez|presenté|decouvrez|voici)\b/i.test(igTranscript);
+    const hasArgument = /\b(parce que|car|grace a|avantage|permet|ideal|parfait|genial)\b/i.test(igTranscript);
+    const hasConclusion = /\b(alors|donc|n'attendez|commandez|essayez|profitez|conclusion)\b/i.test(igTranscript);
+    const structScore = (hasIntro ? 25 : 5) + (hasArgument ? 25 : 5) + (hasConclusion ? 20 : 5);
+    const fluidBonus = Math.max(0, 30 - fillers.total * 4);
+    score = Math.min(100, structScore + fluidBonus);
+    details = { intro: hasIntro, argument: hasArgument, conclusion: hasConclusion };
+    if (!hasIntro) advice = 'Commence par une accroche : "Imaginez...", "Saviez-vous que...". Ca capte l\'attention.';
+    else if (!hasArgument) advice = 'Ajoute un argument : pourquoi ce produit est genial ? Quel probleme il resout ?';
+    else if (!hasConclusion) advice = 'Termine par un appel a l\'action : "Alors n\'attendez plus..."';
+    else advice = 'Pitch bien structure. Travaille maintenant la conviction dans le ton.';
+
+  } else if (ex.id === 'histoire') {
+    const lower = igTranscript.toLowerCase();
+    const found = igConstraintWords.filter(w => lower.includes(w.toLowerCase()));
+    const wordsFound = found.length;
+    const hasNarrative = totalWords > 30;
+    score = Math.min(100, (wordsFound * 25) + (hasNarrative ? 25 : 10) + Math.max(0, 15 - fillers.total * 2));
+    details = { wordsFound: wordsFound, totalWords: totalWords };
+    if (wordsFound < 3) advice = 'Essaie de placer les 3 mots. Construis ton histoire autour d\'eux.';
+    else if (!hasNarrative) advice = 'Les mots sont places. Maintenant developpe : ajoute des details, des personnages, des rebondissements.';
+    else advice = 'Belle narration. Les 3 mots sont integres naturellement dans ton histoire.';
+  }
+
+  igScores.push({ exercise: ex.id, score: score, details: details });
+  const scoreColor = score >= 75 ? '#00c853' : score >= 50 ? '#ffab00' : '#ff5252';
+
+  const timerEl = document.getElementById("ig-timer");
+  if (timerEl) { timerEl.textContent = score + '/100'; timerEl.style.color = scoreColor; }
+
+  const resultsEl = document.getElementById("ig-results");
+  if (resultsEl) {
+    resultsEl.innerHTML = `
+      <div style="margin-top:16px;padding:16px;background:#111;border-radius:12px;text-align:left;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">SCORE</div>
+            <div style="font-size:24px;font-weight:700;color:${scoreColor};">${score}/100</div>
+          </div>
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">DEBIT</div>
+            <div style="font-size:18px;font-weight:700;">${wpm} m/min</div>
+          </div>
+          <div style="text-align:center;padding:8px 16px;background:#1a1a1a;border-radius:8px;">
+            <div style="font-size:11px;opacity:0.5;">PARASITES</div>
+            <div style="font-size:18px;font-weight:700;color:${fillers.total > 3 ? '#ff5252' : '#00c853'};">${fillers.total}</div>
+          </div>
+        </div>
+        <div style="font-size:13px;padding:10px;background:#0a1a0a;border-radius:8px;border:1px solid #1a3a1a;">
+          <div style="font-size:11px;opacity:0.5;margin-bottom:4px;">CONSEIL</div>
+          <div style="line-height:1.4;">${advice}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  igCurrentExercise++;
+  const controls = document.getElementById("exercise-controls");
+  if (igCurrentExercise < IG_EXERCISES.length) {
+    controls.innerHTML = `
+      <button class="btn-primary" onclick="showIGExercise()" style="background:#e040fb;">Exercice suivant</button>
+      <button class="btn-secondary" onclick="igAllDone()">Terminer le module</button>
+    `;
+  } else {
+    controls.innerHTML = `
+      <button class="btn-success" onclick="igAllDone()">Voir les resultats</button>
+    `;
+  }
+}
+
+function igAllDone() {
+  if (igTimer) { clearInterval(igTimer); igTimer = null; }
+  stopRecognition();
+  stopVoiceAnalysis();
+  hideFillerOverlay();
+
+  const totalScore = igScores.length > 0 ? Math.round(igScores.reduce((a, b) => a + b.score, 0) / igScores.length) : 0;
+  const totalElapsed = Math.round((Date.now() - (igStartTime || Date.now())) / 1000);
+
+  // Record session
+  if (typeof recordSession === 'function') {
+    recordSession({
+      module: 'impro_guidee',
+      score: totalScore,
+      duration: totalElapsed,
+      fillerWords: 0,
+      wpm: 0,
+      skills: ['improvisation', 'structure'],
+      details: { exercises: igScores.length, scores: igScores.map(s => s.score) }
+    });
+  }
+
+  const scoreColor = totalScore >= 75 ? '#00c853' : totalScore >= 50 ? '#ffab00' : '#ff5252';
+
+  const content = document.getElementById("exercise-content");
+  content.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:12px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Impro Guidee — Resultats</div>
+      <div style="font-size:56px;font-weight:900;color:${scoreColor};margin:16px 0;">${totalScore}/100</div>
+      <div style="font-size:14px;opacity:0.6;margin-bottom:20px;">Moyenne sur ${igScores.length} exercice${igScores.length > 1 ? 's' : ''}</div>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%;max-width:380px;margin:0 auto;">
+        ${igScores.map((s, i) => {
+          const ex = IG_EXERCISES[i] || { name: 'Exercice ' + (i+1) };
+          const c = s.score >= 75 ? '#00c853' : s.score >= 50 ? '#ffab00' : '#ff5252';
+          return `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#111;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:rgba(224,64,251,0.2);color:#e040fb;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${i+1}</div>
+            <div style="flex:1;text-align:left;font-size:13px;">${ex.name}</div>
+            <div style="font-size:18px;font-weight:700;color:${c};">${s.score}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+
+  const controls = document.getElementById("exercise-controls");
+  controls.innerHTML = `
+    <button class="btn-primary" onclick="startImproGuidee()" style="background:#e040fb;">Recommencer</button>
+    <button class="btn-success" onclick="completeModule('improguidee')">Terminer</button>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════
 // FILLER WORDS OVERLAY (transversal)
 // ════════════════════════════════════════════════════════════
 function showFillerOverlay() {
@@ -3290,7 +3814,7 @@ function showDone() {
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
 
-  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", improv: "Improvisation", frameworks: "Structures d'Impro", coldcall: "Cold Call", simulation: "Simulation Realiste" };
+  const moduleNames = { breathing: "Respiration", warmup: "Echauffement Vocal", reading: "Lecture", twisters: "Virelangues", improv: "Improvisation", improguidee: "Impro Guidee", frameworks: "Structures d'Impro", coldcall: "Cold Call", simulation: "Simulation Realiste" };
   const modList = modulesCompleted.map(m => moduleNames[m] || m).join(", ");
 
   showScreen("done-screen");
@@ -4984,10 +5508,68 @@ function showDiagResults() {
       `).join('')}
     </div>
     ${compHTML}
+    ${buildDiagPlan(axes, assignedLevel)}
     <div class="btn-group" style="margin-top:20px;">
       <button class="btn-primary" onclick="showScreen('setup')">Retour au menu</button>
     </div>
   `;
+}
+
+function buildDiagPlan(axes, level) {
+  const recos = [];
+  if ((axes.articulation || 0) < 50) {
+    recos.push({ axis: 'Articulation', score: axes.articulation, text: 'Fais 2 sessions Virelangues + Sur-articulation par jour. Concentre-toi sur la precision de chaque syllabe.' });
+  }
+  if ((axes.fluidite || 0) < 50) {
+    recos.push({ axis: 'Fluidite', score: axes.fluidite, text: 'Pratique la Lecture a voix haute (module 3). Focus sur le debit regulier sans hesitations.' });
+  }
+  if ((axes.structure || 0) < 50) {
+    recos.push({ axis: 'Structure', score: axes.structure, text: 'Utilise les Structures d\'Impro (module 8). Le framework What/So What/Now What t\'aide a organiser tes idees rapidement.' });
+  }
+  if ((axes.improvisation || 0) < 50) {
+    recos.push({ axis: 'Improvisation', score: axes.improvisation, text: 'Commence par les sous-exercices d\'Impro Guidee avant de passer a l\'impro libre. Les 5 exercices progressifs debloquent la fluidite de pensee.' });
+  }
+  if ((axes.application || 0) < 50) {
+    recos.push({ axis: 'Application', score: axes.application, text: 'Fais 3 Mises en Situation par jour sur des competences differentes. Varie entre persuasion, negociation et storytelling.' });
+  }
+
+  let weeklyPlan = '';
+  if (level === 'debutant') {
+    weeklyPlan = `<div class="diag-weekly-plan">
+      <div class="plan-title">Plan hebdomadaire recommande — Debutant</div>
+      <div><strong>Semaine 1-2 :</strong> Respiration + Virelangues + Lecture chaque jour (30 min/jour)</div>
+      <div><strong>Semaine 3-4 :</strong> Ajoute Impro Guidee (exercices 1 a 3). Monte progressivement vers l'impro libre.</div>
+    </div>`;
+  } else if (level === 'intermediaire') {
+    weeklyPlan = `<div class="diag-weekly-plan">
+      <div class="plan-title">Plan hebdomadaire recommande — Intermediaire</div>
+      <div>Chaque jour : 1 echauffement vocal + 1 session Impro Guidee ou Impro libre + 2 Mises en Situation.</div>
+      <div style="margin-top:4px;">Varie les competences pour progresser sur tous les axes.</div>
+    </div>`;
+  } else {
+    weeklyPlan = `<div class="diag-weekly-plan">
+      <div class="plan-title">Plan hebdomadaire recommande — ${level === 'avance' ? 'Avance' : 'Expert'}</div>
+      <div>Focus sur tes points faibles identifies ci-dessus. Varie les competences en Mise en Situation.</div>
+      <div style="margin-top:4px;">Challenge-toi avec les contraintes expert en Impro et les simulations realistes.</div>
+    </div>`;
+  }
+
+  if (recos.length === 0 && (level === 'avance' || level === 'expert')) {
+    return `<div class="diag-plan">
+      <div class="diag-plan-title">Plan d'entrainement recommande</div>
+      <div style="font-size:13px;opacity:0.7;margin-bottom:8px;">Tous tes axes sont au-dessus de 50/100. Continue comme ca.</div>
+      ${weeklyPlan}
+    </div>`;
+  }
+
+  return `<div class="diag-plan">
+    <div class="diag-plan-title">Plan d'entrainement recommande</div>
+    ${recos.map(r => `<div class="diag-reco">
+      <div class="reco-axis">${r.axis} — ${r.score}/100</div>
+      <div class="reco-text">${r.text}</div>
+    </div>`).join('')}
+    ${weeklyPlan}
+  </div>`;
 }
 
 // SVG Radar Chart (5 axes)
@@ -5333,6 +5915,11 @@ window.finishMesEarly = finishMesEarly;
 window.mesDone = mesDone;
 window.showProgression = showProgression;
 window.startDiagnostic = startDiagnostic;
+window.startImproGuidee = startImproGuidee;
+window.showIGExercise = showIGExercise;
+window.startIGTimer = startIGTimer;
+window.finishIGEarly = finishIGEarly;
+window.igAllDone = igAllDone;
 </script>
 </body>
 </html>
