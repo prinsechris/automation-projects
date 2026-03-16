@@ -1710,51 +1710,80 @@ function runVoiceAnalysis() {
 }
 
 function detectPitch(buffer, sampleRate) {
-  // Autocorrelation pitch detection
+  // YIN-inspired pitch detection (more robust than basic autocorrelation)
   const SIZE = buffer.length;
-  let maxVal = 0;
-  for (let i = 0; i < SIZE; i++) {
-    if (Math.abs(buffer[i]) > maxVal) maxVal = Math.abs(buffer[i]);
-  }
-  if (maxVal < 0.005) return -1; // too quiet (lowered for mobile mics)
+  const halfSize = Math.floor(SIZE / 2);
 
-  // Trim silence from ends
-  let start = 0, end = SIZE - 1;
-  const threshold = 0.2;
-  while (start < SIZE && Math.abs(buffer[start]) < threshold * maxVal) start++;
-  while (end > 0 && Math.abs(buffer[end]) < threshold * maxVal) end--;
-  if (end <= start) return -1;
+  // Check if signal is loud enough
+  let rmsSum = 0;
+  for (let i = 0; i < SIZE; i++) rmsSum += buffer[i] * buffer[i];
+  const rms = Math.sqrt(rmsSum / SIZE);
+  if (rms < 0.003) return -1; // too quiet
 
-  const trimmed = buffer.slice(start, end + 1);
-  const len = trimmed.length;
-
-  // Autocorrelation
-  const correlations = new Float32Array(len);
-  for (let lag = 0; lag < len; lag++) {
+  // Step 1: Difference function
+  const diff = new Float32Array(halfSize);
+  for (let tau = 0; tau < halfSize; tau++) {
     let sum = 0;
-    for (let i = 0; i < len - lag; i++) {
-      sum += trimmed[i] * trimmed[i + lag];
+    for (let i = 0; i < halfSize; i++) {
+      const d = buffer[i] - buffer[i + tau];
+      sum += d * d;
     }
-    correlations[lag] = sum;
+    diff[tau] = sum;
   }
 
-  // Find first dip then first peak
-  let dip = 1;
-  while (dip < len && correlations[dip] > correlations[dip - 1]) dip++;
-  if (dip >= len) return -1;
+  // Step 2: Cumulative mean normalized difference
+  const cmndf = new Float32Array(halfSize);
+  cmndf[0] = 1;
+  let runningSum = 0;
+  for (let tau = 1; tau < halfSize; tau++) {
+    runningSum += diff[tau];
+    cmndf[tau] = diff[tau] * tau / runningSum;
+  }
 
-  let peak = dip;
-  let peakVal = correlations[dip];
-  for (let i = dip; i < len; i++) {
-    if (correlations[i] > peakVal) {
-      peakVal = correlations[i];
-      peak = i;
+  // Step 3: Absolute threshold — find first tau where cmndf < threshold
+  const yinThreshold = 0.15;
+  // Min lag for 500Hz, max lag for 60Hz
+  const minLag = Math.floor(sampleRate / 500);
+  const maxLag = Math.min(halfSize - 1, Math.floor(sampleRate / 60));
+
+  let bestTau = -1;
+  for (let tau = minLag; tau < maxLag; tau++) {
+    if (cmndf[tau] < yinThreshold) {
+      // Find local minimum
+      while (tau + 1 < maxLag && cmndf[tau + 1] < cmndf[tau]) tau++;
+      bestTau = tau;
+      break;
     }
   }
 
-  if (peakVal < 0.15 * correlations[0]) return -1; // lowered for better detection
+  // Fallback: find global minimum if no tau below threshold
+  if (bestTau < 0) {
+    let minVal = Infinity;
+    for (let tau = minLag; tau < maxLag; tau++) {
+      if (cmndf[tau] < minVal) {
+        minVal = cmndf[tau];
+        bestTau = tau;
+      }
+    }
+    // Only accept if reasonably low
+    if (minVal > 0.5) return -1;
+  }
 
-  const freq = sampleRate / peak;
+  if (bestTau < 0) return -1;
+
+  // Step 4: Parabolic interpolation for sub-sample accuracy
+  let betterTau = bestTau;
+  if (bestTau > 0 && bestTau < halfSize - 1) {
+    const s0 = cmndf[bestTau - 1];
+    const s1 = cmndf[bestTau];
+    const s2 = cmndf[bestTau + 1];
+    const denom = 2 * s1 - s2 - s0;
+    if (denom !== 0) {
+      betterTau = bestTau + (s0 - s2) / (2 * denom);
+    }
+  }
+
+  const freq = sampleRate / betterTau;
   if (freq < 60 || freq > 500) return -1;
   return freq;
 }
@@ -1762,17 +1791,22 @@ function detectPitch(buffer, sampleRate) {
 function trackPace(wordCount) {
   const now = Date.now();
   paceWordTimestamps.push({ time: now, count: wordCount });
-  // Keep last 10 seconds
-  const cutoff = now - 10000;
+  // Keep last 15 seconds for smoother average
+  const cutoff = now - 15000;
   paceWordTimestamps = paceWordTimestamps.filter(e => e.time > cutoff);
 
   if (paceWordTimestamps.length >= 2) {
     const first = paceWordTimestamps[0];
     const last = paceWordTimestamps[paceWordTimestamps.length - 1];
-    const elapsed = (last.time - first.time) / 60000; // minutes
-    const words = last.count - first.count;
-    if (elapsed > 0) {
-      currentPaceWPM = Math.round(words / elapsed);
+    const elapsedMs = last.time - first.time;
+    if (elapsedMs > 1000) { // at least 1 second of data
+      const elapsedMin = elapsedMs / 60000;
+      const wordsInWindow = last.count - first.count;
+      if (wordsInWindow >= 0) {
+        currentPaceWPM = Math.round(wordsInWindow / elapsedMin);
+        // Clamp to reasonable range
+        currentPaceWPM = Math.min(300, Math.max(0, currentPaceWPM));
+      }
     }
   }
 }
